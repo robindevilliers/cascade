@@ -2,6 +2,28 @@
 dependencies {
     compile "junit:junit:4.10"
     compile "org.reflections:reflections:0.9.9-RC1"
+    testCompile 'org.mockito:mockito-all:1.9.5'
+}
+
+sourceSets {
+    functionalTest {
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        java {
+            srcDir 'src/functional-test/java'
+        }
+    }
+}
+
+task functionalTest(type: Test) {
+    testClassesDir = sourceSets.functionalTest.output.classesDir
+    classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 
+idea {
+    module {
+
+        testSourceDirs += file('src/functional-test/java')
+    }
+}
