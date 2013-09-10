@@ -1,14 +1,14 @@
-apply plugin: 'java'
-apply plugin: 'idea'
 
 
-repositories {
-	mavenCentral()
+allprojects {
+    apply plugin: 'idea'
+    group = 'uk.co.malbec.cascade'
+    version = '1.0'
 }
 
-dependencies {
-    testCompile "junit:junit:4.10"
-    testCompile "org.reflections:reflections:0.9.9-RC1"
+subprojects {
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+    }
 }
-
-

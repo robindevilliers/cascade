@@ -1,7 +1,10 @@
 *.class
 build
 out
-
+*.ipr
+*.iws
+*.iml
+.gradle
 
 # Package Files #
 *.jar
