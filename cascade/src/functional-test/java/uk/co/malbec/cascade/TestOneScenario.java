@@ -1,23 +1,39 @@
 package uk.co.malbec.cascade;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
 
-import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class TestCascade {
+public class TestOneScenario {
 
+    static int count;
+
+    static List<Integer> doThisSetupCalled = new ArrayList<Integer>();
+    static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
+    static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
+    static List<Integer> doThisClearCalled = new ArrayList<Integer>();
+    
+    @Before
+    public void setup(){
+        count = 0;
+        doThisSetupCalled.clear();
+        doThisExecuteCalled.clear();
+        doThisCheckCalled.clear();
+        doThisClearCalled.clear();
+    }
 
     @Test
     public void givenOneStep_CascadeShouldGenerateOneDescriptionAndExecuteOneTest(){
@@ -25,11 +41,11 @@ public class TestCascade {
         //given
         ClasspathScanner classpathScannerMock = mock(ClasspathScanner.class);
         when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>(){{
-            add(EnterUsernameAndPasswordStep.class);
+            add(Do.class);
         }});
 
-        when(classpathScannerMock.getSubTypesOf(EnterUsernameAndPasswordStep.class)).thenReturn(new HashSet<Class>(){{
-            add(EnterUsernameAndPasswordStep.Successful.class);
+        when(classpathScannerMock.getSubTypesOf(Do.class)).thenReturn(new HashSet<Class>() {{
+            add(Do.DoThis.class);
         }});
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
@@ -46,37 +62,52 @@ public class TestCascade {
         assertEquals(1, children.size());
 
         org.junit.runner.Description child = children.get(0);
-        assertEquals("Enter username and password succesfully(uk.co.malbec.cascade.TestCascade$TestBasicMain)", child.getDisplayName());
+        assertEquals("Do This(uk.co.malbec.cascade.TestOneScenario$TestBasicMain)", child.getDisplayName());
 
         cascade.run(runNotifierMock);
 
         //then
         verify(classpathScannerMock).initialise("uk.co.mytest.steps");
         verify(classpathScannerMock).getTypesAnnotatedWith(Step.class);
-        verify(classpathScannerMock).getSubTypesOf(EnterUsernameAndPasswordStep.class);
+        verify(classpathScannerMock).getSubTypesOf(Do.class);
         
         verify(runNotifierMock).fireTestStarted(child);
         verify(runNotifierMock).fireTestFinished(child);
-        //TODO add assertions for test execution.
-        
+
+        assertEquals("[1]", doThisSetupCalled.toString());
+        assertEquals("[2]", doThisExecuteCalled.toString());
+        assertEquals("[3]", doThisCheckCalled.toString());
+        assertEquals("[4]", doThisClearCalled.toString());
     }
 
     @Step
-    public interface EnterUsernameAndPasswordStep  {
+    public interface Do {
 
-        @Description("Enter username and password succesfully")
-        public class Successful implements EnterUsernameAndPasswordStep {
+        @Description("Do This")
+        public class DoThis implements Do {
 
             @Given
             public void setup() {
+                count++;
+                doThisSetupCalled.add(count);
             }
 
             @When
             public void execute() {
+                count++;
+                doThisExecuteCalled.add(count);
             }
 
             @Then
             public void check(Throwable f) {
+                count++;
+                doThisCheckCalled.add(count);
+            }
+
+            @Clear
+            public void cleanup() {
+                count++;
+                doThisClearCalled.add(count);
             }
         }
     }

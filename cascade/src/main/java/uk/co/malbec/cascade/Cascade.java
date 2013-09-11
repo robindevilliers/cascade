@@ -329,12 +329,29 @@ public class Cascade {
             }
 
             //notifier.fireTestFailure();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             notifier.fireTestFinished(description);
+
+            //execute Clear
+            for (Object step : steps) {
+                Method clearMethod = null;
+                for (Method method : step.getClass().getMethods()) {
+                    Clear clear = method.getAnnotation(Clear.class);
+                    if (clear != null) {
+                        clearMethod = method;
+                        break;
+                    }
+                }
+                if (clearMethod != null) {
+                    try {
+                        clearMethod.invoke(step);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
         }
     }
 
