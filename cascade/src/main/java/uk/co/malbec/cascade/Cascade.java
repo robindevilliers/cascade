@@ -1,11 +1,8 @@
 package uk.co.malbec.cascade;
 
 
-import org.junit.runner.*;
 import org.junit.runner.notification.RunNotifier;
-import org.reflections.Reflections;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.annotations.Description;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -16,100 +13,43 @@ public class Cascade {
     
     private ClasspathScanner classpathScanner;
 
+    private ScenarioFinder scenarioFinder;
+    
+    private JourneyGenerator journeyGenerator;
 
-    private Class<?> testClass;
+    private Class<?> controlClass;
 
     private List<Journey> journeys = new ArrayList<Journey>();
 
     private Class[] filter;
     
-    public Cascade(ClasspathScanner classpathScanner) {
+    public Cascade(ClasspathScanner classpathScanner,  ScenarioFinder scenarioFinder, JourneyGenerator journeyGenerator) {
         this.classpathScanner = classpathScanner;
+        this.scenarioFinder = scenarioFinder;
+        this.journeyGenerator = journeyGenerator;
     }
     
-    public void init(Class<?> testClass){
-        this.testClass = testClass;
+    public void init(Class<?> controlClass){
+        this.controlClass = controlClass;
 
-        FilterTests filterTests = testClass.getAnnotation(FilterTests.class);
+        FilterTests filterTests = controlClass.getAnnotation(FilterTests.class);
 
         if (filterTests != null){
             filter = filterTests.value();
         }
 
-        Scan scan = testClass.getAnnotation(Scan.class);
+        Scan scanAnnotation = controlClass.getAnnotation(Scan.class);
 
-        List<Class> steps = new ArrayList<Class>();
+        List<Class> scenarios = scenarioFinder.findScenarios(scanAnnotation.value(), classpathScanner);
 
-        for (String path : scan.value()) {
-            classpathScanner.initialise(path);
-            Set<Class<?>> annotated = classpathScanner.getTypesAnnotatedWith(Step.class);
-
-            for (Class<?> clazz : annotated) {
-                findStepClasses(steps, clazz, classpathScanner);
-            }
-        }
-
-
-        List<Class> terminators = new ArrayList<Class>();
-        List<Class> potentialEndings = new ArrayList<Class>(steps);
-        for (Class<?> cls : steps) {
-            if (cls.isAnnotationPresent(Terminator.class)) {
-                terminators.add(cls);
-            }
-
-            Step step = findInheritedStepAnnotation(cls);
-            if (step.value() != null) {
-                for (Class<?> parentStep : step.value()) {
-                    Iterator<Class> it = potentialEndings.iterator();
-                    while (it.hasNext()) {
-                        Class clz = it.next();
-                        if (parentStep.isAssignableFrom(clz)) {
-                            it.remove();
-                        }
-                    }
-                }
-            }
-        }
-        terminators.addAll(potentialEndings);
-
-        for (Class cls : terminators) {
-
-            List<Class> trail = new ArrayList<Class>();
-
-            generatingTrail(cls, trail, steps);
-
-        }
-    }
-
-    private void generatingTrail(Class cls, List<Class> trail, List<Class> steps) {
-        trail.add(cls);
-
-        Step step = findInheritedStepAnnotation(cls);
-        if (step.value()[0] == Step.Null.class) {
-            List<Class> newTrail = new ArrayList<Class>(trail);
-            Collections.reverse(newTrail);
-            journeys.add(new Journey(newTrail));
-
-
-        } else {
-            for (Class parent : step.value()) {
-                for (Class classOfStep : steps) {
-                    if (parent.isAssignableFrom(classOfStep)) {
-                        if (!classOfStep.isAnnotationPresent(Terminator.class)) {
-                            generatingTrail(classOfStep, trail, steps);
-                        }
-                    }
-                }
-            }
-        }
-        trail.remove(trail.size() - 1);
+        journeys = journeyGenerator.generateJourneys(scenarios);
     }
 
     public org.junit.runner.Description getDescription() {
         org.junit.runner.Description suite = org.junit.runner.Description.createSuiteDescription("Cascade Tests");
         List<org.junit.runner.Description> descriptions = new ArrayList<org.junit.runner.Description>();
         for (Journey journey : journeys) {
-            journey.generateDescription(testClass);
+            journey.generateDescription(controlClass);
             descriptions.add(journey.getDescription());
         }
 
@@ -164,10 +104,10 @@ public class Cascade {
             Map<String, Object> scope = new HashMap<String, Object>();
 
 
-            Object testContext = newInstance(testClass);
+            Object testContext = newInstance(controlClass);
 
             //pull supplied objects from malbec context
-            for (Field field : testClass.getDeclaredFields()) {
+            for (Field field : controlClass.getDeclaredFields()) {
 
                 Supplies supplies = field.getAnnotation(Supplies.class);
                 if (supplies != null) {
@@ -234,7 +174,7 @@ public class Cascade {
 
 
             //pull supplied objects from malbec context
-            for (Field field : testClass.getDeclaredFields()) {
+            for (Field field : controlClass.getDeclaredFields()) {
 
                 Demands demands = field.getAnnotation(Demands.class);
                 if (demands != null) {
@@ -243,7 +183,7 @@ public class Cascade {
             }
 
             Method intialisationMethod = null;
-            for (Method method : testClass.getMethods()) {
+            for (Method method : controlClass.getMethods()) {
                 FinalInitialisation finalInitialisation = method.getAnnotation(FinalInitialisation.class);
                 if (finalInitialisation != null) {
                     intialisationMethod = method;
@@ -355,41 +295,9 @@ public class Cascade {
         }
     }
 
-    private Step findInheritedStepAnnotation(Class<?> subject) {
-        Step step = subject.getAnnotation(Step.class);
-        if (step != null) {
-            return step;
-        }
 
-        for (Class<?> i : subject.getInterfaces()) {
-            step = i.getAnnotation(Step.class);
-            if (step != null) {
-                return step;
-            }
-        }
 
-        Class superClass = subject.getSuperclass();
-        if (superClass != null) {
-            step = findInheritedStepAnnotation(superClass);
-        }
 
-        return step;
-    }
-
-    private void findStepClasses(List<Class> steps, Class<?> clazz, ClasspathScanner classpathScanner) {
-        if (clazz.isInterface()) {
-            Set subtypes = classpathScanner.getSubTypesOf(clazz);
-            for (Object subType : subtypes) {
-                Class cls = (Class) subType;
-                findStepClasses(steps, cls, classpathScanner);
-            }
-
-        } else {
-
-            steps.add(clazz);
-
-        }
-    }
 
 
 
