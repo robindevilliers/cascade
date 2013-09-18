@@ -9,7 +9,7 @@ public class CascadeRunner extends Runner {
     private Cascade cascade;
 
     public CascadeRunner(Class<?> testClass) {
-        cascade = new Cascade(new ReflectionsClasspathScanner(), new ScenarioFinder(), new StepBackwardsFromTerminatorsJourneyGenerator());
+        cascade = new Cascade(new ReflectionsClasspathScanner(), new ScenarioFinder(), new StepBackwardsFromTerminatorsJourneyGenerator(), new StandardConstructionStrategy(), new StandardTestExecutor());
         cascade.init(testClass);
     }
 
