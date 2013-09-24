@@ -4,14 +4,11 @@ package uk.co.malbec.cascade;
 import uk.co.malbec.cascade.annotations.*;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
-    public List<Journey> generateJourneys(List<Class> allScenarios) {
+    public List<Journey> generateJourneys(List<Class> allScenarios, Class<?> controlClass) {
 
         List<Class> terminators = new ArrayList<Class>();
 
@@ -23,12 +20,20 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         List<Journey> journeys = new ArrayList<Journey>();
         for (Class terminator : terminators) {
-            generatingTrail(terminator, new ArrayList<Class>(), allScenarios, journeys);
+            generatingTrail(terminator, new ArrayList<Class>(), allScenarios, journeys, controlClass);
         }
+
+        Collections.sort(journeys, new Comparator<Journey>() {
+            @Override
+            public int compare(Journey lhs, Journey rhs) {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        });
+
         return journeys;
     }
 
-    private void generatingTrail(Class currentScenario, List<Class> trail, List<Class> allScenarios, List<Journey> journeys) {
+    private void generatingTrail(Class currentScenario, List<Class> trail, List<Class> allScenarios, List<Journey> journeys, Class<?> controlClass) {
         trail.add(currentScenario);
 
         Step currentStepAnnotation = findAnnotation(Step.class, currentScenario);
@@ -39,7 +44,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
             List<Class> newTrail = new ArrayList<Class>(trail);
             Collections.reverse(newTrail);
-            journeys.add(new Journey(newTrail));
+            journeys.add(new Journey(newTrail, controlClass));
 
         } else {
 
@@ -58,7 +63,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                         continue;
                     }
 
-                    generatingTrail(scenario, trail, allScenarios, journeys);
+                    generatingTrail(scenario, trail, allScenarios, journeys, controlClass);
 
                 }
 
@@ -78,7 +83,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
     }
     
-    public void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators){
+    private void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators){
         List<Class> danglingScenarios = new ArrayList<Class>(allScenarios);
 
         for (Class<?> scenario : allScenarios) {

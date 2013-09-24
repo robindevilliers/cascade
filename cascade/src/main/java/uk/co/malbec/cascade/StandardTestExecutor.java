@@ -44,8 +44,6 @@ public class StandardTestExecutor implements TestExecutor {
             }
         }
 
-
-
         notifier.fireTestFinished(description);
     }
 }

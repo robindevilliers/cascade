@@ -51,7 +51,7 @@ public class TestOneScenario {
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
         //when
-        Cascade cascade = new Cascade(classpathScannerMock, new ScenarioFinder(), new StepBackwardsFromTerminatorsJourneyGenerator(), new StandardConstructionStrategy(), new StandardTestExecutor());
+        Cascade cascade = new Cascade(classpathScannerMock, new ScenarioFinder(), new StepBackwardsFromTerminatorsJourneyGenerator(), new StandardConstructionStrategy(), new StandardTestExecutor(), new StandardFilterStrategy());
         
         cascade.init(TestBasicMain.class);
 

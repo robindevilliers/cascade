@@ -1,14 +1,11 @@
 package uk.co.malbec.cascade;
 
-
+import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
-import uk.co.malbec.cascade.annotations.FilterTests;
 import uk.co.malbec.cascade.annotations.Scan;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class Cascade {
@@ -23,106 +20,55 @@ public class Cascade {
 
     private TestExecutor testExecutor;
 
+    private FilterStrategy filterStrategy;
+
     private Class<?> controlClass;
 
     private List<Journey> journeys = new ArrayList<Journey>();
-
-    private Class[] filter;
     
-    public Cascade(ClasspathScanner classpathScanner,  ScenarioFinder scenarioFinder, JourneyGenerator journeyGenerator, ConstructionStrategy constructionStrategy, TestExecutor testExecutor) {
+    public Cascade(ClasspathScanner classpathScanner,  ScenarioFinder scenarioFinder, JourneyGenerator journeyGenerator, ConstructionStrategy constructionStrategy, TestExecutor testExecutor, FilterStrategy filterStrategy) {
         this.classpathScanner = classpathScanner;
         this.scenarioFinder = scenarioFinder;
         this.journeyGenerator = journeyGenerator;
         this.constructionStrategy = constructionStrategy;
         this.testExecutor = testExecutor;
+        this.filterStrategy = filterStrategy;
     }
     
     public void init(Class<?> controlClass){
         this.controlClass = controlClass;
 
-        FilterTests filterTests = controlClass.getAnnotation(FilterTests.class);
+        filterStrategy.init(controlClass);
 
-        if (filterTests != null){
-            filter = filterTests.value();
-        }
+        List<Class> scenarios = scenarioFinder.findScenarios(controlClass.getAnnotation(Scan.class).value(), classpathScanner);
 
-        Scan scanAnnotation = controlClass.getAnnotation(Scan.class);
-
-        List<Class> scenarios = scenarioFinder.findScenarios(scanAnnotation.value(), classpathScanner);
-
-        journeys = journeyGenerator.generateJourneys(scenarios);
+        journeys = journeyGenerator.generateJourneys(scenarios, controlClass);
     }
 
-    public org.junit.runner.Description getDescription() {
-        org.junit.runner.Description suite = org.junit.runner.Description.createSuiteDescription("Cascade Tests");
-        List<org.junit.runner.Description> descriptions = new ArrayList<org.junit.runner.Description>();
+    public Description getDescription() {
+        Description suite = Description.createSuiteDescription("Cascade Tests");
         for (Journey journey : journeys) {
-            journey.generateDescription(controlClass);
-            descriptions.add(journey.getDescription());
+            suite.addChild(journey.getDescription());
         }
-
-        Collections.sort(descriptions, new Comparator<org.junit.runner.Description>() {
-            @Override
-            public int compare(org.junit.runner.Description lhs, org.junit.runner.Description rhs) {
-                return lhs.getDisplayName().compareTo(rhs.getDisplayName());
-            }
-        });
-
-        Collections.sort(journeys, new Comparator<Journey>() {
-            @Override
-            public int compare(Journey lhs, Journey rhs) {
-
-                return lhs.getDescription().getDisplayName().compareTo(rhs.getDescription().getDisplayName());
-            }
-        });
-
-
-        for (org.junit.runner.Description description : descriptions){
-            suite.addChild(description);
-        }
-
         return suite;
     }
 
-
     public void run(RunNotifier notifier) {
+        
+        for (Journey journey: journeys){
 
-        List<org.junit.runner.Description> descriptions = getDescription().getChildren();
-        for (int i = 0; i < descriptions.size(); i++) {
-            Journey journey = journeys.get(i);
-
-            if (filter != null){
-                List<Class> steps = journey.getSteps();
-                boolean match = true;
-                for (Class clazz: filter){
-                    if (!steps.contains(clazz)){
-                        match = false;
-                        break;
-                    }
-                }
-                if (!match ){
-                    continue;
-                }
+            if (!filterStrategy.match(journey)) {
+                continue;
             }
-
 
             Reference<Object> control = new Reference<Object>();
             Reference<List<Object>> steps = new Reference<List<Object>>();
 
             constructionStrategy.setup(controlClass, journey, control, steps);
 
-            testExecutor.executeTest(notifier, descriptions.get(i), steps.get());
+            testExecutor.executeTest(notifier, journey.getDescription(), steps.get());
 
             constructionStrategy.tearDown(control, steps);
         }
     }
-
-
-
-
-
-
-
-
-    
 }
