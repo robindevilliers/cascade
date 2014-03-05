@@ -3,6 +3,7 @@ package uk.co.malbec.cascade;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.Scan;
+import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.ArrayList;
@@ -40,7 +41,8 @@ public class Cascade {
 
         filterStrategy.init(controlClass);
 
-        List<Class> scenarios = scenarioFinder.findScenarios(controlClass.getAnnotation(Scan.class).value(), classpathScanner);
+        String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
+        List<Class> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
 
         journeys = journeyGenerator.generateJourneys(scenarios, controlClass);
     }

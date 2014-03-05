@@ -2,6 +2,7 @@ package uk.co.malbec.cascade;
 
 
 import uk.co.malbec.cascade.annotations.FilterTests;
+import uk.co.malbec.cascade.model.Journey;
 
 import java.util.List;
 

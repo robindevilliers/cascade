@@ -10,7 +10,6 @@ import uk.co.malbec.cascade.annotations.*;
 //@FilterTests({SourcePartsStep.SuccessfulSourcingFromRequisitioner.class, RegisterVehicle.Successful.class})
 public class TestMain {
 
-
     @Supplies
     Stores stores = new Stores();
 
@@ -30,5 +29,4 @@ public class TestMain {
     public void init(){
         carCompany = new CarCompany(stores, requisitioner, new QualityChecker(true), new TestDriver(true), truck, shop);
     }
-
 }

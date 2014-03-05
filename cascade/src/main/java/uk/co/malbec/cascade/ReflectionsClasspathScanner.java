@@ -2,7 +2,6 @@ package uk.co.malbec.cascade;
 
 
 import org.reflections.Reflections;
-import uk.co.malbec.cascade.annotations.Step;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;

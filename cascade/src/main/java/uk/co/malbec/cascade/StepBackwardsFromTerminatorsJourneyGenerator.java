@@ -2,6 +2,7 @@ package uk.co.malbec.cascade;
 
 
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.model.Journey;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -33,6 +34,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         return journeys;
     }
 
+    //TODO - circular journey paths need to be handled
     private void generatingTrail(Class currentScenario, List<Class> trail, List<Class> allScenarios, List<Journey> journeys, Class<?> controlClass) {
         trail.add(currentScenario);
 
@@ -50,7 +52,6 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
             for (Class preceedingStep : currentStepAnnotation.value()) {
 
-
                 for (Class scenario : allScenarios) {
 
                     boolean scenarioIsNotAPreceedingStep = !preceedingStep.isAssignableFrom(scenario);
@@ -64,11 +65,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                     }
 
                     generatingTrail(scenario, trail, allScenarios, journeys, controlClass);
-
                 }
-
             }
-
         }
         trail.remove(trail.size() - 1);
     }
@@ -84,26 +82,33 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
     }
     
     private void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators){
-        List<Class> danglingScenarios = new ArrayList<Class>(allScenarios);
+        List<Class> unreferencedScenarios = new ArrayList<Class>(allScenarios);
+
+
+        for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ){
+            Class clz = i.next();
+            boolean isATerminatingScenario = findAnnotation(Terminator.class, clz) != null;
+            if (isATerminatingScenario){
+                i.remove();
+            }
+        }
 
         for (Class<?> scenario : allScenarios) {
             Step stepAnnotation = findAnnotation(Step.class, scenario);
             for (Class<?> preceedingStep : stepAnnotation.value()) {
 
-                Iterator<Class> danglingScenariosIterator = danglingScenarios.iterator();
-
-                while (danglingScenariosIterator.hasNext()) {
-                    Class potentialTerminator = danglingScenariosIterator.next();
-
-                    boolean isNotATerminator = preceedingStep.isAssignableFrom(potentialTerminator);
+                for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ){
+                    Class clz = i.next();
+                    //this tests if a scenario implements a step class.
+                    boolean isNotATerminator = preceedingStep.isAssignableFrom(clz);
 
                     if (isNotATerminator) {
-                        danglingScenariosIterator.remove();
+                        i.remove();
                     }
                 }
             }
         }
-        terminators.addAll(danglingScenarios);
+        terminators.addAll(unreferencedScenarios);
     }
 
     private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Class<?> subject) {

@@ -1,6 +1,8 @@
 package uk.co.malbec.cascade;
 
 
+import uk.co.malbec.cascade.model.Journey;
+
 import java.util.List;
 
 public interface JourneyGenerator {

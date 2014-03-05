@@ -1,4 +1,4 @@
-package uk.co.malbec.cascade;
+package uk.co.malbec.cascade.model;
 
 
 import org.junit.runner.Description;

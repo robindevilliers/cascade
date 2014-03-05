@@ -1,5 +1,6 @@
 package uk.co.malbec.cascade;
 
+import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.List;
