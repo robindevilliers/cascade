@@ -11,6 +11,7 @@ class JourneyTest {
     def void "given a Journey, it should have a name and contains appropriate steps"(){
 
         Journey journey = new Journey([GoToLoginPage, EnterPassword], TestClass)
+        journey.init()
         assert journey.name == ' class uk.co.malbec.cascade.model.JourneyTest$GoToLoginPage  class uk.co.malbec.cascade.model.JourneyTest$EnterPassword '
         assert journey.steps == [GoToLoginPage, EnterPassword]
         assert journey.description.displayName == ' class uk.co.malbec.cascade.model.JourneyTest$GoToLoginPage  class uk.co.malbec.cascade.model.JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
@@ -20,6 +21,7 @@ class JourneyTest {
     def void "given a Journey with descriptions, the journey could contain a nice description"(){
 
         Journey journey = new Journey([GoToForgotPasswordPage, EnterEmailAddress], TestClass)
+        journey.init()
         assert journey.name == 'User goes to the \'forgot password\' page and he enters his email address'
     }
 

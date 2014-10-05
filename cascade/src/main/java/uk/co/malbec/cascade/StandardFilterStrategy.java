@@ -2,13 +2,18 @@ package uk.co.malbec.cascade;
 
 
 import uk.co.malbec.cascade.annotations.FilterTests;
+import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 
 import java.util.List;
 
+import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
+import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
+
 public class StandardFilterStrategy implements FilterStrategy {
 
-    private Class[] filter;
+    private Predicate filter;
 
     private ConditionalLogic conditionalLogic;
 
@@ -18,9 +23,12 @@ public class StandardFilterStrategy implements FilterStrategy {
 
     @Override
     public void init(Class<?> controlClass) {
-        FilterTests filterTests = controlClass.getAnnotation(FilterTests.class);
-        if (filterTests != null){
-            filter = filterTests.value();
+        try {
+            filter = (Predicate) getValueOfFieldAnnotatedWith(newInstance(controlClass), FilterTests.class);
+        } catch (IllegalAccessException e) {
+            throw new CascadeException("illegal access exception trying to instantiate control class");
+        } catch (InstantiationException e) {
+            throw new CascadeException("instantiation exception trying to instantiate control class");
         }
     }
 

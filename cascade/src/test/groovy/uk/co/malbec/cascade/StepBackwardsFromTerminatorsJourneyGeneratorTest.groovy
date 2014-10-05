@@ -5,7 +5,10 @@ import org.junit.Test
 import uk.co.malbec.cascade.annotations.OnlyRunWith
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
+import uk.co.malbec.cascade.conditions.Predicate
 import uk.co.malbec.cascade.model.Journey
+
+import static uk.co.malbec.cascade.conditions.Predicates.withStep
 
 class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
@@ -42,7 +45,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplayAccountsList.MortgageAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey successful password challenge followed by the account list page showing mortgage"
+        assert journey: "expected a journey successful password challenge followed by the account list page showing mortgage"
         journeys.remove(journey)
 
         //we should have the simplest most happy journey for saver accounts
@@ -54,7 +57,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplaySaverAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey successful password challenge followed by the account list page showing saver account and then the saver account page"
+        assert journey: "expected a journey successful password challenge followed by the account list page showing saver account and then the saver account page"
         journeys.remove(journey)
 
         //we should have the journey that includes an optional informational message that does not terminate
@@ -66,7 +69,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplayAccountsList.MortgageAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey successful password challenge followed by an informational message and then the mortgage list page"
+        assert journey: "expected a journey successful password challenge followed by an informational message and then the mortgage list page"
         journeys.remove(journey)
 
         //we should have the journey that includes an optional informational message that does not terminate
@@ -77,9 +80,9 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == PostLoginAlert.InformationAlert &&
                     steps.remove(0) == DisplayAccountsList.SaverAccount &&
                     steps.remove(0) == DisplaySaverAccount
-                    steps.empty
+            steps.empty
         }
-        assert journey : "expected a journey successful password challenge followed by an informational message and then the saver list page, and then the saver details page"
+        assert journey: "expected a journey successful password challenge followed by an informational message and then the saver list page, and then the saver details page"
         journeys.remove(journey)
 
         // we should have the journey that has the account locked alert which is a terminating journey
@@ -90,7 +93,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == PostLoginAlert.UserAccountLockedAlert &&
                     steps.empty
         }
-        assert journey : "expected a journey successful password challenge and a message stating that the account is locked"
+        assert journey: "expected a journey successful password challenge and a message stating that the account is locked"
         journeys.remove(journey)
 
         //we should have all the above tests preceded by an incorrect password entry
@@ -103,7 +106,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplayAccountsList.MortgageAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey with a failed password, followed by a success and then the mortgage list page."
+        assert journey: "expected a journey with a failed password, followed by a success and then the mortgage list page."
         journeys.remove(journey)
 
         //we should have all the above tests preceded by an incorrect password entry
@@ -117,9 +120,8 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplaySaverAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey with a failed password, followed by a success and then the saver list page and then the saver details."
+        assert journey: "expected a journey with a failed password, followed by a success and then the saver list page and then the saver details."
         journeys.remove(journey)
-
 
         //informational message with bad password
         journey = journeys.find {
@@ -131,7 +133,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplayAccountsList.MortgageAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey with a failed password, followed by a success, an information message and then the mortgage list page."
+        assert journey: "expected a journey with a failed password, followed by a success, an information message and then the mortgage list page."
         journeys.remove(journey)
 
         //informational message with bad password
@@ -145,7 +147,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == DisplaySaverAccount &&
                     steps.empty
         }
-        assert journey : "expected a journey with a failed password, followed by a success, an information message and then the saver list page and then the saver details page."
+        assert journey: "expected a journey with a failed password, followed by a success, an information message and then the saver list page and then the saver details page."
         journeys.remove(journey)
 
         //user account locked with bad password
@@ -157,7 +159,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     steps.remove(0) == PostLoginAlert.UserAccountLockedAlert &&
                     steps.empty
         }
-        assert journey : "expected a journey with a failed password, followed by a success and a message stating that the account is locked"
+        assert journey: "expected a journey with a failed password, followed by a success and a message stating that the account is locked"
         journeys.remove(journey)
 
         //if this is empty then we don't have any unexpected journeys.
@@ -200,8 +202,10 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
     }
 
     @Step([DisplayAccountsList])
-    @OnlyRunWith(DisplayAccountsList.SaverAccount)
-    static class DisplaySaverAccount{
+    static class DisplaySaverAccount {
+
+        @OnlyRunWith
+        Predicate predicate = withStep(DisplayAccountsList.SaverAccount)
 
     }
 

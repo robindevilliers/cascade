@@ -42,26 +42,15 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
             }
         }
 
-        try {
-            collectSuppliedFields(control.get(), scope);
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("Illegal access exception trying to collect supplied fields on control class", e);
+
+        collectSuppliedFields(control.get(), scope);
+
+        for (Object step : steps.get()) {
+            collectSuppliedFields(step, scope);
         }
 
         for (Object step : steps.get()) {
-            try {
-                collectSuppliedFields(step, scope);
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to collect supplied fields on step class: %s", step.getClass().toString()), e);
-            }
-        }
-
-        for (Object step : steps.get()) {
-            try {
-                injectDemandedFields(step, scope);
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to inject demanded fields on step class: %s", step.getClass().toString()), e);
-            }
+            injectDemandedFields(step, scope);
         }
 
         for (Object step : steps.get()) {
@@ -75,18 +64,10 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
         }
 
         for (Object step : steps.get()) {
-            try {
-                collectSuppliedFields(step, scope);
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to collect supplied fields on step class: %s", step.getClass().toString()), e);
-            }
+            collectSuppliedFields(step, scope);
         }
 
-        try {
-            injectDemandedFields(control.get(), scope);
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("Illegal access exception trying to inject demanded fields on control class", e);
-        }
+        injectDemandedFields(control.get(), scope);
 
         try {
             invokeAnnotatedMethod(Setup.class, control.get());
@@ -96,18 +77,10 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
             throw new CascadeException("Illegal access exception trying to execute Setup method on control class", e);
         }
 
-        try {
-            collectSuppliedFields(control.get(), scope);
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("Illegal access exception trying to collect supplied fields on control class", e);
-        }
+        collectSuppliedFields(control.get(), scope);
 
         for (Object step : steps.get()) {
-            try {
-                injectDemandedFields(step, scope);
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to inject demanded fields on step class: %s", step.getClass().toString()), e);
-            }
+            injectDemandedFields(step, scope);
         }
     }
 

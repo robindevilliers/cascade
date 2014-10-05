@@ -16,7 +16,7 @@ public class ReflectionUtils {
         Method annotatedMethod = findAnnotatedMethod(annotationClass, subject);
         if (annotatedMethod != null) {
 
-                annotatedMethod.invoke(subject);
+            annotatedMethod.invoke(subject);
 
         }
     }
@@ -32,7 +32,7 @@ public class ReflectionUtils {
         return null;
     }
 
-    public static void collectSuppliedFields(Object subject, Map<String, Object> scope) throws IllegalAccessException {
+    public static void collectSuppliedFields(Object subject, Map<String, Object> scope) {
         for (Field field : subject.getClass().getDeclaredFields()) {
             Supplies supplies = field.getAnnotation(Supplies.class);
             if (supplies != null) {
@@ -45,7 +45,7 @@ public class ReflectionUtils {
         }
     }
 
-    public static void injectDemandedFields(Object subject, Map<String, Object> scope) throws IllegalAccessException {
+    public static void injectDemandedFields(Object subject, Map<String, Object> scope) {
         for (Field field : subject.getClass().getDeclaredFields()) {
             Demands demands = field.getAnnotation(Demands.class);
             if (demands == null) {
@@ -61,15 +61,34 @@ public class ReflectionUtils {
         return clazz.newInstance();
     }
 
-    public static Object getFieldValue(Field field, Object instance) throws IllegalAccessException {
-        field.setAccessible(true);
-        return field.get(instance);
+    public static Object getValueOfFieldAnnotatedWith(Object subject, Class annotationClass) {
+        for (Field field : subject.getClass().getDeclaredFields()) {
+
+            Annotation annotation = field.getAnnotation(annotationClass);
+            if (annotation != null) {
+                return getFieldValue(field, subject);
+            }
+        }
+        return null;
     }
 
-    public static void setFieldValue(Field field, Object instance, Object value) throws IllegalAccessException {
+    public static Object getFieldValue(Field field, Object instance) {
+        field.setAccessible(true);
+        try {
+            return field.get(instance);
+        } catch (IllegalAccessException e) {
+            //can't happen
+        }
+        return null;
+    }
+
+    public static void setFieldValue(Field field, Object instance, Object value) {
         field.setAccessible(true);
 
-        field.set(instance, value);
-
+        try {
+            field.set(instance, value);
+        } catch (IllegalAccessException e) {
+            //can't happen
+        }
     }
 }

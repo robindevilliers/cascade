@@ -2,10 +2,9 @@ package uk.co.malbec.cascade.annotations;
 
 import java.lang.annotation.*;
 
-@Documented
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-@Retention(RetentionPolicy.RUNTIME)
-public @interface MethodInfo{
-
+public @interface StepPreHandler {
+    Class[] value();
 }

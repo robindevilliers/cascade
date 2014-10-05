@@ -4,7 +4,11 @@ import org.junit.Before
 import org.junit.Test
 import uk.co.malbec.cascade.annotations.FilterTests
 import uk.co.malbec.cascade.annotations.Step
+import uk.co.malbec.cascade.conditions.Predicate
+import uk.co.malbec.cascade.conditions.WithStepPredicate
 import uk.co.malbec.cascade.model.Journey
+
+import static uk.co.malbec.cascade.conditions.Predicates.withStep
 
 class StandardFilterStrategyTest {
 
@@ -19,7 +23,7 @@ class StandardFilterStrategyTest {
     def void "given instantiation, the filter strategy should extract filter classes from control class"(){
         standardFilterStrategy.init(TestClass)
 
-        assert standardFilterStrategy.filter == [BadPassword]
+        assert standardFilterStrategy.filter == new WithStepPredicate(BadPassword.class)
     }
 
     @Test
@@ -33,7 +37,7 @@ class StandardFilterStrategyTest {
 
     @Test
     def void "given a filter, the filter strategy should return as appropriate"(){
-        standardFilterStrategy.filter = [BadPassword]
+        standardFilterStrategy.filter = new WithStepPredicate(BadPassword)
 
         Journey badPasswordJourney = new Journey([OpenLoginPage, BadPassword], TestClass);
         Journey successfulJourney = new Journey([OpenLoginPage, Successful], TestClass);
@@ -41,7 +45,7 @@ class StandardFilterStrategyTest {
         assert standardFilterStrategy.match(badPasswordJourney)
         assert !standardFilterStrategy.match(successfulJourney)
 
-        standardFilterStrategy.filter = [OpenLoginPage]
+        standardFilterStrategy.filter = new WithStepPredicate(OpenLoginPage)
 
         assert standardFilterStrategy.match(badPasswordJourney)
         assert standardFilterStrategy.match(successfulJourney)
@@ -59,7 +63,8 @@ class StandardFilterStrategyTest {
     static class BadPassword {
     }
 
-    @FilterTests([BadPassword])
     public static class TestClass {
+        @FilterTests
+        Predicate predicate = withStep(BadPassword)
     }
 }

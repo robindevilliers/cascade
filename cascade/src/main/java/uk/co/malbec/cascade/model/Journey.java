@@ -9,13 +9,18 @@ public class Journey {
     
     private List<Class> steps;
 
+    private Class<?> controlClass;
+
     private Description description;
     
     private String name;
 
     public Journey(List<Class> steps, Class<?> controlClass){
         this.steps = steps;
+        this.controlClass = controlClass;
+    }
 
+    public void init(){
         StringBuffer buffer = new StringBuffer();
         for (Class<?> cls: steps){
             uk.co.malbec.cascade.annotations.Description description  = cls.getAnnotation(uk.co.malbec.cascade.annotations.Description.class);

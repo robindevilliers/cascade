@@ -3,17 +3,12 @@ package uk.co.malbec.onlinebankingexample;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.FilterTests;
-import uk.co.malbec.cascade.annotations.Scan;
-import uk.co.malbec.cascade.annotations.Setup;
-import uk.co.malbec.onlinebankingexample.steps.Notice;
-import uk.co.malbec.onlinebankingexample.steps.Portfolio;
+import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.onlinebankingexample.steps.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -25,19 +20,34 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static uk.co.malbec.cascade.conditions.Predicates.and;
+import static uk.co.malbec.cascade.conditions.Predicates.or;
+import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")
-
-//TODO - add code so that I can defined a step interface here as well as a concrete class.
-//TODO - add full AND / OR predicate logic to filters
-@FilterTests({  Notice.AcceptTwoNotices.class, Portfolio.CurrentAccountOnly.class})
+//@StepPostHandler(WaitASecond.class)
 public class OnlineBankingTests {
 
     {
         Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.INFO);
     }
+
+
+
+    /*@FilterTests
+    Predicate filter = and(
+            withStep(OpenLandingPage.class),
+            withStep(Login.SuccessfulLogin.class),
+            or(
+                    withStep(Challenge.FailChallenge.class),
+                    and(
+                            withStep(Notice.AcceptOneNotice.class),
+                            withStep(OpenAccountPage.OpenCurrentAccount.class)
+                    )
+            )
+    );*/
 
     //TODO - need to fail the test if a variable is demanded but not supplied
     @Demands

@@ -2,16 +2,21 @@ package uk.co.malbec.cascade;
 
 
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
+import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
+
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
     private ConditionalLogic conditionalLogic;
 
-    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic){
+    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic) {
         this.conditionalLogic = conditionalLogic;
     }
 
@@ -32,18 +37,27 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         // go through journeys and make sure that they are valid according to @RunWith annotations.
         Iterator<Journey> journeyIterator = journeys.iterator();
-        while (journeyIterator.hasNext()){
+        while (journeyIterator.hasNext()) {
             Journey journey = journeyIterator.next();
             Iterator<Class> stepIterator = journey.getSteps().iterator();
-            while (stepIterator.hasNext()){
+            while (stepIterator.hasNext()) {
                 Class step = stepIterator.next();
-                OnlyRunWith onlyRunWithAnnotation = findAnnotation(OnlyRunWith.class, step);
-                if (onlyRunWithAnnotation != null){
-                    boolean valid = conditionalLogic.matches(onlyRunWithAnnotation.value(), journey.getSteps());
-                    if (!valid){
+
+
+                Predicate predicate = null;
+                try {
+                    predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step), OnlyRunWith.class);
+                } catch (IllegalAccessException e) {
+                    throw new CascadeException(String.format("illegal access exception tryng to instantiate step class: %s", step));
+                } catch (InstantiationException e) {
+                    throw new CascadeException(String.format("instantiation exception trying to instantiate step class: %s", step));
+                }
+                if (predicate != null) {
+                    boolean valid = conditionalLogic.matches(predicate, journey.getSteps());
+                    if (!valid) {
                         //test if the step that has the annotation is the last one in the list.
                         //if it is, then the preceeding step is a candidate for an implicit terminator
-                        if (!stepIterator.hasNext()){
+                        if (!stepIterator.hasNext()) {
                             stepIterator.remove();
                         } else {
                             journeyIterator.remove();
@@ -52,6 +66,10 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                     }
                 }
             }
+        }
+
+        for (Journey journey : journeys) {
+            journey.init();
         }
 
         Collections.sort(journeys, new Comparator<Journey>() {
@@ -100,8 +118,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
         trail.remove(trail.size() - 1);
     }
-    
-    private void findTerminatngScenarios(List<Class> allScenarios, List<Class> terminators){
+
+    private void findTerminatngScenarios(List<Class> allScenarios, List<Class> terminators) {
         for (Class<?> scenario : allScenarios) {
             boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario) != null;
 
@@ -110,15 +128,15 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             }
         }
     }
-    
-    private void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators){
+
+    private void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators) {
         List<Class> unreferencedScenarios = new ArrayList<Class>(allScenarios);
 
 
-        for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ){
+        for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ) {
             Class clz = i.next();
             boolean isATerminatingScenario = findAnnotation(Terminator.class, clz) != null;
-            if (isATerminatingScenario){
+            if (isATerminatingScenario) {
                 i.remove();
             }
         }
@@ -127,7 +145,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             Step stepAnnotation = findAnnotation(Step.class, scenario);
             for (Class<?> preceedingStep : stepAnnotation.value()) {
 
-                for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ){
+                for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ) {
                     Class clz = i.next();
                     //this tests if a scenario implements a step class.
                     boolean isNotATerminator = preceedingStep.isAssignableFrom(clz);

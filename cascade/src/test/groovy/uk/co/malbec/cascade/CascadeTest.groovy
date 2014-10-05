@@ -55,6 +55,7 @@ class CascadeTest {
 
         //then
         verify(filterStrategyMock).init(TestClass);
+        verify(testExecutorMock).init(TestClass);
         verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
         verify(journeyGeneratorMock).generateJourneys(scenariosMock, TestClass)
 
@@ -66,6 +67,9 @@ class CascadeTest {
     public void "given a generated cascade test suit, a call to getDescription should generate a description for each journey"() {
         //given
         cascade.journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
+        for (Journey journey : cascade.journeys){
+            journey.init()
+        }
 
         //when
         Description description = cascade.getDescription()
@@ -83,6 +87,9 @@ class CascadeTest {
         //given
         List<Journey> journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
         cascade.journeys = journeys
+        for (Journey journey : cascade.journeys){
+            journey.init()
+        }
         cascade.controlClass = TestClass
        
         when(filterStrategyMock.match(journeys[0])).thenReturn(true);
