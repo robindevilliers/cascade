@@ -1,0 +1,62 @@
+
+
+
+<div class="container">
+    <div class="well">
+        <div class="row">
+
+            <h3 class="col-xs-10 col-xs-offset-1 text-center">Please enter characters 1, 4 and 8 of your personal access code in the input fields below.</h3>
+        </div>
+        <div class="row">
+            <h2 class="col-xs-1 col-xs-offset-3 text-center">
+                <span test-text-number-one class="label label-primary">$numberOne</span>
+            </h2>
+            <h2 class="col-xs-1 col-xs-offset-1 text-center">
+                <span test-text-number-two class="label label-primary">$numberTwo</span>
+            </h2>
+            <h2 class="col-xs-1 col-xs-offset-1 text-center">
+                <span test-text-number-three  class="label label-primary">$numberThree</span>
+            </h2>
+        </div>
+        <div test-form-challenge >
+        <form action="answer" method="POST">
+        <div class="row form-group form-control-sm">
+            <div class="col-xs-1 col-xs-offset-3 text-center">
+                <input test-field-number-one maxlength="1" type="password" name="input1" class="form-control text-center">
+            </div>
+            <div class="col-xs-1 col-xs-offset-1 text-center">
+                 <input test-field-number-two maxlength="1" type="password" name="input2" class="form-control text-center">
+            </div>
+            <div class="col-xs-1 col-xs-offset-1 text-center">
+                 <input test-field-number-three  maxlength="1" type="password" name="input3" class="form-control text-center">
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-xs-4 col-xs-offset-8 text-center">
+                <button test-cta-authenticate type="submit" class="btn btn-primary btn-lg">Authenticate</button>
+            </div>
+        </div>
+        </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Internet Safety</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Credit Card Fraud</h2>
+            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Who to Contact</h2>
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+    </div>
+</div>
+</div> <!-- /container -->
+
+

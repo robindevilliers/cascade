@@ -9,6 +9,12 @@ import java.util.*;
 
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
+    private ConditionalLogic conditionalLogic;
+
+    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic){
+        this.conditionalLogic = conditionalLogic;
+    }
+
     public List<Journey> generateJourneys(List<Class> allScenarios, Class<?> controlClass) {
 
         List<Class> terminators = new ArrayList<Class>();
@@ -22,6 +28,30 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         List<Journey> journeys = new ArrayList<Journey>();
         for (Class terminator : terminators) {
             generatingTrail(terminator, new ArrayList<Class>(), allScenarios, journeys, controlClass);
+        }
+
+        // go through journeys and make sure that they are valid according to @RunWith annotations.
+        Iterator<Journey> journeyIterator = journeys.iterator();
+        while (journeyIterator.hasNext()){
+            Journey journey = journeyIterator.next();
+            Iterator<Class> stepIterator = journey.getSteps().iterator();
+            while (stepIterator.hasNext()){
+                Class step = stepIterator.next();
+                OnlyRunWith onlyRunWithAnnotation = findAnnotation(OnlyRunWith.class, step);
+                if (onlyRunWithAnnotation != null){
+                    boolean valid = conditionalLogic.matches(onlyRunWithAnnotation.value(), journey.getSteps());
+                    if (!valid){
+                        //test if the step that has the annotation is the last one in the list.
+                        //if it is, then the preceeding step is a candidate for an implicit terminator
+                        if (!stepIterator.hasNext()){
+                            stepIterator.remove();
+                        } else {
+                            journeyIterator.remove();
+                        }
+
+                    }
+                }
+            }
         }
 
         Collections.sort(journeys, new Comparator<Journey>() {
@@ -43,7 +73,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         boolean beginningOfTrail = currentStepAnnotation.value()[0] == Step.Null.class;
 
         if (beginningOfTrail) {
-
+            //we are copying the trail as the current trail may be part of another trail.  There could be a few of them.
             List<Class> newTrail = new ArrayList<Class>(trail);
             Collections.reverse(newTrail);
             journeys.add(new Journey(newTrail, controlClass));

@@ -10,6 +10,12 @@ public class StandardFilterStrategy implements FilterStrategy {
 
     private Class[] filter;
 
+    private ConditionalLogic conditionalLogic;
+
+    public StandardFilterStrategy(ConditionalLogic conditionalLogic){
+        this.conditionalLogic = conditionalLogic;
+    }
+
     @Override
     public void init(Class<?> controlClass) {
         FilterTests filterTests = controlClass.getAnnotation(FilterTests.class);
@@ -22,15 +28,7 @@ public class StandardFilterStrategy implements FilterStrategy {
     public boolean match(Journey journey) {
 
         if (filter != null){
-            List<Class> steps = journey.getSteps();
-            boolean match = true;
-            for (Class clazz: filter){
-                if (!steps.contains(clazz)){
-                    match = false;
-                    break;
-                }
-            }
-            return match;
+            return conditionalLogic.matches(filter, journey.getSteps());
         }
         return true;
     }

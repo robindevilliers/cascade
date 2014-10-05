@@ -25,7 +25,7 @@ public class TestMain {
     @Demands
     Shop shop;
 
-    @FinalInitialisation
+    @Setup
     public void init(){
         carCompany = new CarCompany(stores, requisitioner, new QualityChecker(true), new TestDriver(true), truck, shop);
     }

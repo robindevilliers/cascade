@@ -1,0 +1,88 @@
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="sidebar-nav btn-group-vertical">
+
+                #parse('sidenav.vm')
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="container-fluid">
+                <h2 test-field-account-name>${account.name}</h2>
+            </div>
+
+            <div class="container-fluid">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Date</th>
+                        <th>Details</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Balance</th>
+                    </tr>
+
+                    #set($balance = $account.balance)
+                    #set($rowNumber = 0)
+                    #foreach($transaction in $account.transactions)
+                    <tr test-row-$rowNumber>
+                        <td test-field-date>$transaction.date</td>
+                        <td test-field-description>$transaction.description</td>
+
+                        <td test-field-debit>
+                        #if ($transaction.type == "DEBIT")
+                            $transaction.amount
+                        #end
+                        </td>
+                        <td test-field-credit>
+                        #if ($transaction.type == "CREDIT")
+                            $transaction.amount
+                        #end
+                        </td>
+                        <td test-field-balance>$balance</td>
+                    </tr>
+
+                    #if ($transaction.type == "DEBIT")
+                        #set($balance = $balance + $transaction.amount)
+                    #else
+                        #set($balance = $balance - $transaction.amount)
+                    #end
+
+                    #set($rowNumber = $rowNumber + 1)
+                    #end
+                </table>
+            </div>
+            <div class="container-fluid text-right">
+                <ul class="pagination">
+                  <li ><a href="#">&laquo;</a></li>
+                  <li class="active"><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Apply for a Mortgage</h2>
+        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Fixed Deposits</h2>
+        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Credit Refinancing</h2>
+        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+      </div>
+    </div>
+
+</div>

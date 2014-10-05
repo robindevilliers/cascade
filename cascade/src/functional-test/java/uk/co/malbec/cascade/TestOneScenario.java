@@ -25,9 +25,9 @@ public class TestOneScenario {
     static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
     static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
     static List<Integer> doThisClearCalled = new ArrayList<Integer>();
-    
+
     @Before
-    public void setup(){
+    public void setup() {
         count = 0;
         doThisSetupCalled.clear();
         doThisExecuteCalled.clear();
@@ -36,11 +36,11 @@ public class TestOneScenario {
     }
 
     @Test
-    public void givenOneStep_CascadeShouldGenerateOneDescriptionAndExecuteOneTest(){
+    public void givenOneStep_CascadeShouldGenerateOneDescriptionAndExecuteOneTest() {
 
         //given
         ClasspathScanner classpathScannerMock = mock(ClasspathScanner.class);
-        when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>(){{
+        when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>() {{
             add(Do.class);
         }});
 
@@ -51,8 +51,13 @@ public class TestOneScenario {
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
         //when
-        Cascade cascade =new Cascade(classpathScannerMock, new ScenarioFinder(), new StepBackwardsFromTerminatorsJourneyGenerator(), new StandardConstructionStrategy(), new StandardTestExecutor(), new StandardFilterStrategy());
-        
+        Cascade cascade = new Cascade(classpathScannerMock,
+                new ScenarioFinder(),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                new StandardConstructionStrategy(),
+                new StandardTestExecutor(),
+                new StandardFilterStrategy(new ConditionalLogic()));
+
         cascade.init(TestBasicMain.class);
 
         org.junit.runner.Description description = cascade.getDescription();
@@ -70,7 +75,7 @@ public class TestOneScenario {
         verify(classpathScannerMock).initialise("uk.co.mytest.steps");
         verify(classpathScannerMock).getTypesAnnotatedWith(Step.class);
         verify(classpathScannerMock).getSubTypesOf(Do.class);
-        
+
         verify(runNotifierMock).fireTestStarted(child);
         verify(runNotifierMock).fireTestFinished(child);
 
@@ -115,7 +120,7 @@ public class TestOneScenario {
 
     @Scan("uk.co.mytest.steps")
     public static class TestBasicMain {
-        
+
     }
-    
+
 }

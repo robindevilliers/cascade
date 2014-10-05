@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fiery Horse Banking</title>
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+  </head>
+  <body>
+    <style>
+        body { padding-top: 70px; }
+    </style>
+
+    <script src="/js/jquery-1.11.1.min.js"></script>
+
+    <script src="/js/bootstrap.min.js"></script>
+
+    <div class="container">
+        #parse ("head.vm")
+        $screen_content
+        #parse ("foot.vm")
+    </div>
+  </body>
+</html>

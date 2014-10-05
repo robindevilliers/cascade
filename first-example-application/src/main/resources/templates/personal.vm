@@ -1,0 +1,22 @@
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-md-2">
+            #parse('sidenav.vm')
+        </div>
+        <div class="col-md-10">
+            <h2>Please keep us informed</h2>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,</p>
+            <table class="table table-striped">
+                <tr><td>Name</td><td>Robin de Villiers</td></tr>
+                <tr><td>Nationality</td><td>British</td><td></td></tr>
+                <tr><td>Domicile</td><td>UK</td><td></td></tr>
+                <tr><td>Address</td><td>7 Special Way, FairBank, ImaginaryVille, WOW007</td><td><a href="" class="btn btn-primary btn-sm">Modify</a></td></tr>
+                <tr><td>Mobile Number</td><td>0788 1234 556</td><td><a href="" class="btn btn-primary btn-sm">Modify</a></td></tr>
+                <tr><td>Email Address</td><td>robin@imaginaryville.co.uk</td><td><a href="" class="btn btn-primary btn-sm">Modify</a></td></tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -8,8 +8,5 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Step {
     Class[] value() default Null.class;
-    
-    
-
     public static class Null {}
 }

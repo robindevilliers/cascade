@@ -12,7 +12,7 @@ class StandardFilterStrategyTest {
 
     @Before
     public void "initialisation"() {
-        standardFilterStrategy = new StandardFilterStrategy()
+        standardFilterStrategy = new StandardFilterStrategy(new ConditionalLogic())
     }
 
     @Test

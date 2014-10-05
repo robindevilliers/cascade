@@ -2,6 +2,7 @@ package uk.co.malbec.cascade
 
 import org.junit.Before
 import org.junit.Test
+import uk.co.malbec.cascade.annotations.OnlyRunWith
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
 import uk.co.malbec.cascade.model.Journey
@@ -12,63 +13,157 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
     @Before
     def void "initialisation"() {
-        backwardsFromTerminatorsJourneyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator()
+        backwardsFromTerminatorsJourneyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic())
     }
 
     @Test
     def void "given a set of dependent steps, the journey generator should generate journeys"() {
 
+        //when
         List<Journey> journeys = backwardsFromTerminatorsJourneyGenerator.generateJourneys([
                 OpenLoginPage,
                 BadPassword,
                 Successful,
                 PostLoginAlert.UserAccountLockedAlert,
                 PostLoginAlert.InformationAlert,
-                DisplayUserHomePage
+                DisplayAccountsList.MortgageAccount,
+                DisplayAccountsList.SaverAccount,
+                DisplaySaverAccount
         ], TestClass)
 
-        assert journeys.size() == 6
+        //then
+        Journey journey;
 
-        Journey one = journeys[0]
-        assert one.steps[0] == OpenLoginPage
-        assert one.steps[1] == BadPassword
-        assert one.steps[2] == Successful
-        assert one.steps[3] == DisplayUserHomePage
-        assert one.steps[4] == null
+        //we should have the simplest most happy journey for mortgages
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == DisplayAccountsList.MortgageAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey successful password challenge followed by the account list page showing mortgage"
+        journeys.remove(journey)
 
-        Journey two = journeys[1]
-        assert two.steps[0] == OpenLoginPage
-        assert two.steps[1] == BadPassword
-        assert two.steps[2] == Successful
-        assert two.steps[3] == PostLoginAlert.InformationAlert
-        assert two.steps[4] == DisplayUserHomePage
-        assert two.steps[5] == null
+        //we should have the simplest most happy journey for saver accounts
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == DisplayAccountsList.SaverAccount &&
+                    steps.remove(0) == DisplaySaverAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey successful password challenge followed by the account list page showing saver account and then the saver account page"
+        journeys.remove(journey)
 
-        Journey three = journeys[2]
-        assert three.steps[0] == OpenLoginPage
-        assert three.steps[1] == BadPassword
-        assert three.steps[2] == Successful
-        assert three.steps[3] == PostLoginAlert.UserAccountLockedAlert
-        assert three.steps[4] == null
+        //we should have the journey that includes an optional informational message that does not terminate
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == PostLoginAlert.InformationAlert &&
+                    steps.remove(0) == DisplayAccountsList.MortgageAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey successful password challenge followed by an informational message and then the mortgage list page"
+        journeys.remove(journey)
 
-        Journey four = journeys[3]
-        assert four.steps[0] == OpenLoginPage
-        assert four.steps[1] == Successful
-        assert four.steps[2] == DisplayUserHomePage
-        assert four.steps[3] == null
+        //we should have the journey that includes an optional informational message that does not terminate
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == PostLoginAlert.InformationAlert &&
+                    steps.remove(0) == DisplayAccountsList.SaverAccount &&
+                    steps.remove(0) == DisplaySaverAccount
+                    steps.empty
+        }
+        assert journey : "expected a journey successful password challenge followed by an informational message and then the saver list page, and then the saver details page"
+        journeys.remove(journey)
 
-        Journey five = journeys[4]
-        assert five.steps[0] == OpenLoginPage
-        assert five.steps[1] == Successful
-        assert five.steps[2] == PostLoginAlert.InformationAlert
-        assert five.steps[3] == DisplayUserHomePage
-        assert five.steps[4] == null
+        // we should have the journey that has the account locked alert which is a terminating journey
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == PostLoginAlert.UserAccountLockedAlert &&
+                    steps.empty
+        }
+        assert journey : "expected a journey successful password challenge and a message stating that the account is locked"
+        journeys.remove(journey)
 
-        Journey six = journeys[5]
-        assert six.steps[0] == OpenLoginPage
-        assert six.steps[1] == Successful
-        assert six.steps[2] == PostLoginAlert.UserAccountLockedAlert
-        assert six.steps[3] == null
+        //we should have all the above tests preceded by an incorrect password entry
+        //simplest journey first
+        journey = journeys.find { it ->
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == BadPassword &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == DisplayAccountsList.MortgageAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey with a failed password, followed by a success and then the mortgage list page."
+        journeys.remove(journey)
+
+        //we should have all the above tests preceded by an incorrect password entry
+        //simplest journey first
+        journey = journeys.find { it ->
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == BadPassword &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == DisplayAccountsList.SaverAccount &&
+                    steps.remove(0) == DisplaySaverAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey with a failed password, followed by a success and then the saver list page and then the saver details."
+        journeys.remove(journey)
+
+
+        //informational message with bad password
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == BadPassword &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == PostLoginAlert.InformationAlert &&
+                    steps.remove(0) == DisplayAccountsList.MortgageAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey with a failed password, followed by a success, an information message and then the mortgage list page."
+        journeys.remove(journey)
+
+        //informational message with bad password
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == BadPassword &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == PostLoginAlert.InformationAlert &&
+                    steps.remove(0) == DisplayAccountsList.SaverAccount &&
+                    steps.remove(0) == DisplaySaverAccount &&
+                    steps.empty
+        }
+        assert journey : "expected a journey with a failed password, followed by a success, an information message and then the saver list page and then the saver details page."
+        journeys.remove(journey)
+
+        //user account locked with bad password
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.remove(0) == OpenLoginPage &&
+                    steps.remove(0) == BadPassword &&
+                    steps.remove(0) == Successful &&
+                    steps.remove(0) == PostLoginAlert.UserAccountLockedAlert &&
+                    steps.empty
+        }
+        assert journey : "expected a journey with a failed password, followed by a success and a message stating that the account is locked"
+        journeys.remove(journey)
+
+        //if this is empty then we don't have any unexpected journeys.
+        // notably, we don't have saver details steps following mortgage list which is prohibited by OnRunWith tag.
+        assert journeys.empty
+
     }
 
     @Step
@@ -95,7 +190,18 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
     }
 
     @Step([Successful, PostLoginAlert.InformationAlert])
-    static class DisplayUserHomePage{
+    static interface DisplayAccountsList {
+        static class MortgageAccount implements DisplayAccountsList {
+        }
+
+        static class SaverAccount implements DisplayAccountsList {
+        }
+
+    }
+
+    @Step([DisplayAccountsList])
+    @OnlyRunWith(DisplayAccountsList.SaverAccount)
+    static class DisplaySaverAccount{
 
     }
 

@@ -79,7 +79,11 @@ public class TestThreeScenariosOverTwoSteps {
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
         //when
-        Cascade cascade = new Cascade(classpathScannerMock, new ScenarioFinder(), new StepBackwardsFromTerminatorsJourneyGenerator(), new StandardConstructionStrategy(), new StandardTestExecutor(), new StandardFilterStrategy());
+        Cascade cascade = new Cascade(classpathScannerMock, new ScenarioFinder(),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                new StandardConstructionStrategy(),
+                new StandardTestExecutor(),
+                new StandardFilterStrategy(new ConditionalLogic()));
 
         cascade.init(TestBasicMain.class);
 

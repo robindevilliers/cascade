@@ -1,0 +1,8 @@
+<div class="sidebar-nav btn-group-vertical">
+    <a href="/portfolio" class="btn btn-default">My Portfolio</a>
+    <a href="/personal" class="btn btn-default">Personal Details</a>
+    <a href="/payments" class="btn btn-default">Manage Payments</a>
+    <a class="btn btn-default">Security</a>
+    <a class="btn btn-default">Contact Us</a>
+    <a href="/" class="btn btn-default">Log Out</a>
+</div>

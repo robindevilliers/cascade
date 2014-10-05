@@ -2,11 +2,10 @@ apply plugin: 'groovy'
 
 
 dependencies {
-
     compile "junit:junit:4.10"
     compile "org.reflections:reflections:0.9.9-RC1"
     testCompile 'org.mockito:mockito-all:1.9.5'
-    groovy "org.codehaus.groovy:groovy-all:2.2.0"
+    testCompile "org.codehaus.groovy:groovy-all:2.2.0"
 }
 
 sourceSets {
@@ -16,8 +15,6 @@ sourceSets {
         java {
             srcDir 'src/functional-test/java'
         }
-
-
     }
 }
 
@@ -26,10 +23,8 @@ task functionalTest(type: Test) {
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
-
 idea {
     module {
-
         testSourceDirs += file('src/functional-test/java')
     }
 }
