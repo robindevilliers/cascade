@@ -1,9 +1,11 @@
 package uk.co.malbec.onlinebankingexample.model;
 
 
+import java.util.Date;
+
 public class Transaction {
 
-    private String date;
+    private Date date;
 
     private String description;
 
@@ -12,11 +14,11 @@ public class Transaction {
     private TransactionType type;
 
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

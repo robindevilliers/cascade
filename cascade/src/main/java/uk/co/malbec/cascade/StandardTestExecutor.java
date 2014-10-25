@@ -19,6 +19,7 @@ import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 public class StandardTestExecutor implements TestExecutor {
 
     private Handler[] preHandlers = new Handler[0];
+    private Handler[] handlers = new Handler[0];
     private Handler[] postHandlers = new Handler[0];
 
     @Override
@@ -28,17 +29,25 @@ public class StandardTestExecutor implements TestExecutor {
             List<Handler> handlers = new ArrayList<Handler>();
             for (Class cls : stepPreHandlerAnnotation.value()){
                 try {
-                    handlers.add((Handler) newInstance(cls));
-                } catch (IllegalAccessException e) {
-                    throw new CascadeException("Illegal access exception trying to instantiate handler class", e);
-                } catch (InstantiationException e) {
-                    throw new CascadeException("Instantiation exception trying to instantiate handler class", e);
+                    handlers.add((Handler) newInstance(cls, "step pre handler"));
                 } catch (ClassCastException e){
                     throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
                 }
-
             }
             preHandlers = handlers.toArray(new Handler[handlers.size()]);
+        }
+
+        StepHandler stepHandlerAnnotation = controlClass.getAnnotation(StepHandler.class);
+        if (stepHandlerAnnotation != null){
+            List<Handler> handlers = new ArrayList<Handler>();
+            for (Class cls : stepHandlerAnnotation.value()){
+                try {
+                    handlers.add((Handler) newInstance(cls, "step handler"));
+                } catch (ClassCastException e){
+                    throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                }
+            }
+            this.handlers = handlers.toArray(new Handler[handlers.size()]);
         }
 
         StepPostHandler stepPostHandlerAnnotation = controlClass.getAnnotation(StepPostHandler.class);
@@ -46,11 +55,7 @@ public class StandardTestExecutor implements TestExecutor {
             List<Handler> handlers = new ArrayList<Handler>();
             for (Class cls : stepPostHandlerAnnotation.value()){
                 try {
-                    handlers.add((Handler) newInstance(cls));
-                } catch (IllegalAccessException e) {
-                    throw new CascadeException("Illegal access exception trying to instantiate handler class", e);
-                } catch (InstantiationException e) {
-                    throw new CascadeException("Instantiation exception trying to instantiate handler class", e);
+                    handlers.add((Handler) newInstance(cls, "step post handler"));
                 } catch (ClassCastException e){
                     throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
                 }
@@ -76,11 +81,7 @@ public class StandardTestExecutor implements TestExecutor {
             if (stepPreHandlerAnnotation != null){
                 for (Class cls : stepPreHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls)).handle(step);
-                    } catch (IllegalAccessException e) {
-                        throw new CascadeException("Illegal access exception trying to instantiate handler class", e);
-                    } catch (InstantiationException e) {
-                        throw new CascadeException("Instantiation exception trying to instantiate handler class", e);
+                        ((Handler) newInstance(cls, "step pre handler")).handle(step);
                     } catch (ClassCastException e){
                         throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
                     }
@@ -99,6 +100,21 @@ public class StandardTestExecutor implements TestExecutor {
                     //TODO - come up with a better way to handle this.
                     e.printStackTrace();
                 }
+            }
+
+            StepHandler stepHandlerAnnotation = step.getClass().getAnnotation(StepHandler.class);
+            if (stepHandlerAnnotation != null){
+                for (Class cls : stepHandlerAnnotation.value()){
+                    try {
+                        ((Handler) newInstance(cls, "step handler")).handle(step);
+                    } catch (ClassCastException e){
+                        throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                    }
+                }
+            }
+
+            for (Handler handler : handlers){
+                handler.handle(step);
             }
 
             Method thenMethod = findAnnotatedMethod(Then.class, step);
@@ -120,11 +136,7 @@ public class StandardTestExecutor implements TestExecutor {
             if (stepPostHandlerAnnotation != null){
                 for (Class cls : stepPostHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls)).handle(step);
-                    } catch (IllegalAccessException e) {
-                        throw new CascadeException("Illegal access exception trying to instantiate handler class", e);
-                    } catch (InstantiationException e) {
-                        throw new CascadeException("Instantiation exception trying to instantiate handler class", e);
+                        ((Handler) newInstance(cls, "step post handler")).handle(step);
                     } catch (ClassCastException e){
                         throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
                     }

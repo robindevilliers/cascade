@@ -44,14 +44,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                 Class step = stepIterator.next();
 
 
-                Predicate predicate = null;
-                try {
-                    predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step), OnlyRunWith.class);
-                } catch (IllegalAccessException e) {
-                    throw new CascadeException(String.format("illegal access exception tryng to instantiate step class: %s", step));
-                } catch (InstantiationException e) {
-                    throw new CascadeException(String.format("instantiation exception trying to instantiate step class: %s", step));
-                }
+                Predicate predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step, "step"), OnlyRunWith.class);
+
                 if (predicate != null) {
                     boolean valid = conditionalLogic.matches(predicate, journey.getSteps());
                     if (!valid) {

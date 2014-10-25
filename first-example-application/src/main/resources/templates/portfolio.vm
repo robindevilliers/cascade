@@ -31,8 +31,8 @@
                         <td test-field-account-name>
                             $account.name
                         </td>
-                        <td test-field-account-balance>$account.balance</td>
-                        <td><a href="account/$account.number" class="btn btn-primary btn-sm"  test-button-account-details  >Details</a></td>
+                        <td test-field-account-balance class="text-right">$money.format($account.balance)</td>
+                        <td><a href="account/$account.number" class="btn btn-primary btn-sm" test-button-account-details  >Details</a></td>
                     </tr>
                     #end
 

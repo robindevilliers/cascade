@@ -8,6 +8,7 @@
 
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/datepicker.css" rel="stylesheet">
 
 
   </head>
@@ -19,6 +20,18 @@
     <script src="/js/jquery-1.11.1.min.js"></script>
 
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="/js/jquery-maskmoney.js"></script>
+    <script src="/js/jquery.alphanum.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('.datepicker').datepicker();
+            $(".money").maskMoney({prefix:'\u00A3 ', allowNegative: false, thousands:',', decimal:'.', affixesStay: false});
+            $(".number").numeric({});
+        });
+
+    </script>
 
     <div class="container">
         #parse ("head.vm")

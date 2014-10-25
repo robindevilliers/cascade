@@ -23,25 +23,12 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
     public void setup(Class<?> controlClass, Journey journey, Reference<Object> control, Reference<List<Object>> steps) {
         Map<String, Object> scope = new HashMap<String, Object>();
 
-        try {
-            control.set(newInstance(controlClass));
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("Illegal access exception trying to instantiate control class", e);
-        } catch (InstantiationException e) {
-            throw new CascadeException("Instantiation exception trying to instantiate control class", e);
-        }
+        control.set(newInstance(controlClass, "control"));
 
         steps.set(new ArrayList<Object>());
         for (Class clazz : journey.getSteps()) {
-            try {
-                steps.get().add(newInstance(clazz));
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to instantiate step class: %s", clazz.toString()), e);
-            } catch (InstantiationException e) {
-                throw new CascadeException(String.format("Instantiation exception trying to instantiate step class: %s", clazz.toString()), e);
-            }
+            steps.get().add(newInstance(clazz, "step"));
         }
-
 
         collectSuppliedFields(control.get(), scope);
 
@@ -54,13 +41,7 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
         }
 
         for (Object step : steps.get()) {
-            try {
-                invokeAnnotatedMethod(Given.class, step);
-            } catch (InvocationTargetException e) {
-                throw new CascadeException(String.format("step class through exception executing Given method: %s", step.getClass().toString()), e.getTargetException());
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to execute Given method on step class: %s", step.getClass().toString()), e);
-            }
+            invokeAnnotatedMethod(Given.class, step);
         }
 
         for (Object step : steps.get()) {
@@ -69,13 +50,7 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
 
         injectDemandedFields(control.get(), scope);
 
-        try {
-            invokeAnnotatedMethod(Setup.class, control.get());
-        } catch (InvocationTargetException e) {
-            throw new CascadeException("control class through exception executing Setup method", e.getTargetException());
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("Illegal access exception trying to execute Setup method on control class", e);
-        }
+        invokeAnnotatedMethod(Setup.class, control.get());
 
         collectSuppliedFields(control.get(), scope);
 
@@ -86,23 +61,10 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
 
     @Override
     public void tearDown(Reference<Object> control, Reference<List<Object>> steps) {
-
         for (Object step : steps.get()) {
-            try {
-                invokeAnnotatedMethod(Clear.class, step);
-            } catch (InvocationTargetException e) {
-                throw new CascadeException(String.format("step class through exception executing Clear method: %s", step.getClass().toString()), e.getTargetException());
-            } catch (IllegalAccessException e) {
-                throw new CascadeException(String.format("Illegal access exception trying to execute Clear method on step class: %s", step.getClass().toString()), e);
-            }
+            invokeAnnotatedMethod(Clear.class, step);
         }
 
-        try {
-            invokeAnnotatedMethod(Teardown.class, control.get());
-        } catch (InvocationTargetException e) {
-            throw new CascadeException("control class through exception executing Teardown method", e.getTargetException());
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("Illegal access exception trying to execute Teardown method on control class", e);
-        }
+        invokeAnnotatedMethod(Teardown.class, control.get());
     }
 }

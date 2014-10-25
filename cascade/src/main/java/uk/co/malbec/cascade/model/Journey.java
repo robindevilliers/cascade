@@ -28,7 +28,8 @@ public class Journey {
                 buffer.append(description.value());
             } else {
                 buffer.append(" ");
-                buffer.append(cls.toString());
+                String[] parts = cls.toString().split("[.]");
+                buffer.append(parts[parts.length-1]);
                 buffer.append(" ");
             }
         }

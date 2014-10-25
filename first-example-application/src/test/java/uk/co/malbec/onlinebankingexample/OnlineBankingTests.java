@@ -3,11 +3,13 @@ package uk.co.malbec.onlinebankingexample;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.handler.WaitASecond;
 import uk.co.malbec.onlinebankingexample.steps.*;
 
 import javax.ws.rs.client.Client;
@@ -34,7 +36,9 @@ public class OnlineBankingTests {
         root.setLevel(Level.INFO);
     }
 
-
+    @FilterTests
+    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class), withStep(OpenPersonalPage.class));
+    //Predicate filter = withStep(OpenAccountPage.OpenMortgageAccount.class);
 
     /*@FilterTests
     Predicate filter = and(
@@ -65,6 +69,9 @@ public class OnlineBankingTests {
     @Demands
     List<Map> accounts;
 
+    @Demands
+    Map personalDetails;
+
 
     @Setup
     public void setup() {
@@ -75,12 +82,19 @@ public class OnlineBankingTests {
             put("challengePhrase", challengePhrase);
             put("notices", notices);
             put("accounts", accounts);
-
+            put("personalDetails", personalDetails);
         }};
 
         Client client = ClientBuilder.newBuilder().build();
         WebTarget target = client.target("http://localhost:8080/database/set-user");
         Response response = target.request().post(Entity.entity(user, "application/json"));
+
+
+        if (response.getStatus() != 200){
+            String content = response.readEntity(String.class);
+            System.err.print(content);
+        }
+
         assertEquals(200, response.getStatus());
     }
 

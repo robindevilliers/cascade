@@ -4,6 +4,7 @@ import org.junit.Test
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
 
+import static uk.co.malbec.cascade.conditions.Predicates.not
 import static uk.co.malbec.cascade.conditions.Predicates.or
 import static uk.co.malbec.cascade.conditions.Predicates.withStep
 import static uk.co.malbec.cascade.conditions.Predicates.and
@@ -15,6 +16,11 @@ class ConditionalLogicTest {
     @Test
     def void "the withStep predicate should return true"() {
         assert new ConditionalLogic().matches(withStep(Successful), steps)
+    }
+
+    @Test
+    def void "the not predicate enclosing the withStep predicate should return false"() {
+        assert !new ConditionalLogic().matches(not(withStep(Successful)), steps)
     }
 
     @Test
@@ -73,10 +79,14 @@ class ConditionalLogicTest {
     }
 
     @Test
-    def void "a or composing and should return false because of or"() {
+    def void "a or composing and should return true because of or"() {
         assert new ConditionalLogic().matches(or(withStep(PostLoginAlert.InformationAlert), and(withStep(OpenLoginPage), withStep(Successful))), steps)
     }
 
+    @Test
+    def void "a 'not' composing 'or' composing 'and' should return true"() {
+        assert !new ConditionalLogic().matches(not(or(withStep(PostLoginAlert.InformationAlert), and(withStep(OpenLoginPage), withStep(Successful)))), steps)
+    }
 
     @Step
     static class OpenLoginPage {

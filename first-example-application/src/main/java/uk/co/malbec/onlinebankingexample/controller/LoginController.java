@@ -83,7 +83,7 @@ public class LoginController {
                 challengePhrase.charAt(challenge.get(1)) == input2.charAt(0) &&
                 challengePhrase.charAt(challenge.get(2)) == input3.charAt(0)) {
 
-
+            httpSession.setAttribute("authenticated", true);
             if (user.getNotices() != null && user.getNotices().size() > 0){
                 String notice = user.getNotices().remove(0);
                 ModelAndView modelAndView = new ModelAndView("notice");
@@ -91,10 +91,13 @@ public class LoginController {
                 modelAndView.addObject("displayLogin", false);
                 return modelAndView;
             } else {
+
                 return new ModelAndView(new RedirectView("/portfolio"));
             }
 
         } else {
+            httpSession.setAttribute("user", null);
+            httpSession.setAttribute("authenticated", null);
             ModelAndView modelAndView = new ModelAndView("index");
             modelAndView.addObject("displayLogin", true);
             modelAndView.addObject("displayFailedModal", true);

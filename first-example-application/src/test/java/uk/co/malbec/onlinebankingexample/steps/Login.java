@@ -1,16 +1,15 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.annotations.Terminator;
 
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 @Step(OpenLandingPage.class)

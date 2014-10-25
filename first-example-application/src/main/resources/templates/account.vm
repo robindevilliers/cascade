@@ -13,7 +13,18 @@
             <div class="container-fluid">
                 <h2 test-field-account-name>${account.name}</h2>
             </div>
-
+            #if ($account.type == "Current")
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-8">
+                        <strong>Funds Available</strong>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        $money.format($available)
+                    </div>
+                </div>
+            </div>
+            #end
             <div class="container-fluid">
                 <table class="table table-striped">
                     <tr>
@@ -28,20 +39,21 @@
                     #set($rowNumber = 0)
                     #foreach($transaction in $account.transactions)
                     <tr test-row-$rowNumber>
-                        <td test-field-date>$transaction.date</td>
+                        <td test-field-date>$date.format($transaction.date)</td>
                         <td test-field-description>$transaction.description</td>
 
-                        <td test-field-debit>
+                        <td test-field-debit class="text-right">
                         #if ($transaction.type == "DEBIT")
-                            $transaction.amount
+                            $money.format($transaction.amount)
                         #end
                         </td>
-                        <td test-field-credit>
+                        <td test-field-credit class="text-right">
                         #if ($transaction.type == "CREDIT")
-                            $transaction.amount
+                            $money.format($transaction.amount)
                         #end
                         </td>
-                        <td test-field-balance>$balance</td>
+
+                        <td test-field-balance class="text-right">$money.format($balance)</td>
                     </tr>
 
                     #if ($transaction.type == "DEBIT")

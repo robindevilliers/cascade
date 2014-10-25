@@ -13,7 +13,13 @@ public class User {
 
     private List<String> notices = new ArrayList<String>();
 
+    private List<StandingOrder> standingOrders = new ArrayList<StandingOrder>();
+
+    private List<RecentPayment> recentPayments = new ArrayList<RecentPayment>();
+
     private List<Account> accounts = new ArrayList<Account>();
+
+    private PersonalDetails personalDetails;
 
     public String getUsername() {
         return username;
@@ -47,11 +53,35 @@ public class User {
         this.notices = notices;
     }
 
+    public List<StandingOrder> getStandingOrders() {
+        return standingOrders;
+    }
+
+    public void setStandingOrders(List<StandingOrder> standingOrders) {
+        this.standingOrders = standingOrders;
+    }
+
+    public List<RecentPayment> getRecentPayments() {
+        return recentPayments;
+    }
+
+    public void setRecentPayments(List<RecentPayment> recentPayments) {
+        this.recentPayments = recentPayments;
+    }
+
     public List<Account> getAccounts() {
         return accounts;
     }
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public PersonalDetails getPersonalDetails() {
+        return personalDetails;
+    }
+
+    public void setPersonalDetails(PersonalDetails personalDetails) {
+        this.personalDetails = personalDetails;
     }
 }

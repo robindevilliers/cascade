@@ -32,6 +32,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.apache.velocity:velocity:1.7")
+    compile('joda-time:joda-time:2.5')
 
     testCompile("junit:junit:4.11")
     testCompile('org.jboss.resteasy:resteasy-client:3.0.9.Final')

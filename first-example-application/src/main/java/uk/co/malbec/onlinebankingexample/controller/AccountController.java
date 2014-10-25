@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.malbec.onlinebankingexample.model.Account;
+import uk.co.malbec.onlinebankingexample.model.AccountType;
+import uk.co.malbec.onlinebankingexample.model.RecentPayment;
 import uk.co.malbec.onlinebankingexample.model.User;
 
 import javax.servlet.http.HttpSession;
@@ -31,9 +33,23 @@ public class AccountController {
             }
         }
 
+
+
+
         ModelAndView modelAndView = new ModelAndView("account");
         modelAndView.addObject("displayLogin", false);
         modelAndView.addObject("account", account);
+
+        if (AccountType.Current.equals(account.getType())){
+            Integer available = account.getBalance();
+            for (RecentPayment recentPayment : user.getRecentPayments()){
+                if (recentPayment.getCleared() == null){
+                    available -= recentPayment.getAmount();
+                }
+            }
+            modelAndView.addObject("available", available);
+        }
+
 
         return modelAndView;
     }

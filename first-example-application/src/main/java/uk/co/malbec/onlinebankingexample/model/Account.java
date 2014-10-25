@@ -6,6 +6,8 @@ public class Account {
 
     private String name;
 
+    private AccountType type;
+
     private String number;
 
     private Integer balance;
@@ -26,6 +28,14 @@ public class Account {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
     }
 
     public Integer getBalance() {

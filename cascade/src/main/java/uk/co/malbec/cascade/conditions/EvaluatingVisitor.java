@@ -13,36 +13,36 @@ public class EvaluatingVisitor implements Visitor {
 
     @Override
     public void visit(AndPredicate andPredicate) {
-        boolean result = true;
         for (Predicate predicate : andPredicate.getPredicates()){
-            EvaluatingVisitor visitor = new EvaluatingVisitor(steps);
-            predicate.accept(visitor);
-            if (!visitor.getResult()){
-                result = false;
-                break;
+            predicate.accept(this);
+            if (!result){
+                return;
             }
         }
-        this.result = result;
+        this.result = true;
     }
 
     @Override
     public void visit(OrPredicate orPredicate) {
-        boolean result = false;
         for (Predicate predicate : orPredicate.getPredicates()){
-            EvaluatingVisitor visitor = new EvaluatingVisitor(steps);
-            predicate.accept(visitor);
-            if (visitor.getResult()){
-                result = true;
-                break;
+            predicate.accept(this);
+            if (result){
+                return;
             }
         }
-        this.result = result;
+        result = false;
     }
 
     @Override
     public void visit(WithStepPredicate withStepPredicate) {
         //TODO - add code so that I can define a step interface here as well as a concrete class.
         result = steps.contains(withStepPredicate.getStep());
+    }
+
+    @Override
+    public void visit(NotPredicate notPredicate) {
+        notPredicate.getPredicate().accept(this);
+        result = !result;
     }
 
     public boolean getResult(){

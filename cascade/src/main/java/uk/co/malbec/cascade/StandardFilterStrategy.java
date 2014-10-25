@@ -23,18 +23,11 @@ public class StandardFilterStrategy implements FilterStrategy {
 
     @Override
     public void init(Class<?> controlClass) {
-        try {
-            filter = (Predicate) getValueOfFieldAnnotatedWith(newInstance(controlClass), FilterTests.class);
-        } catch (IllegalAccessException e) {
-            throw new CascadeException("illegal access exception trying to instantiate control class");
-        } catch (InstantiationException e) {
-            throw new CascadeException("instantiation exception trying to instantiate control class");
-        }
+        filter = (Predicate) getValueOfFieldAnnotatedWith(newInstance(controlClass, "control"), FilterTests.class);
     }
 
     @Override
     public boolean match(Journey journey) {
-
         if (filter != null){
             return conditionalLogic.matches(filter, journey.getSteps());
         }

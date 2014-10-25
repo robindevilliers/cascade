@@ -12,12 +12,17 @@ import java.util.Map;
 
 public class ReflectionUtils {
 
-    public static <T extends Annotation> void invokeAnnotatedMethod(Class<T> annotationClass, Object subject) throws InvocationTargetException, IllegalAccessException {
+    public static <T extends Annotation> void invokeAnnotatedMethod(Class<T> annotationClass, Object subject) {
         Method annotatedMethod = findAnnotatedMethod(annotationClass, subject);
         if (annotatedMethod != null) {
 
-            annotatedMethod.invoke(subject);
-
+            try {
+                annotatedMethod.invoke(subject);
+            } catch (InvocationTargetException e) {
+                throw new CascadeException(String.format("Invocation target exception executing %s method on class: %s", annotationClass.getName(), subject.getClass().toString()), e.getTargetException());
+            } catch (IllegalAccessException e) {
+                throw new CascadeException(String.format("Illegal access exception trying to execute %s method on step class: %s", annotationClass.getName(), subject.getClass().toString()), e);
+            }
         }
     }
 
@@ -57,8 +62,14 @@ public class ReflectionUtils {
         }
     }
 
-    public static Object newInstance(Class clazz) throws IllegalAccessException, InstantiationException {
-        return clazz.newInstance();
+    public static Object newInstance(Class clazz, String name)  {
+        try {
+            return clazz.newInstance();
+        } catch (IllegalAccessException e) {
+            throw new CascadeException(String.format("Illegal access exception trying to instantiate %s class: %s", name, clazz.toString()), e);
+        } catch (InstantiationException e) {
+            throw new CascadeException(String.format("Instantiation exception trying to instantiate %s class: %s", name, clazz.toString()), e);
+        }
     }
 
     public static Object getValueOfFieldAnnotatedWith(Object subject, Class annotationClass) {

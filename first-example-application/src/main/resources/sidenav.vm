@@ -1,8 +1,10 @@
 <div class="sidebar-nav btn-group-vertical">
-    <a href="/portfolio" class="btn btn-default">My Portfolio</a>
-    <a href="/personal" class="btn btn-default">Personal Details</a>
-    <a href="/payments" class="btn btn-default">Manage Payments</a>
-    <a class="btn btn-default">Security</a>
-    <a class="btn btn-default">Contact Us</a>
-    <a href="/" class="btn btn-default">Log Out</a>
+    <a test-link-portfolio href="/portfolio" class="btn btn-default">My Portfolio</a>
+    <a test-link-personal-details href="/personal" class="btn btn-default">Personal Details</a>
+    #if ($currentAccountPresent)
+    <a test-link-payments href="/payments" class="btn btn-default">Manage Payments</a>
+    #end
+    <a test-link-security class="btn btn-default">Security</a>
+    <a test-link-contact-us class="btn btn-default">Contact Us</a>
+    <a test-link-log-out href="/" class="btn btn-default">Log Out</a>
 </div>
