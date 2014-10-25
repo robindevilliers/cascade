@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            #parse('sidenav.vm')
+        </div>
+        <div class="col-md-10">
+            <div class="container-fluid">
+                <h2>Modify Address</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-1 col-md-9">
+                    Your current address is <strong>$address</strong>
+                </div>
+            </div>
+            <div class="well">
+                <form action="/save_address" method="POST" class="form-horizontal" >
+                    <div class="row" >
+                        <div class="col-md-2">Address</div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input test-input-address name="address" type="text" class="form-control text-left"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-9">
+                            <button type="submit" class="btn btn-primary pull-right ">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

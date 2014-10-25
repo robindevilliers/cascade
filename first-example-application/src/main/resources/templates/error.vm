@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Error</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">TimeStamp</div>
+        <div class="col-md-4">$timestamp</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Status</div>
+        <div class="col-md-4">$status</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Error</div>
+        <div class="col-md-4">$error</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Exception</div>
+        <div class="col-md-4">$exception</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Message</div>
+        <div class="col-md-4">$message</div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">Path</div>
+        <div class="col-md-4">$path</div>
+    </div>
+
+</div> <!-- /container -->
+
