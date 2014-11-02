@@ -29,6 +29,7 @@ public interface Login {
         public void when() {
             webDriver.findElement(By.cssSelector("[test-field-username]")).sendKeys(username);
             webDriver.findElement(By.cssSelector("[test-field-password]")).sendKeys(password);
+            //TODO - think there may be a race condition at this point.  Between send keys and the signin click.
             webDriver.findElement(By.cssSelector("[test-cta-signin]")).click();
             new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
         }

@@ -78,8 +78,8 @@ class CascadeTest {
         assert description.displayName == 'Cascade Tests'
         List<Description> children = description.getChildren()
         assert children.size() == 2
-        assert children[0].displayName == ' class uk.co.malbec.cascade.CascadeTest$Her  class uk.co.malbec.cascade.CascadeTest$Him (uk.co.malbec.cascade.CascadeTest$TestClass)'
-        assert children[1].displayName == ' class uk.co.malbec.cascade.CascadeTest$Him  class uk.co.malbec.cascade.CascadeTest$Her (uk.co.malbec.cascade.CascadeTest$TestClass)'
+        assert children[0].displayName == ' CascadeTest$Her  CascadeTest$Him (uk.co.malbec.cascade.CascadeTest$TestClass)'
+        assert children[1].displayName == ' CascadeTest$Him  CascadeTest$Her (uk.co.malbec.cascade.CascadeTest$TestClass)'
     }
 
     @Test

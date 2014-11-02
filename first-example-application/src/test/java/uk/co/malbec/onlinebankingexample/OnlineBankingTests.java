@@ -36,12 +36,12 @@ public class OnlineBankingTests {
         root.setLevel(Level.INFO);
     }
 
-    @FilterTests
+    //@FilterTests
     //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class), withStep(OpenPersonalPage.class));
-    //Predicate filter = withStep(OpenAccountPage.OpenMortgageAccount.class);
+    //Predicate filter = withStep(Portfolio.CurrentAndSaverAccounts.class);
 
-    /*@FilterTests
-    Predicate filter = and(
+   // @FilterTests
+    /*Predicate filter = and(
             withStep(OpenLandingPage.class),
             withStep(Login.SuccessfulLogin.class),
             or(

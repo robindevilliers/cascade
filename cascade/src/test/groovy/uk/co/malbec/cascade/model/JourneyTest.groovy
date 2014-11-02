@@ -12,9 +12,9 @@ class JourneyTest {
 
         Journey journey = new Journey([GoToLoginPage, EnterPassword], TestClass)
         journey.init()
-        assert journey.name == ' class uk.co.malbec.cascade.model.JourneyTest$GoToLoginPage  class uk.co.malbec.cascade.model.JourneyTest$EnterPassword '
+        assert journey.name == ' JourneyTest$GoToLoginPage  JourneyTest$EnterPassword '
         assert journey.steps == [GoToLoginPage, EnterPassword]
-        assert journey.description.displayName == ' class uk.co.malbec.cascade.model.JourneyTest$GoToLoginPage  class uk.co.malbec.cascade.model.JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
+        assert journey.description.displayName == ' JourneyTest$GoToLoginPage  JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
     }
 
     @Test
