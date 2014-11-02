@@ -207,7 +207,7 @@ public interface OpenAccountPage {
         }
     }
 
-    //@StepHandler({WaitTenSeconds.class, WaitTenSeconds.class , WaitTenSeconds.class, WaitTenSeconds.class,WaitTenSeconds.class, WaitTenSeconds.class , WaitTenSeconds.class, WaitTenSeconds.class, WaitTenSeconds.class, WaitTenSeconds.class , WaitTenSeconds.class, WaitTenSeconds.class,WaitTenSeconds.class, WaitTenSeconds.class , WaitTenSeconds.class, WaitTenSeconds.class })
+
     public class OpenMortgageAccount implements OpenAccountPage {
 
         @OnlyRunWith

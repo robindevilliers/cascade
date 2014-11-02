@@ -32,19 +32,21 @@
                         <th>Amount</th>
                         <th></th>
                     </tr>
+                    #set($rowNumber = 0)
                     #foreach($standingOrder in $standingOrders)
 
-                    <tr>
-                        <td>$standingOrder.description</td>
-                        <td>$standingOrder.reference</td>
-                        <td>$standingOrder.accountNumber</td>
-                        <td>$standingOrder.sortCode</td>
-                        <td>$date.format($standingOrder.dueDate)</td>
-                        <td>$standingOrder.period</td>
-                        <td class="text-right">$money.format($standingOrder.amount)</td>
-                        <td><a href="/payments/removeStandingOrder/$standingOrder.id" class="btn btn-primary btn-sm">Cancel</a></td>
+                    <tr test-standing-order-row-$rowNumber>
+                        <td test-field-description>$standingOrder.description</td>
+                        <td test-field-reference>$standingOrder.reference</td>
+                        <td test-field-account-number>$standingOrder.accountNumber</td>
+                        <td test-field-sort-code>$standingOrder.sortCode</td>
+                        <td test-field-last-date>$date.format($standingOrder.dueDate)</td>
+                        <td test-field-period>$standingOrder.period</td>
+                        <td test-field-amount class="text-right">$money.format($standingOrder.amount)</td>
+                        <td><a href="/payments/removeStandingOrder/$standingOrder.id" test-cancel-cta class="btn btn-primary btn-sm">Cancel</a></td>
                     </tr>
-                #end
+                    #set($rowNumber = $rowNumber + 1)
+                    #end
                 </table>
             </div>
 
@@ -60,16 +62,18 @@
                         <th>Cleared</th>
                         <th>Amount</th>
                     </tr>
+                    #set($rowNumber = 0)
                     #foreach($recentPayment in $recentPayments)
-                    <tr>
-                        <td>$date.format($recentPayment.date)</td>
-                        <td>$recentPayment.description</td>
-                        <td>$recentPayment.reference</td>
-                        <td>$recentPayment.accountNumber</td>
-                        <td>$recentPayment.sortCode</td>
-                        <td>$date.format($recentPayment.cleared)</td>
-                        <td class="text-right">$money.format($recentPayment.amount)</td>
+                    <tr test-recent-payment-row-$rowNumber>
+                        <td test-field-date>$date.format($recentPayment.date)</td>
+                        <td test-field-description>$recentPayment.description</td>
+                        <td test-field-reference>$recentPayment.reference</td>
+                        <td test-field-account-number>$recentPayment.accountNumber</td>
+                        <td test-field-sort-code>$recentPayment.sortCode</td>
+                        <td test-field-cleared>$date.format($recentPayment.cleared)</td>
+                        <td test-field-amount class="text-right">$money.format($recentPayment.amount)</td>
                     </tr>
+                    #set($rowNumber = $rowNumber + 1)
                     #end
                 </table>
             </div>

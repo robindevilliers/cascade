@@ -42,11 +42,14 @@ public class AccountController {
 
         if (AccountType.Current.equals(account.getType())){
             Integer available = account.getBalance();
-            for (RecentPayment recentPayment : user.getRecentPayments()){
-                if (recentPayment.getCleared() == null){
-                    available -= recentPayment.getAmount();
+            if (user.getRecentPayments() != null){
+                for (RecentPayment recentPayment : user.getRecentPayments()){
+                    if (recentPayment.getCleared() == null){
+                        available -= recentPayment.getAmount();
+                    }
                 }
             }
+
             modelAndView.addObject("available", available);
         }
 

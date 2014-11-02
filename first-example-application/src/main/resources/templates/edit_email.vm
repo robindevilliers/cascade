@@ -9,7 +9,7 @@
             </div>
             <div class="row">
                 <div class="col-md-offset-1 col-md-9">
-                    Your current email is <strong>$email</strong>
+                    Your current email is <strong test-current-email-text>$email</strong>
                 </div>
             </div>
             <div class="well">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="row" >
                         <div class="col-md-9">
-                            <button type="submit" class="btn btn-primary pull-right ">Save</button>
+                            <button test-save-cta type="submit" class="btn btn-primary pull-right ">Save</button>
                         </div>
                     </div>
                 </form>

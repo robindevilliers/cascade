@@ -9,7 +9,7 @@
             </div>
             <div class="row">
                 <div class="col-md-offset-1 col-md-9">
-                    Your current mobile is <strong>$mobile</strong>
+                    Your current mobile is <strong test-current-mobile-text>$mobile</strong>
                 </div>
             </div>
             <div class="well">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="row" >
                         <div class="col-md-9">
-                            <button test-submit type="submit" class="btn btn-primary pull-right ">Save</button>
+                            <button test-save-cta type="submit" class="btn btn-primary pull-right ">Save</button>
                         </div>
                     </div>
                 </form>

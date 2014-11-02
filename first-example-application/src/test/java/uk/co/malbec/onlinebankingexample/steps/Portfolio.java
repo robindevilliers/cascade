@@ -151,6 +151,7 @@ public interface Portfolio {
             assertNull(f);
             assertEquals(webDriver.findElement(By.cssSelector("[test-row-1004] [test-field-account-name]")).getText(), "Fancy Mortgage");
             assertEquals(webDriver.findElement(By.cssSelector("[test-row-1004] [test-field-account-balance]")).getText(), "£ (154,987.00)");
+            assertEquals(0, webDriver.findElements(By.cssSelector("[test-link-payments]")).size());
         }
     }
 }

@@ -37,8 +37,8 @@ public class OnlineBankingTests {
     }
 
     //@FilterTests
-    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class), withStep(OpenPersonalPage.class));
-    //Predicate filter = withStep(Portfolio.CurrentAndSaverAccounts.class);
+    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class), withStep(OpenPaymentsPage.class));
+    //Predicate filter = withStep(OpenEditAddress.class);
 
    // @FilterTests
     /*Predicate filter = and(
@@ -72,6 +72,12 @@ public class OnlineBankingTests {
     @Demands
     Map personalDetails;
 
+    @Demands
+    List<Map> standingOrders;
+
+    @Demands
+    List<Map> recentPayments;
+
 
     @Setup
     public void setup() {
@@ -83,6 +89,8 @@ public class OnlineBankingTests {
             put("notices", notices);
             put("accounts", accounts);
             put("personalDetails", personalDetails);
+            put("standingOrders", standingOrders);
+            put("recentPayments", recentPayments);
         }};
 
         Client client = ClientBuilder.newBuilder().build();

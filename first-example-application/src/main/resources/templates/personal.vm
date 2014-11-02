@@ -13,9 +13,9 @@
                 <tr><td>Name</td><td test-field-name>${personalDetails.name}</td></tr>
                 <tr><td>Nationality</td><td test-field-nationality>${personalDetails.nationality}</td><td></td></tr>
                 <tr><td>Domicile</td><td test-field-domicile>${personalDetails.domicile}</td><td></td></tr>
-                <tr><td>Address</td><td test-field-address>${personalDetails.address}</td><td><a href="/edit_address" class="btn btn-primary btn-sm">Modify</a></td></tr>
-                <tr><td>Mobile Number</td><td test-field-mobile>${personalDetails.mobile}</td><td><a href="/edit_mobile" class="btn btn-primary btn-sm">Modify</a></td></tr>
-                <tr><td>Email Address</td><td test-field-email>${personalDetails.email}</td><td><a href="/edit_email" class="btn btn-primary btn-sm">Modify</a></td></tr>
+                <tr><td>Address</td><td test-field-address>${personalDetails.address}</td><td><a href="/edit_address" test-edit-address-cta class="btn btn-primary btn-sm">Modify</a></td></tr>
+                <tr><td>Mobile Number</td><td test-field-mobile>${personalDetails.mobile}</td><td><a href="/edit_mobile" test-edit-mobile-cta class="btn btn-primary btn-sm">Modify</a></td></tr>
+                <tr><td>Email Address</td><td test-field-email>${personalDetails.email}</td><td><a href="/edit_email" test-edit-email-cta class="btn btn-primary btn-sm">Modify</a></td></tr>
             </table>
         </div>
     </div>
