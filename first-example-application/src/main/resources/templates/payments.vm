@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <input name="description" class="form-control" size="45" type="text" ></input>
+                                        <input test-input-description name="description" class="form-control" size="45" type="text" ></input>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <input name="reference" class="form-control" type="text" size="45"></input>
+                                        <input test-input-reference name="reference" class="form-control" type="text" size="45"></input>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -179,13 +179,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input name="accountNumber" class="form-control number"  type="text" maxlength="8"></input>
+                                        <input test-input-account-number name="accountNumber" class="form-control number"  type="text" maxlength="8"></input>
                                     </div>
                                     <div class="col-md-6">
 
-                                        <input name="sortCodeOne" type="text" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control text-left number" size="2"  maxlength="2"></input>
-                                        <input name="sortCodeTwo" type="text" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control text-left number" size="2" maxlength="2"></input>
-                                        <input name="sortCodeThree" type="text" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control text-left number" size="2" maxlength="2"></input>
+                                        <input test-input-sort-code-one name="sortCodeOne" type="text" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control text-left number" size="2"  maxlength="2"></input>
+                                        <input test-input-sort-code-two name="sortCodeTwo" type="text" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control text-left number" size="2" maxlength="2"></input>
+                                        <input test-input-sort-code-three name="sortCodeThree" type="text" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control text-left number" size="2" maxlength="2"></input>
 
                                     </div>
                                 </div>
@@ -204,11 +204,11 @@
                                 </div>
                                 <div class="row">
                                    <div class="col-md-4">
-                                       <input type="radio" name="type"  value="now" checked>
+                                       <input test-input-type-now type="radio" name="type"  value="now" checked>
                                    </div>
                                    <div class="col-md-8">
-                                       <input type="radio" style="display: inline-block;vertical-align: middle;width: auto;" name="type"  value="specified"></input>&nbsp;
-                                       <input name="date" type="date" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control datepicker" size="10" maxlength="10"></input>
+                                       <input test-input-type-specified type="radio" style="display: inline-block;vertical-align: middle;width: auto;" name="type"  value="specified"></input>&nbsp;
+                                       <input test-input-date name="date" type="date" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control datepicker" size="10" maxlength="10"></input>
                                    </div>
                                 </div>
                                 <div class="row">
@@ -220,11 +220,11 @@
                                     Period
                                     <div class="row">
                                         <div class="col-sm-12" >
-                                            <select name="period" class="form-control">
-                                                <option>Once</option>
-                                                <option>Monthly</option>
-                                                <option>Quarterly</option>
-                                                <option>Yearly</option>
+                                            <select test-input-period name="period" class="form-control">
+                                                <option value="Once">Once</option>
+                                                <option value="Monthly">Monthly</option>
+                                                <option value="Quarterly">Quarterly</option>
+                                                <option value="Yearly">Yearly</option>
                                             </select>
                                         </div>
                                     </div>
@@ -241,7 +241,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12" >
-                                        <input name="amount" type="text" class="form-control money text-right"  maxlength="14"></input>
+                                        <input test-input-amount name="amount" type="text" class="form-control money text-right"  maxlength="14"></input>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -251,7 +251,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-primary">Setup/Pay</button>
+                                        <button test-setup-cta type="submit" class="btn btn-primary">Setup/Pay</button>
                                     </div>
                                 </div>
 

@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
 
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 

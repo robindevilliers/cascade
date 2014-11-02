@@ -39,7 +39,7 @@ public class PaymentsController {
 
 
     @RequestMapping("/payments/removeStandingOrder/{id}")
-    public ModelAndView removeStandingOrder(@PathVariable String id) {
+    public ModelAndView removeStandingOrder(@PathVariable Integer id) {
 
         User user = (User) httpSession.getAttribute("user");
 

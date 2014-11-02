@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.cascade.handler.WaitTenSeconds;
 
 import java.util.ArrayList;
 import java.util.HashMap;

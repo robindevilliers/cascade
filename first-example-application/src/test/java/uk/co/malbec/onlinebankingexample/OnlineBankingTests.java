@@ -3,14 +3,18 @@ package uk.co.malbec.onlinebankingexample;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
-import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.annotations.Demands;
+import uk.co.malbec.cascade.annotations.FilterTests;
+import uk.co.malbec.cascade.annotations.Scan;
+import uk.co.malbec.cascade.annotations.Setup;
 import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.cascade.handler.WaitASecond;
-import uk.co.malbec.onlinebankingexample.steps.*;
+import uk.co.malbec.onlinebankingexample.steps.EditMobile;
+import uk.co.malbec.onlinebankingexample.steps.Notice;
+import uk.co.malbec.onlinebankingexample.steps.Portfolio;
+import uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -23,7 +27,6 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.cascade.conditions.Predicates.and;
-import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 
 @RunWith(CascadeRunner.class)
@@ -36,9 +39,9 @@ public class OnlineBankingTests {
         root.setLevel(Level.INFO);
     }
 
-    //@FilterTests
-    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class), withStep(OpenPaymentsPage.class));
-    //Predicate filter = withStep(OpenEditAddress.class);
+    @FilterTests
+    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.AllAccounts.class), withStep(SetupStandingOrder.SetupStandingOrderForNow.class));
+    //Predicate filter = withStep(EditMobile.class);
 
    // @FilterTests
     /*Predicate filter = and(
