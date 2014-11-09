@@ -21,7 +21,7 @@ public class Journey {
     }
 
     public void init(){
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (Class<?> cls: steps){
             uk.co.malbec.cascade.annotations.Description description  = cls.getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
             if (description != null){

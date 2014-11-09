@@ -11,6 +11,7 @@ import uk.co.malbec.cascade.model.Journey;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static java.lang.String.format;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
 
@@ -60,18 +61,54 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                         } else {
                             journeyIterator.remove();
                         }
-
                     }
                 }
             }
         }
 
-        //TODO - go through journeys and remove journeys that are subsets of other journeys.
+        //Go through journeys and remove journeys that are subsets of other journeys.
+        Collections.sort(journeys, new Comparator<Journey>() {
+            @Override
+            public int compare(Journey lhs, Journey rhs) {
+                return lhs.getSteps().size() - rhs.getSteps().size();
+            }
+        });
 
-        //TODO - go through all scenarios and make sure they are all in at least one journey.
-        // If they are not, they are likely a self refering group that has no terminator specified.
-        // or no start step has been defined, so no journeys have been found.
 
+        Iterator<Journey> lhsIterator = journeys.listIterator();
+        int end = journeys.size();
+        for (int start = 1; lhsIterator.hasNext(); start++) {
+            Journey lhsJourney = lhsIterator.next();
+
+            for (Journey rhsJourney : journeys.subList(start, end)) {
+                if (lhsJourney.getSteps().equals(rhsJourney.getSteps().subList(0, lhsJourney.getSteps().size()))) {
+                    lhsIterator.remove();
+                    start--;
+                    end = journeys.size();
+                    break;
+                }
+            }
+        }
+
+        for (Class scenario : allScenarios) {
+            boolean found = false;
+            for (Journey journey : journeys) {
+                if (journey.getSteps().contains(scenario)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new CascadeException(format(new StringBuilder()
+                        .append("Invalid configuration: Scenario %s not found in any journey: ")
+                        .append("This journey generator calculates journeys by finding terminators ")
+                        .append("and walking backwards to the steps that start journeys. ")
+                        .append("If a step is not found in journeys, it is either dependent on ")
+                        .append("steps that don't lead to a journey start, or there are no terminators ")
+                        .append("downstream of this step.")
+                        .toString(), scenario.toString()));
+            }
+        }
 
         for (Journey journey : journeys) {
             journey.init();
@@ -109,21 +146,21 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             if (scenario == currentScenario) {
                 List<Class> infiniteLoop = new ArrayList<Class>();
 
-                while (iterator.hasNext()){
+                while (iterator.hasNext()) {
                     infiniteLoop.add(iterator.next());
                 }
                 infiniteLoop.add(currentScenario);
 
                 Collections.reverse(infiniteLoop);
 
-                StringBuffer buffer = new StringBuffer();
-                for (Class cls: infiniteLoop){
+                StringBuilder buffer = new StringBuilder();
+                for (Class cls : infiniteLoop) {
                     String[] parts = cls.toString().split("[.]");
                     buffer.append(parts[parts.length - 1]);
                     buffer.append(" ");
                 }
 
-                throw new CascadeException(String.format("Invalid configuration.  An infinite loop is configured. [%s]", buffer.toString().trim()));
+                throw new CascadeException(format("Invalid configuration.  An infinite loop is configured. [%s]", buffer.toString().trim()));
             }
         }
 
@@ -143,7 +180,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
             for (Class preceedingStep : currentStepAnnotation.value()) {
 
-                Scenario: for (Class scenario : allScenarios) {
+                Scenario:
+                for (Class scenario : allScenarios) {
 
                     boolean scenarioIsNotAPreceedingStep = !preceedingStep.isAssignableFrom(scenario);
                     if (scenarioIsNotAPreceedingStep) {
@@ -155,20 +193,19 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                         continue;
                     }
 
-                    ReEntrantTerminator reEntrantTerminator  = findAnnotation(ReEntrantTerminator.class, scenario);
-                    if (reEntrantTerminator != null){
+                    ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, scenario);
+                    if (reEntrantTerminator != null) {
                         Integer limit = reEntrantTerminator.value();
                         Integer count = 0;
-                        for (Class cls : trail){
-                            if (cls == scenario){
+                        for (Class cls : trail) {
+                            if (cls == scenario) {
                                 count++;
                             }
-                            if (count == limit){
+                            if (count == limit) {
                                 continue Scenario;
                             }
                         }
                     }
-
 
 
                     generatingTrail(scenario, trail, allScenarios, journeys, controlClass);

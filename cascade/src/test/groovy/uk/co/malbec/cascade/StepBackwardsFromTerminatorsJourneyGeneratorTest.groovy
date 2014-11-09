@@ -240,14 +240,8 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         assert journey: "expected a journey with the open details page occurring exactly twice and the journey should end on the open details page"
         journeys.remove(journey)
 
-
-        //TODO - go through journeys and remove journeys that are subsets of other journeys.
-        //at the moment this test returns two journeys.  The one journey is a subset of the other journey.
     }
 
-    //TODO - we need to find journey's that don't have normal terminators or re-entrant terminators  - or do we - those would just be ignored.
-
-    //TODO - what about journey's with no start step?
     @Test
     def void "given a set of re-entrant steps with no re-entrant-terminators, the journey generator should throw an exception"() {
         //re-entrant steps are steps that can occur multiple times in a journey, but will
@@ -282,6 +276,53 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
     @Step(OpenHomePage)
     @ReEntrantTerminator(2)
     static class OpenDetailsPage {
+    }
+
+    @Test
+    def void "given a set of self referring steps, the generator should throw an exception"() {
+        //re-entrant steps are steps that can occur multiple times in a journey, but will
+        try {
+            //when
+            backwardsFromTerminatorsJourneyGenerator.generateJourneys([
+                    A,
+                    B
+            ], TestClass)
+
+            assert false: "An infinite loop exists, so an exception is expected"
+        } catch (CascadeException e) {
+            //then
+            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
+        }
+    }
+
+    @Test
+    def void "given a set of non-termnating steps, with no downstream terminators, the generator should throw an exception"() {
+        //re-entrant steps are steps that can occur multiple times in a journey, but will
+        try {
+            //when
+            backwardsFromTerminatorsJourneyGenerator.generateJourneys([
+                    A,
+                    B,
+                    C
+            ], TestClass)
+
+            assert false: "An infinite loop exists, so an exception is expected"
+        } catch (CascadeException e) {
+            //then
+            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
+        }
+    }
+
+    @Step(B)
+    static class A {
+    }
+
+    @Step([A, C])
+    static class B {
+    }
+
+    @Step
+    static class C {
     }
 
     public static class TestClass {
