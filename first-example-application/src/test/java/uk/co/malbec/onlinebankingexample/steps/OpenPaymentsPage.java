@@ -1,10 +1,7 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
 
@@ -16,8 +13,7 @@ import java.util.Map;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
-import static uk.co.malbec.onlinebankingexample.Utilities.assertRecentPaymentRow;
-import static uk.co.malbec.onlinebankingexample.Utilities.assertStandingOrderRow;
+import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Portfolio.class)
 public class OpenPaymentsPage {
@@ -117,8 +113,8 @@ public class OpenPaymentsPage {
 
     @When
     public void when() {
-        webDriver.findElement(By.cssSelector("[test-link-payments]")).click();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
+        click(webDriver, "[test-link-payments]");
+        waitForPage(webDriver);
     }
 
     @Then

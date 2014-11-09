@@ -1,13 +1,13 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.annotations.Demands;
+import uk.co.malbec.cascade.annotations.Step;
+import uk.co.malbec.cascade.annotations.Then;
+import uk.co.malbec.cascade.annotations.When;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenPersonalPage.class)
 public class OpenEditMobile {
@@ -15,21 +15,15 @@ public class OpenEditMobile {
     @Demands
     public WebDriver webDriver;
 
-    @Given
-    public void given(){
-
-    }
-
     @When
-    public void when(){
-        webDriver.findElement(By.cssSelector("[test-edit-mobile-cta]")).click();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
-
+    public void when() {
+        click(webDriver, "[test-edit-mobile-cta]");
+        waitForPage(webDriver);
     }
 
     @Then
-    public void then(Throwable f){
+    public void then(Throwable f) {
         assertNull(f);
-        assertEquals(webDriver.findElement(By.cssSelector("[test-current-mobile-text]")).getText(),"0788 1234 567");
+        assertTextEquals(webDriver, "[test-current-mobile-text]", "0788 1234 567");
     }
 }

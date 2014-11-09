@@ -1,20 +1,15 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.annotations.Terminator;
 
+import static java.lang.Integer.parseInt;
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Login.class)
 public interface Challenge {
-
-
     public class PassChallenge implements Challenge {
 
         @Supplies
@@ -25,18 +20,17 @@ public interface Challenge {
 
         @When
         public void when() {
+            int one = parseInt(readText(webDriver, "[test-text-number-one]")) - 1;
+            int two = parseInt(readText(webDriver, "[test-text-number-two]")) - 1;
+            int three = parseInt(readText(webDriver, "[test-text-number-three]")) - 1;
 
-            String textOne = webDriver.findElement(By.cssSelector("[test-text-number-one]")).getText();
-            String textTwo = webDriver.findElement(By.cssSelector("[test-text-number-two]")).getText();
-            String textThree = webDriver.findElement(By.cssSelector("[test-text-number-three]")).getText();
+            enterText(webDriver, "[test-field-number-one]", String.format("%c", challengePhrase.charAt(one)));
+            enterText(webDriver, "[test-field-number-two]", String.format("%c", challengePhrase.charAt(two)));
+            enterText(webDriver, "[test-field-number-three]", String.format("%c", challengePhrase.charAt(three)));
 
-            webDriver.findElement(By.cssSelector("[test-field-number-one]")).sendKeys("" + challengePhrase.charAt(new Integer(textOne) - 1));
-            webDriver.findElement(By.cssSelector("[test-field-number-two]")).sendKeys("" + challengePhrase.charAt(new Integer(textTwo) - 1));
-            webDriver.findElement(By.cssSelector("[test-field-number-three]")).sendKeys("" + challengePhrase.charAt(new Integer(textThree) - 1));
+            click(webDriver, "[test-cta-authenticate]");
 
-            webDriver.findElement(By.cssSelector("[test-cta-authenticate]")).click();
-
-            new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
+            waitForPage(webDriver);
         }
 
         @Then
@@ -55,26 +49,19 @@ public interface Challenge {
 
         @When
         public void when() {
+            enterText(webDriver, "[test-field-number-one]", "a");
+            enterText(webDriver, "[test-field-number-two]", "a");
+            enterText(webDriver, "[test-field-number-three]", "a");
 
-
-            webDriver.findElement(By.cssSelector("[test-field-number-one]")).sendKeys("a");
-            webDriver.findElement(By.cssSelector("[test-field-number-two]")).sendKeys("a");
-            webDriver.findElement(By.cssSelector("[test-field-number-three]")).sendKeys("a");
-
-            webDriver.findElement(By.cssSelector("[test-cta-authenticate]")).click();
-
-            new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
+            click(webDriver, "[test-cta-authenticate]");
+            waitForPage(webDriver);
         }
 
         @Then
         public void then(Throwable f) {
             assertNull(f);
-            assertEquals(1, webDriver.findElements(By.cssSelector("[test-form-login]")).size());
-            assertTrue(webDriver.findElement(By.cssSelector("[test-dialog-authentication-failure]")).isDisplayed());
-
+            assertElementPresent(webDriver,"[test-form-login]");
+            assertElementDisplayed(webDriver, "[test-dialog-authentication-failure]");
         }
-
     }
-
-
 }

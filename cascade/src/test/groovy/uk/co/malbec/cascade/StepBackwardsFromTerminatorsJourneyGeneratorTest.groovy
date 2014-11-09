@@ -3,9 +3,11 @@ package uk.co.malbec.cascade
 import org.junit.Before
 import org.junit.Test
 import uk.co.malbec.cascade.annotations.OnlyRunWith
+import uk.co.malbec.cascade.annotations.ReEntrantTerminator
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
 import uk.co.malbec.cascade.conditions.Predicate
+import uk.co.malbec.cascade.exception.CascadeException
 import uk.co.malbec.cascade.model.Journey
 
 import static uk.co.malbec.cascade.conditions.Predicates.withStep
@@ -209,7 +211,79 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
     }
 
-    public static class TestClass {
+
+    @Test
+    def void "given a set of re-entrant steps, the journey generator should generate journeys"() {
+        //re-entrant steps are steps that can occur multiple times in a journey, but will
+
+        //when
+        List<Journey> journeys = backwardsFromTerminatorsJourneyGenerator.generateJourneys([
+                OpenLandingPage,
+                OpenHomePage,
+                OpenDetailsPage
+        ], TestClass)
+
+        //then
+        Journey journey;
+
+        //journey with the OpenDetailsPage repeated twice.
+        journey = journeys.find {
+            List<Class> steps = new ArrayList(it.steps)
+            return steps.size() == 5 &&
+                    steps.remove(0) == OpenLandingPage &&
+                    steps.remove(0) == OpenHomePage &&
+                    steps.remove(0) == OpenDetailsPage &&
+                    steps.remove(0) == OpenHomePage &&
+                    steps.remove(0) == OpenDetailsPage &&
+                    steps.empty
+        }
+        assert journey: "expected a journey with the open details page occurring exactly twice and the journey should end on the open details page"
+        journeys.remove(journey)
+
+
+        //TODO - go through journeys and remove journeys that are subsets of other journeys.
+        //at the moment this test returns two journeys.  The one journey is a subset of the other journey.
     }
 
+    //TODO - we need to find journey's that don't have normal terminators or re-entrant terminators  - or do we - those would just be ignored.
+
+    //TODO - what about journey's with no start step?
+    @Test
+    def void "given a set of re-entrant steps with no re-entrant-terminators, the journey generator should throw an exception"() {
+        //re-entrant steps are steps that can occur multiple times in a journey, but will
+        try {
+            //when
+            backwardsFromTerminatorsJourneyGenerator.generateJourneys([
+
+                    OpenHomePage,
+                    OpenDetailsPageThatDoesntTerminate,
+                    OpenDetailsPage
+            ], TestClass)
+
+            assert false: "An infinite loop exists, so an exception is expected"
+        } catch (CascadeException e) {
+            //then
+            assert e.message == 'Invalid configuration.  An infinite loop is configured. [StepBackwardsFromTerminatorsJourneyGeneratorTest$OpenHomePage StepBackwardsFromTerminatorsJourneyGeneratorTest$OpenDetailsPageThatDoesntTerminate StepBackwardsFromTerminatorsJourneyGeneratorTest$OpenHomePage]'
+        }
+    }
+
+    @Step
+    static class OpenLandingPage {
+    }
+
+    @Step([OpenLandingPage, OpenDetailsPage, OpenDetailsPageThatDoesntTerminate])
+    static class OpenHomePage {
+    }
+
+    @Step(OpenHomePage)
+    static class OpenDetailsPageThatDoesntTerminate {
+    }
+
+    @Step(OpenHomePage)
+    @ReEntrantTerminator(2)
+    static class OpenDetailsPage {
+    }
+
+    public static class TestClass {
+    }
 }

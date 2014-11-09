@@ -1,34 +1,28 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.annotations.Demands;
+import uk.co.malbec.cascade.annotations.Step;
+import uk.co.malbec.cascade.annotations.Then;
+import uk.co.malbec.cascade.annotations.When;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenPersonalPage.class)
 public class OpenEditEmail {
     @Demands
     public WebDriver webDriver;
 
-    @Given
-    public void given(){
-
-    }
-
     @When
     public void when(){
-        webDriver.findElement(By.cssSelector("[test-edit-email-cta]")).click();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
-
+        click(webDriver, "[test-edit-email-cta]");
+        waitForPage(webDriver);
     }
 
     @Then
     public void then(Throwable f){
         assertNull(f);
-        assertEquals(webDriver.findElement(By.cssSelector("[test-current-email-text]")).getText(),"robin@imaginaryville.co.uk");
+        assertTextEquals(webDriver, "[test-current-email-text]", "robin@imaginaryville.co.uk");
     }
 }

@@ -1,17 +1,13 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Portfolio.class)
 public class OpenPersonalPage {
@@ -36,20 +32,19 @@ public class OpenPersonalPage {
 
     @When
     public void when() {
-        webDriver.findElement(By.cssSelector("[test-link-personal-details]")).click();
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
+        click(webDriver, "[test-link-personal-details]");
+        waitForPage(webDriver);
     }
 
     @Then
     public void then(Throwable f) {
         assertNull(f);
-
-        assertEquals("Robin de Villiers", webDriver.findElement(By.cssSelector("[test-field-name]")).getText());
-        assertEquals("British", webDriver.findElement(By.cssSelector("[test-field-nationality]")).getText());
-        assertEquals("UK", webDriver.findElement(By.cssSelector("[test-field-domicile]")).getText());
-        assertEquals("7 Special Way, FairBank, ImaginaryVille, WOW007", webDriver.findElement(By.cssSelector("[test-field-address]")).getText());
-        assertEquals("0788 1234 567", webDriver.findElement(By.cssSelector("[test-field-mobile]")).getText());
-        assertEquals("robin@imaginaryville.co.uk", webDriver.findElement(By.cssSelector("[test-field-email]")).getText());
+        assertTextEquals(webDriver, "[test-field-name]", "Robin de Villiers");
+        assertTextEquals(webDriver, "[test-field-nationality]", "British");
+        assertTextEquals(webDriver, "[test-field-domicile]", "UK");
+        assertTextEquals(webDriver, "[test-field-address]", "7 Special Way, FairBank, ImaginaryVille, WOW007");
+        assertTextEquals(webDriver, "[test-field-mobile]", "0788 1234 567");
+        assertTextEquals(webDriver, "[test-field-email]", "robin@imaginaryville.co.uk");
     }
 
 }

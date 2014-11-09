@@ -10,6 +10,8 @@ import uk.co.malbec.cascade.annotations.*;
 
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
+import static uk.co.malbec.onlinebankingexample.Utilities.assertElementPresent;
+import static uk.co.malbec.onlinebankingexample.Utilities.waitForPage;
 
 @Step
 public class OpenLandingPage {
@@ -20,13 +22,12 @@ public class OpenLandingPage {
     @Given
     public void given() {
         webDriver = new FirefoxDriver();
-
     }
 
     @When
     public void when() {
         webDriver.get("http://localhost:8080");
-        new WebDriverWait(webDriver, 20).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("body")));
+        waitForPage(webDriver);
     }
 
     @Then
@@ -35,8 +36,7 @@ public class OpenLandingPage {
     public void then(Throwable f) {
         assertNull(f);
         assertEquals("Fiery Horse Banking", webDriver.getTitle());
-        assertEquals(1, webDriver.findElements(By.cssSelector("[test-form-login]")).size());
-
+        assertElementPresent(webDriver, "[test-form-login]");
     }
 
     @Clear

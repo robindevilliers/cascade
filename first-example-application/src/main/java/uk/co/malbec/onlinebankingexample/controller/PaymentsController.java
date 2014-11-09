@@ -19,6 +19,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.joda.time.DateTime.*;
 import static org.joda.time.format.DateTimeFormat.*;
@@ -67,11 +69,20 @@ public class PaymentsController {
                             @RequestParam String period,
                             @RequestParam String amount) {
 
+        //the javascript currency handler doesn't always send the right stuff back to us.
+        //TODO - find a better solution to this hack
+        Matcher matcher = Pattern.compile("([\\d,]*[.][\\d]*)").matcher(amount);
+
+        if (!matcher.find()){
+            throw new RuntimeException("invalid amount supplied");
+        }
+
+
         User user = (User) httpSession.getAttribute("user");
 
         Integer amountInPence;
         try {
-            amountInPence = (int) (new DecimalFormat("#,###,##0.00").parse(amount).doubleValue() * 100);
+            amountInPence = (int) (new DecimalFormat("#,###,##0.00").parse(matcher.group()).doubleValue() * 100);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
