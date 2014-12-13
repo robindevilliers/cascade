@@ -2,6 +2,7 @@ package uk.co.malbec.cascade;
 
 
 import uk.co.malbec.cascade.annotations.Step;
+import uk.co.malbec.cascade.modules.ClasspathScanner;
 
 import java.util.ArrayList;
 import java.util.List;

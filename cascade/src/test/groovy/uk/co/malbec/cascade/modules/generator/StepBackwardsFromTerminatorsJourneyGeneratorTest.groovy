@@ -1,4 +1,4 @@
-package uk.co.malbec.cascade
+package uk.co.malbec.cascade.modules.generator
 
 import org.junit.Before
 import org.junit.Test
@@ -6,9 +6,11 @@ import uk.co.malbec.cascade.annotations.OnlyRunWith
 import uk.co.malbec.cascade.annotations.ReEntrantTerminator
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
+import uk.co.malbec.cascade.conditions.ConditionalLogic
 import uk.co.malbec.cascade.conditions.Predicate
 import uk.co.malbec.cascade.exception.CascadeException
 import uk.co.malbec.cascade.model.Journey
+import uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator
 
 import static uk.co.malbec.cascade.conditions.Predicates.withStep
 
@@ -291,7 +293,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {
             //then
-            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
+            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
         }
     }
 
@@ -309,7 +311,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {
             //then
-            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
+            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
         }
     }
 

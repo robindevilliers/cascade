@@ -1,11 +1,13 @@
-package uk.co.malbec.cascade
+package uk.co.malbec.cascade.modules.executor
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.handler.Handler;
+import uk.co.malbec.cascade.events.Handler
+import uk.co.malbec.cascade.modules.TestExecutor
+import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 
 import static org.mockito.Mockito.*;
 

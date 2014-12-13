@@ -69,7 +69,7 @@ public class PaymentsController {
                             @RequestParam String period,
                             @RequestParam String amount) {
 
-        //the javascript currency handler doesn't always send the right stuff back to us.
+        //the javascript currency events doesn't always send the right stuff back to us.
         //TODO - find a better solution to this hack
         Matcher matcher = Pattern.compile("([\\d,]*[.][\\d]*)").matcher(amount);
 

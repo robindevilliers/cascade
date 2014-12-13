@@ -1,7 +1,8 @@
-package uk.co.malbec.cascade;
+package uk.co.malbec.cascade.modules.scanner;
 
 
 import org.reflections.Reflections;
+import uk.co.malbec.cascade.modules.ClasspathScanner;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;

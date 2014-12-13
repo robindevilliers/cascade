@@ -1,12 +1,14 @@
-package uk.co.malbec.cascade
+package uk.co.malbec.cascade.modules.filtering
 
 import org.junit.Before
 import org.junit.Test
 import uk.co.malbec.cascade.annotations.FilterTests
 import uk.co.malbec.cascade.annotations.Step
+import uk.co.malbec.cascade.conditions.ConditionalLogic
 import uk.co.malbec.cascade.conditions.Predicate
 import uk.co.malbec.cascade.conditions.WithStepPredicate
 import uk.co.malbec.cascade.model.Journey
+import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy
 
 import static uk.co.malbec.cascade.conditions.Predicates.withStep
 

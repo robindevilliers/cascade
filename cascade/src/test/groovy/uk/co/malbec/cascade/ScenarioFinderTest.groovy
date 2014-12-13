@@ -4,6 +4,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import uk.co.malbec.cascade.annotations.Step
+import uk.co.malbec.cascade.modules.ClasspathScanner
+
 import static org.mockito.Mockito.*
 
 class ScenarioFinderTest {

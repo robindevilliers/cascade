@@ -1,8 +1,9 @@
-package uk.co.malbec.cascade
+package uk.co.malbec.cascade.conditions
 
 import org.junit.Test
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
+import uk.co.malbec.cascade.conditions.ConditionalLogic
 
 import static uk.co.malbec.cascade.conditions.Predicates.not
 import static uk.co.malbec.cascade.conditions.Predicates.or

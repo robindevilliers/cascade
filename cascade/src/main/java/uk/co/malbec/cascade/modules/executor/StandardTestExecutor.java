@@ -1,4 +1,4 @@
-package uk.co.malbec.cascade;
+package uk.co.malbec.cascade.modules.executor;
 
 
 import org.junit.runner.Description;
@@ -6,9 +6,9 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.exception.CascadeException;
-import uk.co.malbec.cascade.handler.Handler;
+import uk.co.malbec.cascade.events.Handler;
+import uk.co.malbec.cascade.modules.TestExecutor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ public class StandardTestExecutor implements TestExecutor {
             List<Handler> handlers = new ArrayList<Handler>();
             for (Class cls : stepPreHandlerAnnotation.value()){
                 try {
-                    handlers.add((Handler) newInstance(cls, "step pre handler"));
+                    handlers.add((Handler) newInstance(cls, "step pre events"));
                 } catch (ClassCastException e){
-                    throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                    throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                 }
             }
             preHandlers = handlers.toArray(new Handler[handlers.size()]);
@@ -42,9 +42,9 @@ public class StandardTestExecutor implements TestExecutor {
             List<Handler> handlers = new ArrayList<Handler>();
             for (Class cls : stepHandlerAnnotation.value()){
                 try {
-                    handlers.add((Handler) newInstance(cls, "step handler"));
+                    handlers.add((Handler) newInstance(cls, "step events"));
                 } catch (ClassCastException e){
-                    throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                    throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                 }
             }
             this.handlers = handlers.toArray(new Handler[handlers.size()]);
@@ -55,9 +55,9 @@ public class StandardTestExecutor implements TestExecutor {
             List<Handler> handlers = new ArrayList<Handler>();
             for (Class cls : stepPostHandlerAnnotation.value()){
                 try {
-                    handlers.add((Handler) newInstance(cls, "step post handler"));
+                    handlers.add((Handler) newInstance(cls, "step post events"));
                 } catch (ClassCastException e){
-                    throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                    throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                 }
             }
             postHandlers = handlers.toArray(new Handler[handlers.size()]);
@@ -81,9 +81,9 @@ public class StandardTestExecutor implements TestExecutor {
             if (stepPreHandlerAnnotation != null){
                 for (Class cls : stepPreHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls, "step pre handler")).handle(step);
+                        ((Handler) newInstance(cls, "step pre events")).handle(step);
                     } catch (ClassCastException e){
-                        throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                        throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                     }
                 }
             }
@@ -106,9 +106,9 @@ public class StandardTestExecutor implements TestExecutor {
             if (stepHandlerAnnotation != null){
                 for (Class cls : stepHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls, "step handler")).handle(step);
+                        ((Handler) newInstance(cls, "step events")).handle(step);
                     } catch (ClassCastException e){
-                        throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                        throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                     }
                 }
             }
@@ -136,9 +136,9 @@ public class StandardTestExecutor implements TestExecutor {
             if (stepPostHandlerAnnotation != null){
                 for (Class cls : stepPostHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls, "step post handler")).handle(step);
+                        ((Handler) newInstance(cls, "step post events")).handle(step);
                     } catch (ClassCastException e){
-                        throw new CascadeException("Class specified as handler class is not an instance of Handler", e);
+                        throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package uk.co.malbec.cascade.handler;
+package uk.co.malbec.cascade.events;
 
 
 public interface Handler {

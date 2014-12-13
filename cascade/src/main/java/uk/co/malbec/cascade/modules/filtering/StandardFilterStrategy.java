@@ -1,12 +1,11 @@
-package uk.co.malbec.cascade;
+package uk.co.malbec.cascade.modules.filtering;
 
 
 import uk.co.malbec.cascade.annotations.FilterTests;
+import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
-
-import java.util.List;
+import uk.co.malbec.cascade.modules.FilterStrategy;
 
 import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;

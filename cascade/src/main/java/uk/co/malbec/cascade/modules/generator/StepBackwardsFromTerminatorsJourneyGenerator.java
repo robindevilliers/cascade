@@ -1,12 +1,12 @@
-package uk.co.malbec.cascade;
+package uk.co.malbec.cascade.modules.generator;
 
 
-import org.junit.runner.*;
+import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.annotations.Description;
 import uk.co.malbec.cascade.conditions.Predicate;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
+import uk.co.malbec.cascade.modules.JourneyGenerator;
 
 import java.lang.annotation.Annotation;
 import java.util.*;

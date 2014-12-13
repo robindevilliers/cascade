@@ -3,9 +3,8 @@ package uk.co.malbec.cascade;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.Scan;
-import uk.co.malbec.cascade.annotations.StepPostHandler;
-import uk.co.malbec.cascade.annotations.StepPreHandler;
 import uk.co.malbec.cascade.model.Journey;
+import uk.co.malbec.cascade.modules.*;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.ArrayList;
@@ -29,7 +28,12 @@ public class Cascade {
 
     private List<Journey> journeys = new ArrayList<Journey>();
 
-    public Cascade(ClasspathScanner classpathScanner, ScenarioFinder scenarioFinder, JourneyGenerator journeyGenerator, ConstructionStrategy constructionStrategy, TestExecutor testExecutor, FilterStrategy filterStrategy) {
+    public Cascade(ClasspathScanner classpathScanner,
+                   ScenarioFinder scenarioFinder,
+                   JourneyGenerator journeyGenerator,
+                   ConstructionStrategy constructionStrategy,
+                   TestExecutor testExecutor,
+                   FilterStrategy filterStrategy) {
         this.classpathScanner = classpathScanner;
         this.scenarioFinder = scenarioFinder;
         this.journeyGenerator = journeyGenerator;
@@ -48,7 +52,6 @@ public class Cascade {
         List<Class> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
 
         journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
-        System.out.println(journeys.size());
     }
 
     public Description getDescription() {

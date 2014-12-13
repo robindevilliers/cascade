@@ -1,8 +1,9 @@
-package uk.co.malbec.cascade
+package uk.co.malbec.cascade.modules.construction
 
 import org.junit.Before
 import org.junit.Test
 import uk.co.malbec.cascade.model.Journey
+import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy
 import uk.co.malbec.cascade.utils.Reference
 import uk.co.malbec.cascade.annotations.*
 

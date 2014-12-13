@@ -7,9 +7,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.cascade.handler.WaitASecond;
-import uk.co.malbec.onlinebankingexample.steps.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -22,8 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static uk.co.malbec.cascade.conditions.Predicates.and;
-import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")

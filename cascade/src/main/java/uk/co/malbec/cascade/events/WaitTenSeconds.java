@@ -1,12 +1,11 @@
-package uk.co.malbec.cascade.handler;
+package uk.co.malbec.cascade.events;
 
 
-public class WaitASecond implements Handler {
-
+public class WaitTenSeconds implements Handler {
     @Override
     public void handle(Object step) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {}
     }
 }

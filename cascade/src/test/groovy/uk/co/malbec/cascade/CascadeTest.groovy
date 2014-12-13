@@ -8,6 +8,11 @@ import org.junit.runner.notification.RunNotifier
 import uk.co.malbec.cascade.annotations.Scan
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.model.Journey
+import uk.co.malbec.cascade.modules.ClasspathScanner
+import uk.co.malbec.cascade.modules.ConstructionStrategy
+import uk.co.malbec.cascade.modules.FilterStrategy
+import uk.co.malbec.cascade.modules.JourneyGenerator
+import uk.co.malbec.cascade.modules.TestExecutor
 import uk.co.malbec.cascade.utils.Reference
 import static org.mockito.Matchers.any
 import static org.mockito.Matchers.eq
@@ -48,7 +53,7 @@ class CascadeTest {
         when(scenarioFinderMock.findScenarios(any(String[]), any(ClasspathScanner))).thenReturn(scenariosMock)
 
         List<Journey> journeysMock = mock(List)
-        when(journeyGeneratorMock.generateJourneys(any(List), any(Class))).thenReturn(journeysMock)
+        when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock))).thenReturn(journeysMock)
 
         //When
         cascade.init(TestClass);
@@ -57,7 +62,7 @@ class CascadeTest {
         verify(filterStrategyMock).init(TestClass);
         verify(testExecutorMock).init(TestClass);
         verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
-        verify(journeyGeneratorMock).generateJourneys(scenariosMock, TestClass)
+        verify(journeyGeneratorMock).generateJourneys(scenariosMock, TestClass, filterStrategyMock)
 
         assert journeysMock == cascade.journeys
         assert TestClass == cascade.controlClass
@@ -83,7 +88,7 @@ class CascadeTest {
     }
 
     @Test
-    public void "given a request to run, the cascade class should filter, setup, execute and then teardown all journeys "() {
+    public void "given a request to run, the cascade class should setup, execute and then teardown all journeys "() {
         //given
         List<Journey> journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
         cascade.journeys = journeys
@@ -91,45 +96,18 @@ class CascadeTest {
             journey.init()
         }
         cascade.controlClass = TestClass
-       
-        when(filterStrategyMock.match(journeys[0])).thenReturn(true);
-        when(filterStrategyMock.match(journeys[1])).thenReturn(true);
 
         //when
         cascade.run(runNotifierMock);
 
         //then
-        verify(filterStrategyMock).match(journeys[0]);
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference));
         verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null);
 
-        verify(filterStrategyMock).match(journeys[1]);
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference));
         verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null);
 
         verify(constructionStrategyMock, times(2)).tearDown(any(Reference), any(Reference));
-    }
-
-    @Test
-    public void "given a request to run, the cascade class should filter out scenarios"() {
-        //given
-        List<Journey> journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
-        cascade.journeys = journeys
-        cascade.controlClass = TestClass
-
-        when(filterStrategyMock.match(journeys[0])).thenReturn(true);
-        when(filterStrategyMock.match(journeys[1])).thenReturn(false);
-
-        //when
-        cascade.run(runNotifierMock);
-
-        //then
-        verify(filterStrategyMock).match(journeys[0]);
-        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null);
-        verify(constructionStrategyMock).tearDown(any(Reference), any(Reference));
-
-        verify(filterStrategyMock).match(journeys[1]);
     }
 
     @Step

@@ -1,7 +1,5 @@
-package uk.co.malbec.cascade;
+package uk.co.malbec.cascade.conditions;
 
-
-import uk.co.malbec.cascade.conditions.*;
 
 import java.util.List;
 
