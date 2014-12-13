@@ -21,6 +21,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Portfolio.class)
+@ReEntrantTerminator(1)
 public interface OpenAccountPage {
 
     public class OpenCurrentAccount implements OpenAccountPage {
@@ -42,6 +43,7 @@ public interface OpenAccountPage {
         @Given
         public void given() {
 
+            System.out.println(accounts.size());
             for (Map account : accounts) {
                 if ("Premium Current Account".equals(account.get("name"))) {
                     currentAccount = account;
@@ -49,6 +51,7 @@ public interface OpenAccountPage {
                 }
             }
 
+            System.out.println(currentAccount);
             currentAccount.put("transactions", new ArrayList<Map>() {{
                 add(new HashMap<String, String>() {{
                     put("date", "30 Aug 2014");

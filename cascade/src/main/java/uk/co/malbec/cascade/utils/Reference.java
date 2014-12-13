@@ -5,6 +5,13 @@ public class Reference<T> {
     
     private T object;
 
+    public Reference(){
+    }
+
+    public Reference(T object){
+        this.object = object;
+    }
+
     public T get() {
         return object;
     }

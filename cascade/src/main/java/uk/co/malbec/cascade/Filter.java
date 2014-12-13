@@ -1,9 +1,8 @@
 package uk.co.malbec.cascade;
 
-
 import uk.co.malbec.cascade.model.Journey;
 
-public interface FilterStrategy extends Filter {
-    void init(Class<?> controlClass);
+public interface Filter {
+
     boolean match(Journey journey);
 }

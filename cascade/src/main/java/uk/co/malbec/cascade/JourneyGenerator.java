@@ -6,6 +6,6 @@ import uk.co.malbec.cascade.model.Journey;
 import java.util.List;
 
 public interface JourneyGenerator {
-    public List<Journey> generateJourneys(List<Class> scenarios, Class<?> controlClass);
+    public List<Journey> generateJourneys(List<Class> scenarios, Class<?> controlClass, Filter filter);
 
 }

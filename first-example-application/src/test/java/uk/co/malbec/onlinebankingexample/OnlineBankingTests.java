@@ -6,21 +6,17 @@ import ch.qos.logback.classic.Logger;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.FilterTests;
-import uk.co.malbec.cascade.annotations.Scan;
-import uk.co.malbec.cascade.annotations.Setup;
+import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.onlinebankingexample.steps.EditMobile;
-import uk.co.malbec.onlinebankingexample.steps.Notice;
-import uk.co.malbec.onlinebankingexample.steps.Portfolio;
-import uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder;
+import uk.co.malbec.cascade.handler.WaitASecond;
+import uk.co.malbec.onlinebankingexample.steps.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +36,8 @@ public class OnlineBankingTests {
     }
 
     @FilterTests
-    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.AllAccounts.class), withStep(SetupStandingOrder.SetupStandingOrderForNow.class));
-    //Predicate filter = withStep(EditMobile.class);
+   // Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.AllAccounts.class), withStep(SetupStandingOrder.SetupStandingOrderForNow.class), withStep(EditEmail.class));
+    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class),  withStep(EditAddress.class), withStep(EditMobile.class));
 
    // @FilterTests
     /*Predicate filter = and(
@@ -56,7 +52,6 @@ public class OnlineBankingTests {
             )
     );*/
 
-    //TODO - need to fail the test if a variable is demanded but not supplied
     @Demands
     String username;
 
@@ -81,6 +76,11 @@ public class OnlineBankingTests {
     @Demands
     List<Map> recentPayments;
 
+    @Supplies
+    List<String[]> expectedStandingOrders = new ArrayList<String[]>();
+
+    @Supplies
+    List<String[]> expectedRecentPayments = new ArrayList<String[]>();
 
     @Setup
     public void setup() {

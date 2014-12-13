@@ -10,10 +10,7 @@ import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 
@@ -26,8 +23,12 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
         control.set(newInstance(controlClass, "control"));
 
         steps.set(new ArrayList<Object>());
+        Map<Class, Object> singletons = new HashMap<Class, Object>();
         for (Class clazz : journey.getSteps()) {
-            steps.get().add(newInstance(clazz, "step"));
+            if (singletons.get(clazz) == null) {
+                singletons.put(clazz, newInstance(clazz, "step"));
+            }
+            steps.get().add(singletons.get(clazz));
         }
 
         collectSuppliedFields(control.get(), scope);
@@ -40,8 +41,13 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
             injectDemandedFields(step, scope);
         }
 
+
+        Set<Object> alreadyInitialised = new HashSet<Object>();
         for (Object step : steps.get()) {
-            invokeAnnotatedMethod(Given.class, step);
+            if (!alreadyInitialised.contains(step)) {
+                invokeAnnotatedMethod(Given.class, step);
+                alreadyInitialised.add(step);
+            }
         }
 
         for (Object step : steps.get()) {

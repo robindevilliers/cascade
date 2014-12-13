@@ -15,7 +15,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(Portfolio.class)
+@Step({Portfolio.class, CancelStandingOrder.class})
 public class OpenPaymentsPage {
 
     @OnlyRunWith
@@ -34,8 +34,24 @@ public class OpenPaymentsPage {
     @Supplies
     public List<Map<String, String>> recentPayments;
 
+    @Demands
+    public List<String[]> expectedStandingOrders;
+
+    @Demands
+    public List<String[]> expectedRecentPayments;
+
     @Given
     public void given() {
+
+        expectedStandingOrders.add(new String[]{"Lorem ipsum dolor sit amet.", "10001-02203-222", "93841732", "893810", "30 Aug 2014", "Monthly", "£ 23.43"});
+        expectedStandingOrders.add(new String[]{"Sed consequat", "X12345-ROBIN-DE-VILLIERS", "44433232", "893810", "30 Sep 2014", "Quarterly", "£ 15.00"});
+        expectedStandingOrders.add(new String[]{"Etiam sit amet", "11102929920293837X", "23334332", "100210", "02 Dec 2014", "Yearly", "£ 85.00"});
+
+        expectedRecentPayments.add(new String[]{"30 Aug 2014","Lorem ipsum dolor sit amet.","1112","93841732","893810","","£ 23.43"});
+        expectedRecentPayments.add(new String[]{"29 Aug 2014","Aenean imperdiet","111223","12345678","100102","","£ 200.00"});
+        expectedRecentPayments.add(new String[]{"30 May 2014","Sed consequat","1113","44433232","893810","02 Jun 2014","£ 15.00"});
+        expectedRecentPayments.add(new String[]{"02 Dec 2014","Etiam sit amet","1114","23334332","100210","04 Dec 2014","£ 85.00"});
+
         standingOrders = new ArrayList<Map<String, String>>() {{
             add(new HashMap<String, String>() {{
                 put("id", "1");
@@ -120,13 +136,18 @@ public class OpenPaymentsPage {
     @Then
     public void then(Throwable f) {
         assertNull(f);
-        assertStandingOrderRow(webDriver, "0", "Lorem ipsum dolor sit amet.", "10001-02203-222", "93841732", "893810", "30 Aug 2014", "Monthly", "£ 23.43");
-        assertStandingOrderRow(webDriver, "1", "Sed consequat", "X12345-ROBIN-DE-VILLIERS", "44433232", "893810", "30 Sep 2014", "Quarterly", "£ 15.00");
-        assertStandingOrderRow(webDriver, "2", "Etiam sit amet", "11102929920293837X", "23334332", "100210", "02 Dec 2014", "Yearly", "£ 85.00");
 
-        assertRecentPaymentRow(webDriver, "0","30 Aug 2014","Lorem ipsum dolor sit amet.","1112","93841732","893810","","£ 23.43");
-        assertRecentPaymentRow(webDriver, "1","29 Aug 2014","Aenean imperdiet","111223","12345678","100102","","£ 200.00");
-        assertRecentPaymentRow(webDriver, "2","30 May 2014","Sed consequat","1113","44433232","893810","02 Jun 2014","£ 15.00");
-        assertRecentPaymentRow(webDriver, "3","02 Dec 2014","Etiam sit amet","1114","23334332","100210","04 Dec 2014","£ 85.00");
+
+        int i = 0;
+        for (String[] expected: expectedStandingOrders){
+            assertStandingOrderRow(webDriver, "" + i, expected[0], expected[1] , expected[2],expected[3] ,expected[4] ,expected[5], expected[6]);
+            i++;
+        }
+
+        i = 0;
+        for (String[] expected: expectedRecentPayments){
+            assertRecentPaymentRow(webDriver, "" + i, expected[0], expected[1] , expected[2],expected[3] ,expected[4] ,expected[5], expected[6]);
+            i++;
+        }
     }
 }

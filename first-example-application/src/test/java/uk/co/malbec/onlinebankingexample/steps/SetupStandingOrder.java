@@ -2,20 +2,26 @@ package uk.co.malbec.onlinebankingexample.steps;
 
 
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
+
+import java.util.List;
 
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenPaymentsPage.class)
+@ReEntrantTerminator(1)
 public interface SetupStandingOrder {
 
     public class SetupStandingOrderForNow implements SetupStandingOrder {
         @Demands
         private WebDriver webDriver;
+
+        @Demands
+        public List<String[]> expectedStandingOrders;
+
+        @Demands
+        public List<String[]> expectedRecentPayments;
 
         @When
         public void when() {
@@ -30,27 +36,38 @@ public interface SetupStandingOrder {
             enterText(webDriver, "[test-input-amount]", "12.00");
             click(webDriver, "[test-setup-cta]");
             waitForPage(webDriver);
+
+            expectedStandingOrders.add(new String[]{"magazine subscription", "rdevilliers", "98985656", "112233", null, "Monthly", "£ 12.00"});
+
+            expectedRecentPayments.add(0, new String[]{null, "magazine subscription", "rdevilliers", "98985656", "112233", "", "£ 12.00"});
         }
 
         @Then
         public void then(Throwable f) {
             assertNull(f);
-            assertStandingOrderRow(webDriver, "0", "Lorem ipsum dolor sit amet.", "10001-02203-222", "93841732", "893810", "30 Aug 2014", "Monthly", "£ 23.43");
-            assertStandingOrderRow(webDriver, "1", "Sed consequat", "X12345-ROBIN-DE-VILLIERS", "44433232", "893810", "30 Sep 2014", "Quarterly", "£ 15.00");
-            assertStandingOrderRow(webDriver, "2", "Etiam sit amet", "11102929920293837X", "23334332", "100210", "02 Dec 2014", "Yearly", "£ 85.00");
-            assertStandingOrderRow(webDriver, "3", "magazine subscription", "rdevilliers", "98985656", "112233", null, "Monthly", "£ 12.00");
+            int i = 0;
+            for (String[] expected : expectedStandingOrders) {
+                assertStandingOrderRow(webDriver, "" + i, expected[0], expected[1], expected[2], expected[3], expected[4], expected[5], expected[6]);
+                i++;
+            }
 
-            assertRecentPaymentRow(webDriver, "0", null, "magazine subscription", "rdevilliers", "98985656", "112233", "", "£ 12.00");
-            assertRecentPaymentRow(webDriver, "1", "30 Aug 2014", "Lorem ipsum dolor sit amet.", "1112", "93841732", "893810", "", "£ 23.43");
-            assertRecentPaymentRow(webDriver, "2", "29 Aug 2014", "Aenean imperdiet", "111223", "12345678", "100102", "", "£ 200.00");
-            assertRecentPaymentRow(webDriver, "3", "30 May 2014", "Sed consequat", "1113", "44433232", "893810", "02 Jun 2014", "£ 15.00");
-            assertRecentPaymentRow(webDriver, "4", "02 Dec 2014", "Etiam sit amet", "1114", "23334332", "100210", "04 Dec 2014", "£ 85.00");
+            i = 0;
+            for (String[] expected : expectedRecentPayments) {
+                assertRecentPaymentRow(webDriver, "" + i, expected[0], expected[1], expected[2], expected[3], expected[4], expected[5], expected[6]);
+                i++;
+            }
         }
     }
 
     public class SetupStandingOrderForLater implements SetupStandingOrder {
         @Demands
         private WebDriver webDriver;
+
+        @Demands
+        public List<String[]> expectedStandingOrders;
+
+        @Demands
+        public List<String[]> expectedRecentPayments;
 
         @When
         public void when() {
@@ -66,21 +83,25 @@ public interface SetupStandingOrder {
             enterText(webDriver, "[test-input-amount]", "12.00");
             click(webDriver, "[test-setup-cta]");
             waitForPage(webDriver);
+
+            expectedStandingOrders.add(new String[]{"magazine subscription", "rdevilliers", "98985656", "112233", null, "Monthly", "£ 12.00"});
         }
 
         @Then
         public void then(Throwable f) {
             assertNull(f);
-            assertStandingOrderRow(webDriver, "0", "Lorem ipsum dolor sit amet.", "10001-02203-222", "93841732", "893810", "30 Aug 2014", "Monthly", "£ 23.43");
-            assertStandingOrderRow(webDriver, "1", "Sed consequat", "X12345-ROBIN-DE-VILLIERS", "44433232", "893810", "30 Sep 2014", "Quarterly", "£ 15.00");
-            assertStandingOrderRow(webDriver, "2", "Etiam sit amet", "11102929920293837X", "23334332", "100210", "02 Dec 2014", "Yearly", "£ 85.00");
-            assertStandingOrderRow(webDriver, "3", "magazine subscription", "rdevilliers", "98985656", "112233", null, "Monthly", "£ 12.00");
 
+            int i = 0;
+            for (String[] expected : expectedStandingOrders) {
+                assertStandingOrderRow(webDriver, "" + i, expected[0], expected[1], expected[2], expected[3], expected[4], expected[5], expected[6]);
+                i++;
+            }
 
-            assertRecentPaymentRow(webDriver, "0", "30 Aug 2014", "Lorem ipsum dolor sit amet.", "1112", "93841732", "893810", "", "£ 23.43");
-            assertRecentPaymentRow(webDriver, "1", "29 Aug 2014", "Aenean imperdiet", "111223", "12345678", "100102", "", "£ 200.00");
-            assertRecentPaymentRow(webDriver, "2", "30 May 2014", "Sed consequat", "1113", "44433232", "893810", "02 Jun 2014", "£ 15.00");
-            assertRecentPaymentRow(webDriver, "3", "02 Dec 2014", "Etiam sit amet", "1114", "23334332", "100210", "04 Dec 2014", "£ 85.00");
+            i = 0;
+            for (String[] expected : expectedRecentPayments) {
+                assertRecentPaymentRow(webDriver, "" + i, expected[0], expected[1], expected[2], expected[3], expected[4], expected[5], expected[6]);
+                i++;
+            }
         }
     }
 }
