@@ -1,12 +1,15 @@
 package uk.co.malbec.cascade.modules.generator;
 
 
+import org.junit.runner.RunWith;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.conditions.Visitor;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.JourneyGenerator;
+import uk.co.malbec.cascade.utils.Utilities;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -15,6 +18,7 @@ import static java.lang.String.format;
 import static java.util.Collections.sort;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
+import static uk.co.malbec.cascade.utils.Utilities.reduce;
 
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
@@ -42,7 +46,6 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         //these are scenarios that belong to steps that are not followed by other steps - implicit terminators.
         findDanglingScenarios(allScenarios, terminators);
 
-        //TODO - if an any terminator is invalid due to runWith terminators, then the scenario that precedes it is a candidate for an implicit terminator
 
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
         sort(terminators, new Comparator<Class>() {
@@ -56,7 +59,6 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         for (Class terminator : terminators) {
             generatingTrail(terminator, new ArrayList<Class>(), allScenarios, journeys, controlClass, compositeFilter);
         }
-
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
         if (!unusedScenariosFilter.getScenarios().isEmpty()) {
@@ -72,18 +74,18 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         //go through journeys and remove any that are redundant
         Iterator<Journey> journeyIterator = journeys.iterator();
-        while (journeyIterator.hasNext()){
+        while (journeyIterator.hasNext()) {
             Journey journey = journeyIterator.next();
 
             JourneyImage journeyImage = new JourneyImage();
 
-            for (Journey reference : journeys){
-                if (!reference.equals(journey)){
+            for (Journey reference : journeys) {
+                if (!reference.equals(journey)) {
                     journeyImage.add(reference.getSteps());
                 }
             }
 
-            if (journeyImage.match(journey.getSteps())){
+            if (journeyImage.match(journey.getSteps())) {
                 journeyIterator.remove();
             }
         }
@@ -102,13 +104,13 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         return journeys;
     }
 
-    private boolean isCovered(List<Class> subject, List<Class> reference){
-        if (subject.size() > reference.size()){
+    private boolean isCovered(List<Class> subject, List<Class> reference) {
+        if (subject.size() > reference.size()) {
             return false;
         }
 
-        for (int i = 0; i < subject.size(); i++){
-            if (!subject.get(i).equals(reference.get(i))){
+        for (int i = 0; i < subject.size(); i++) {
+            if (!subject.get(i).equals(reference.get(i))) {
                 return false;
             }
         }
@@ -239,10 +241,18 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
     }
 
     private void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators) {
-        List<Class> unreferencedScenarios = new ArrayList<Class>(allScenarios);
+
+        //collect all scenarios that don't have @RunWith
+        List<Class> friendlyScenarios = new ArrayList<Class>();
+        for (Class scenario : allScenarios) {
+            if (getValueOfFieldAnnotatedWith(newInstance(scenario, "step"), OnlyRunWith.class) == null) {
+                friendlyScenarios.add(scenario);
+            }
+        }
 
 
-        for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ) {
+        List<Class> possibleTerminators = new ArrayList<Class>(allScenarios);
+        for (Iterator<Class> i = possibleTerminators.iterator(); i.hasNext(); ) {
             Class clz = i.next();
             boolean isATerminatingScenario = findAnnotation(Terminator.class, clz) != null;
             if (isATerminatingScenario) {
@@ -250,23 +260,25 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             }
         }
 
-        for (Class<?> scenario : allScenarios) {
-            Step stepAnnotation = findAnnotation(Step.class, scenario);
-            for (Class<?> preceedingStep : stepAnnotation.value()) {
 
-                for (Iterator<Class> i = unreferencedScenarios.iterator(); i.hasNext(); ) {
-                    Class clz = i.next();
-                    //this tests if a scenario implements a step class.
-                    boolean isNotATerminator = preceedingStep.isAssignableFrom(clz);
-
-                    if (isNotATerminator) {
-                        i.remove();
+        List<Class> implicitTerminators = new ArrayList<Class>(possibleTerminators);
+        for (Class possibleTerminator : possibleTerminators) {
+            for (Class scenario : friendlyScenarios) { //if a friendly scenario references the possible terminator, it is not a terminator
+                for (Class<?> referencedStep : findAnnotation(Step.class, scenario).value()) {
+                    if (referencedStep.isAssignableFrom(possibleTerminator)) {
+                        implicitTerminators.remove(possibleTerminator);
                     }
                 }
             }
         }
-        terminators.addAll(unreferencedScenarios);
+
+        //At this point the scenarios that are remaining in the implicitTerminators list are:
+        //1. scenarios that are not referenced by anything
+        //2. scenarios that are only referenced by @RunWith scenarios (we will only know if they are really there once we consider the journey)
+        terminators.addAll(implicitTerminators);
+
     }
+
 
     private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Class<?> subject) {
         T step = subject.getAnnotation(annotationClass);
