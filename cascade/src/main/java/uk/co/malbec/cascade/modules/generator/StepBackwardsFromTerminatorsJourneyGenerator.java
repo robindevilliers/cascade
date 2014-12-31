@@ -1,15 +1,15 @@
 package uk.co.malbec.cascade.modules.generator;
 
 
-import org.junit.runner.RunWith;
+import uk.co.malbec.cascade.annotations.OnlyRunWith;
+import uk.co.malbec.cascade.annotations.ReEntrantTerminator;
+import uk.co.malbec.cascade.annotations.Step;
+import uk.co.malbec.cascade.annotations.Terminator;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
-import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.cascade.conditions.Visitor;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.JourneyGenerator;
-import uk.co.malbec.cascade.utils.Utilities;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -18,7 +18,6 @@ import static java.lang.String.format;
 import static java.util.Collections.sort;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
-import static uk.co.malbec.cascade.utils.Utilities.reduce;
 
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
@@ -33,7 +32,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         OnlyRunWithFilter onlyRunWithFilter = new OnlyRunWithFilter(conditionalLogic);
         UnusedScenariosFilter unusedScenariosFilter = new UnusedScenariosFilter(allScenarios);
         RedundantFilter redundantFilter = new RedundantFilter();
-        Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, redundantFilter, filter);
+        Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, filter, redundantFilter);
 
         List<Class> terminators = new ArrayList<Class>();
 
