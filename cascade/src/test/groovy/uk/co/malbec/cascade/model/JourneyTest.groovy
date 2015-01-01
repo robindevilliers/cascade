@@ -11,18 +11,18 @@ class JourneyTest {
     def void "given a Journey, it should have a name and contains appropriate steps"(){
 
         Journey journey = new Journey([GoToLoginPage, EnterPassword], TestClass)
-        journey.init()
-        assert journey.name == ' JourneyTest$GoToLoginPage  JourneyTest$EnterPassword '
+        journey.init(1)
+        assert journey.name == 'Test[1]  JourneyTest$GoToLoginPage  JourneyTest$EnterPassword '
         assert journey.steps == [GoToLoginPage, EnterPassword]
-        assert journey.description.displayName == ' JourneyTest$GoToLoginPage  JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
+        assert journey.description.displayName == 'Test[1]  JourneyTest$GoToLoginPage  JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
     }
 
     @Test
     def void "given a Journey with descriptions, the journey could contain a nice description"(){
 
         Journey journey = new Journey([GoToForgotPasswordPage, EnterEmailAddress], TestClass)
-        journey.init()
-        assert journey.name == 'User goes to the \'forgot password\' page and he enters his email address'
+        journey.init(1)
+        assert journey.name == 'Test[1] User goes to the \'forgot password\' page and he enters his email address'
     }
 
     @Step

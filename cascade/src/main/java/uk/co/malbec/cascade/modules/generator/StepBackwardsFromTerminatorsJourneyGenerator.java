@@ -29,6 +29,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     public List<Journey> generateJourneys(List<Class> allScenarios, Class<?> controlClass, Filter filter) {
 
+        //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
+        sort(allScenarios, new ClassComparator());
+
         OnlyRunWithFilter onlyRunWithFilter = new OnlyRunWithFilter(conditionalLogic);
         UnusedScenariosFilter unusedScenariosFilter = new UnusedScenariosFilter(allScenarios);
         RedundantFilter redundantFilter = new RedundantFilter();
@@ -45,14 +48,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         //these are scenarios that belong to steps that are not followed by other steps - implicit terminators.
         findDanglingScenarios(allScenarios, terminators);
 
-
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
-        sort(terminators, new Comparator<Class>() {
-            @Override
-            public int compare(Class lhs, Class rhs) {
-                return lhs.getName().compareTo(rhs.getName());
-            }
-        });
+        sort(terminators, new ClassComparator());
 
         List<Journey> journeys = new ArrayList<Journey>();
         for (Class terminator : terminators) {
@@ -89,8 +86,10 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             }
         }
 
+        int index = 1;
         for (Journey journey : journeys) {
-            journey.init();
+            journey.init(index);
+            index++;
         }
 
         sort(journeys, new Comparator<Journey>() {
@@ -101,19 +100,6 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         });
 
         return journeys;
-    }
-
-    private boolean isCovered(List<Class> subject, List<Class> reference) {
-        if (subject.size() > reference.size()) {
-            return false;
-        }
-
-        for (int i = 0; i < subject.size(); i++) {
-            if (!subject.get(i).equals(reference.get(i))) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void generatingTrail(Class currentScenario, List<Class> trail, List<Class> allScenarios, List<Journey> journeys, Class<?> controlClass, Filter filter) {
@@ -411,6 +397,13 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                     image.get(i).add(steps.get(i));
                 }
             }
+        }
+    }
+
+    private class ClassComparator implements Comparator<Class> {
+        @Override
+        public int compare(Class lhs, Class rhs) {
+            return lhs.getName().compareTo(rhs.getName());
         }
     }
 

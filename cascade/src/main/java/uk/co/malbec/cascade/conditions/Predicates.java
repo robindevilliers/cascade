@@ -6,6 +6,10 @@ public class Predicates {
         return new WithStepPredicate(step);
     }
 
+    public static Predicate stepAt(int i, Class step) {
+        return new StepAtPredicate(i, step);
+    }
+
     public static Predicate or(Predicate... predicates) {
         return new OrPredicate(predicates);
     }

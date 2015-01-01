@@ -20,8 +20,9 @@ public class Journey {
         this.controlClass = controlClass;
     }
 
-    public void init() {
+    public void init(int index) {
         StringBuilder buffer = new StringBuilder();
+        buffer.append("Test[").append(index).append("] ");
         for (Class<?> cls : steps) {
             uk.co.malbec.cascade.annotations.Description description = cls.getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
             if (description != null) {

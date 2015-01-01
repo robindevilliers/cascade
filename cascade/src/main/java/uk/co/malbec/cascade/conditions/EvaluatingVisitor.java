@@ -40,6 +40,11 @@ public class EvaluatingVisitor implements Visitor {
     }
 
     @Override
+    public void visit(StepAtPredicate stepAtPredicate) {
+        result = steps.size() > stepAtPredicate.getIndex() && steps.get(stepAtPredicate.getIndex()).equals(stepAtPredicate.getStep());
+    }
+
+    @Override
     public void visit(NotPredicate notPredicate) {
         notPredicate.getPredicate().accept(this);
         result = !result;

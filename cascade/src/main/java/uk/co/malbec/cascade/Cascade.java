@@ -72,7 +72,7 @@ public class Cascade {
 
                 constructionStrategy.setup(controlClass, journey, control, steps);
 
-                testExecutor.executeTest(notifier, journey.getDescription(), steps.get());
+                testExecutor.executeTest(notifier, journey.getDescription(), steps.get(), journey);
 
                 constructionStrategy.tearDown(control, steps);
             } catch (RuntimeException e) {

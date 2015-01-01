@@ -5,8 +5,9 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.events.Handler;
+import uk.co.malbec.cascade.exception.CascadeException;
+import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.TestExecutor;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +15,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
+import static uk.co.malbec.cascade.utils.ReflectionUtils.findAnnotatedMethod;
+import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
 
 public class StandardTestExecutor implements TestExecutor {
 
@@ -65,12 +67,34 @@ public class StandardTestExecutor implements TestExecutor {
     }
 
 
-    public void executeTest(RunNotifier notifier, Description description, List<Object> steps) {
+    public void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey) {
 
         //TODO - write tests for pre and post handlers
-
         notifier.fireTestStarted(description);
 
+        System.out.println(journey.getName().replaceAll("\\s+", "\n\t"));
+        System.out.println("----------------- Filter ----------------------------------");
+        System.out.println("@FilterTests");
+        System.out.println("Predicate filter = and(");
+
+        boolean comma = false;
+        int index = 0;
+        for (Class step: journey.getSteps()){
+            if (comma){
+                System.out.println(",");
+            }
+            System.out.print("\tstepAt(");
+            System.out.print(index++);
+            System.out.print(",");
+            System.out.print(step.getCanonicalName());
+            System.out.print(".class)");
+            comma = true;
+        }
+
+        System.out.println("\n);");
+        System.out.println("----------------- Results ---------------------------------");
+
+        boolean testSuccess = true;
         for (Object step : steps) {
 
             for (Handler handler : preHandlers){
@@ -125,9 +149,11 @@ public class StandardTestExecutor implements TestExecutor {
 
                 } catch (InvocationTargetException e) {
                     notifier.fireTestFailure(new Failure(description, e.getTargetException()));
+                    testSuccess = false;
                     break;
                 } catch (Exception e) {
                     notifier.fireTestFailure(new Failure(description, e));
+                    testSuccess = false;
                     break;
                 }
             }
@@ -147,6 +173,10 @@ public class StandardTestExecutor implements TestExecutor {
                 handler.handle(step);
             }
         }
+
+        System.out.println(testSuccess ? "SUCCESS" : "FAILURE");
+
+        System.out.println("-----------------------------------------------------------");
 
         notifier.fireTestFinished(description);
     }

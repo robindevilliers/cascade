@@ -6,8 +6,8 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.events.Handler
+import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.modules.TestExecutor
-import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 
 import static org.mockito.Mockito.*;
 
@@ -52,7 +52,11 @@ public class StandardTestExecutorTest {
 
         Description description = mock(Description);
 
-        testExecutor.executeTest(runNotifier, description,[new BasicStep()]);
+        Journey journey = mock(Journey)
+
+        when(journey.getName()).thenReturn("description")
+
+        testExecutor.executeTest(runNotifier, description,[new BasicStep()], journey);
 
         assert preHandlerCtrlCalled == 0
         assert preHandlerCalled == 1
@@ -79,7 +83,11 @@ public class StandardTestExecutorTest {
 
         thrownException = mock(Throwable)
 
-        testExecutor.executeTest(runNotifier, description,[new ExceptionStep()]);
+        Journey journey = mock(Journey)
+
+        when(journey.getName()).thenReturn("description")
+
+        testExecutor.executeTest(runNotifier, description,[new ExceptionStep()], journey);
 
         assert thrownException == receivedException
     }
@@ -92,14 +100,12 @@ public class StandardTestExecutorTest {
 
         @When
         public void when(){
-
             whenCalled = counter++;
         }
 
         @Then
         public void then(Throwable f){
             thenCalled = counter++;
-
         }
     }
 

@@ -72,8 +72,10 @@ class CascadeTest {
     public void "given a generated cascade test suit, a call to getDescription should generate a description for each journey"() {
         //given
         cascade.journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
+
+        int i = 1;
         for (Journey journey : cascade.journeys){
-            journey.init()
+            journey.init(i++)
         }
 
         //when
@@ -83,8 +85,8 @@ class CascadeTest {
         assert description.displayName == 'Cascade Tests'
         List<Description> children = description.getChildren()
         assert children.size() == 2
-        assert children[0].displayName == ' CascadeTest$Her  CascadeTest$Him (uk.co.malbec.cascade.CascadeTest$TestClass)'
-        assert children[1].displayName == ' CascadeTest$Him  CascadeTest$Her (uk.co.malbec.cascade.CascadeTest$TestClass)'
+        assert children[0].displayName == 'Test[1]  CascadeTest$Her  CascadeTest$Him (uk.co.malbec.cascade.CascadeTest$TestClass)'
+        assert children[1].displayName == 'Test[2]  CascadeTest$Him  CascadeTest$Her (uk.co.malbec.cascade.CascadeTest$TestClass)'
     }
 
     @Test
@@ -92,8 +94,9 @@ class CascadeTest {
         //given
         List<Journey> journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
         cascade.journeys = journeys
+        int i = 1;
         for (Journey journey : cascade.journeys){
-            journey.init()
+            journey.init(i++)
         }
         cascade.controlClass = TestClass
 
@@ -102,10 +105,10 @@ class CascadeTest {
 
         //then
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null);
+        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0]);
 
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null);
+        verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1]);
 
         verify(constructionStrategyMock, times(2)).tearDown(any(Reference), any(Reference));
     }
