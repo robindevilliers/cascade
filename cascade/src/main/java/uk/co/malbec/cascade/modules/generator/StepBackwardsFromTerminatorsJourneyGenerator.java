@@ -3,9 +3,9 @@ package uk.co.malbec.cascade.modules.generator;
 
 import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.annotations.OnlyRunWith;
-import uk.co.malbec.cascade.annotations.ReEntrantTerminator;
+
+
 import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Terminator;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.conditions.Predicate;
 import uk.co.malbec.cascade.exception.CascadeException;
@@ -111,12 +111,12 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             Scenario scenario = iterator.previous();
 
             //A ReEntrantTerminator has a limit to its entry in a journey.  So there cannot be infinite cycles if we have encountered this here.
-            if (findAnnotation(ReEntrantTerminator.class, scenario.getCls()) != null) {
+            if (scenario.isReEntrantTerminator()) {
                 break;
             }
 
             //Normal terminators are ok too.
-            if (findAnnotation(Terminator.class, scenario.getCls()) != null) {
+            if (scenario.isTerminator()) {
                 break;
             }
 
@@ -145,9 +145,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         trail.add(currentScenario);
 
-        Step currentStepAnnotation = findAnnotation(Step.class, currentScenario.getCls());
-
-        boolean beginningOfTrail = currentStepAnnotation.value()[0] == Step.Null.class;
+        boolean beginningOfTrail = currentScenario.getSteps()[0] == Step.Null.class;
 
         if (beginningOfTrail) {
             //we are copying the trail as the current trail may be part of another trail.  There could be a few of them.
@@ -160,7 +158,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             }
         } else {
 
-            for (Class preceedingStep : currentStepAnnotation.value()) {
+            for (Class preceedingStep : currentScenario.getSteps()) {
 
                 Scenario:
                 for (Scenario scenario : allScenarios) {
@@ -171,22 +169,19 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                         continue;
                     }
 
-                    //if this scenario is a terminator we don't use it.
-                    boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario.getCls()) != null;
-                    if (isATerminatingScenario) {
+                    if (scenario.isTerminator()) {
                         continue;
                     }
 
                     //if this scenario is a ReEntrantTerminator and its limit is reached, we don't use it.
-                    ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, scenario.getCls());
-                    if (reEntrantTerminator != null) {
-                        Integer limit = reEntrantTerminator.value();
+
+                    if (scenario.isReEntrantTerminator()) {
                         Integer count = 0;
                         for (Scenario s : trail) {
                             if (s == scenario) {
                                 count++;
                             }
-                            if (count == limit) {
+                            if (count == scenario.getReEntrantCount()) {
                                 continue Scenario;
                             }
                         }
@@ -208,9 +203,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private void findTerminatngScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
         for (Scenario scenario : allScenarios) {
-            boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario.getCls()) != null;
-
-            if (isATerminatingScenario) {
+            if (scenario.isTerminator()) {
                 terminators.add(scenario);
             }
         }
@@ -218,9 +211,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private void findReEntrantTerminatngScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
         for (Scenario scenario : allScenarios) {
-            boolean isATerminatingScenario = findAnnotation(ReEntrantTerminator.class, scenario.getCls()) != null;
-
-            if (isATerminatingScenario) {
+            if (scenario.isReEntrantTerminator()) {
                 terminators.add(scenario);
             }
         }
@@ -240,8 +231,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         List<Scenario> possibleTerminators = new ArrayList<Scenario>(allScenarios);
         for (Iterator<Scenario> i = possibleTerminators.iterator(); i.hasNext(); ) {
             Scenario scenario = i.next();
-            boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario.getCls()) != null;
-            if (isATerminatingScenario) {
+            if (scenario.isTerminator()) {
                 i.remove();
             }
         }
@@ -250,7 +240,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         List<Scenario> implicitTerminators = new ArrayList<Scenario>(possibleTerminators);
         for (Scenario possibleTerminator : possibleTerminators) {
             for (Scenario scenario : friendlyScenarios) { //if a friendly scenario references the possible terminator, it is not a terminator
-                for (Class<?> referencedStep : findAnnotation(Step.class, scenario.getCls()).value()) {
+                for (Class<?> referencedStep : scenario.getSteps()) {
                     if (referencedStep.isAssignableFrom(possibleTerminator.getCls())) {
                         implicitTerminators.remove(possibleTerminator);
                     }

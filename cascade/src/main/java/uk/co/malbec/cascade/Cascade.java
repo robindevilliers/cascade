@@ -50,7 +50,6 @@ public class Cascade {
 
         String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
         List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
-
         journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
     }
 
