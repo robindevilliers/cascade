@@ -10,8 +10,8 @@ import java.util.Set;
 
 public class ScenarioFinder {
     
-    List<Class> findScenarios(String[] paths, ClasspathScanner classpathScanner){
-        List<Class> scenarios = new ArrayList<Class>();
+    List<Scenario> findScenarios(String[] paths, ClasspathScanner classpathScanner){
+        List<Scenario> scenarios = new ArrayList<Scenario>();
 
         for (String path : paths) {
             classpathScanner.initialise(path);
@@ -24,14 +24,14 @@ public class ScenarioFinder {
         return scenarios;
     }
 
-    private void findScenarios(List<Class> scenarios, Class<?> clazz, ClasspathScanner classpathScanner) {
+    private void findScenarios(List<Scenario> scenarios, Class<?> clazz, ClasspathScanner classpathScanner) {
         if (clazz.isInterface()) {
             Set<Class> subtypes = classpathScanner.getSubTypesOf(clazz);
             for (Class subType : subtypes) {
                 findScenarios(scenarios, subType, classpathScanner);
             }
         } else {
-            scenarios.add(clazz);
+            scenarios.add(new Scenario(clazz));
         }
     }
 }

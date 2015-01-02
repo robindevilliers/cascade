@@ -49,7 +49,7 @@ class CascadeTest {
     @Test
     public void "given start of test, the cascade class should find scenarios and delegate to journey generator to generate journeys"() {
         //given
-        List<Class> scenariosMock = mock(List)
+        List<Scenario> scenariosMock = mock(List)
         when(scenarioFinderMock.findScenarios(any(String[]), any(ClasspathScanner))).thenReturn(scenariosMock)
 
         List<Journey> journeysMock = mock(List)
@@ -71,7 +71,7 @@ class CascadeTest {
     @Test
     public void "given a generated cascade test suit, a call to getDescription should generate a description for each journey"() {
         //given
-        cascade.journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
+        cascade.journeys = [new Journey([new Scenario(Her), new Scenario(Him)], TestClass), new Journey([new Scenario(Him), new Scenario(Her)], TestClass)]
 
         int i = 1;
         for (Journey journey : cascade.journeys){
@@ -92,7 +92,7 @@ class CascadeTest {
     @Test
     public void "given a request to run, the cascade class should setup, execute and then teardown all journeys "() {
         //given
-        List<Journey> journeys = [new Journey([Her, Him], TestClass), new Journey([Him, Her], TestClass)]
+        List<Journey> journeys = [new Journey([new Scenario(Her), new Scenario(Him)], TestClass), new Journey([new Scenario(Him), new Scenario(Her)], TestClass)]
         cascade.journeys = journeys
         int i = 1;
         for (Journey journey : cascade.journeys){

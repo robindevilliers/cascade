@@ -1,5 +1,6 @@
 package uk.co.malbec.cascade.model
 
+import uk.co.malbec.cascade.Scenario
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Scan
 import org.junit.Test
@@ -10,17 +11,17 @@ class JourneyTest {
     @Test
     def void "given a Journey, it should have a name and contains appropriate steps"(){
 
-        Journey journey = new Journey([GoToLoginPage, EnterPassword], TestClass)
+        Journey journey = new Journey([new Scenario(GoToLoginPage), new Scenario(EnterPassword)], TestClass)
         journey.init(1)
         assert journey.name == 'Test[1]  JourneyTest$GoToLoginPage  JourneyTest$EnterPassword '
-        assert journey.steps == [GoToLoginPage, EnterPassword]
+        assert journey.steps == [new Scenario(GoToLoginPage), new Scenario(EnterPassword)]
         assert journey.description.displayName == 'Test[1]  JourneyTest$GoToLoginPage  JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
     }
 
     @Test
     def void "given a Journey with descriptions, the journey could contain a nice description"(){
 
-        Journey journey = new Journey([GoToForgotPasswordPage, EnterEmailAddress], TestClass)
+        Journey journey = new Journey([new Scenario(GoToForgotPasswordPage), new Scenario(EnterEmailAddress)], TestClass)
         journey.init(1)
         assert journey.name == 'Test[1] User goes to the \'forgot password\' page and he enters his email address'
     }

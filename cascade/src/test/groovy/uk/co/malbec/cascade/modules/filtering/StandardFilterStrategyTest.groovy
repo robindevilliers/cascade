@@ -2,13 +2,13 @@ package uk.co.malbec.cascade.modules.filtering
 
 import org.junit.Before
 import org.junit.Test
+import uk.co.malbec.cascade.Scenario
 import uk.co.malbec.cascade.annotations.FilterTests
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.conditions.ConditionalLogic
 import uk.co.malbec.cascade.conditions.Predicate
 import uk.co.malbec.cascade.conditions.WithStepPredicate
 import uk.co.malbec.cascade.model.Journey
-import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy
 
 import static uk.co.malbec.cascade.conditions.Predicates.withStep
 
@@ -30,8 +30,8 @@ class StandardFilterStrategyTest {
 
     @Test
     def void "given no filters specified, the filter strategy should always return true"(){
-        Journey badPasswordJourney = new Journey([OpenLoginPage, BadPassword], TestClass);
-        Journey successfulJourney = new Journey([OpenLoginPage, Successful], TestClass);
+        Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(BadPassword)], TestClass);
+        Journey successfulJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(Successful)], TestClass);
 
         assert standardFilterStrategy.match(badPasswordJourney)
         assert standardFilterStrategy.match(successfulJourney)
@@ -41,8 +41,8 @@ class StandardFilterStrategyTest {
     def void "given a filter, the filter strategy should return as appropriate"(){
         standardFilterStrategy.filter = new WithStepPredicate(BadPassword)
 
-        Journey badPasswordJourney = new Journey([OpenLoginPage, BadPassword], TestClass);
-        Journey successfulJourney = new Journey([OpenLoginPage, Successful], TestClass);
+        Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(BadPassword)], TestClass);
+        Journey successfulJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(Successful)], TestClass);
 
         assert standardFilterStrategy.match(badPasswordJourney)
         assert !standardFilterStrategy.match(successfulJourney)

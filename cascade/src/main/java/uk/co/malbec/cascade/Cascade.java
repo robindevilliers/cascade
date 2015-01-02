@@ -49,7 +49,7 @@ public class Cascade {
         testExecutor.init(controlClass);
 
         String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
-        List<Class> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
+        List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
 
         journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
     }
@@ -77,7 +77,7 @@ public class Cascade {
                 constructionStrategy.tearDown(control, steps);
             } catch (RuntimeException e) {
                 StringBuilder journeyDescription = new StringBuilder();
-                for (Class scenario : journey.getSteps()) {
+                for (Scenario scenario : journey.getSteps()) {
                     String[] tokens = scenario.toString().split("\\.");
 
                     journeyDescription.append(tokens[tokens.length - 1]).append("\n");

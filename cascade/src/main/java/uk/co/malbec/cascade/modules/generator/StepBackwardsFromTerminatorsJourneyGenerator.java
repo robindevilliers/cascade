@@ -1,6 +1,7 @@
 package uk.co.malbec.cascade.modules.generator;
 
 
+import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.annotations.OnlyRunWith;
 import uk.co.malbec.cascade.annotations.ReEntrantTerminator;
 import uk.co.malbec.cascade.annotations.Step;
@@ -27,7 +28,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         this.conditionalLogic = conditionalLogic;
     }
 
-    public List<Journey> generateJourneys(List<Class> allScenarios, Class<?> controlClass, Filter filter) {
+    public List<Journey> generateJourneys(List<Scenario> allScenarios, Class<?> controlClass, Filter filter) {
 
         //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
         sort(allScenarios, new ClassComparator());
@@ -37,7 +38,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         RedundantFilter redundantFilter = new RedundantFilter();
         Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, filter, redundantFilter);
 
-        List<Class> terminators = new ArrayList<Class>();
+        List<Scenario> terminators = new ArrayList<Scenario>();
 
         //these are scenarios marked with a Terminator annotation - explicit terminators.
         findTerminatngScenarios(allScenarios, terminators);
@@ -52,8 +53,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         sort(terminators, new ClassComparator());
 
         List<Journey> journeys = new ArrayList<Journey>();
-        for (Class terminator : terminators) {
-            generatingTrail(terminator, new ArrayList<Class>(), allScenarios, journeys, controlClass, compositeFilter);
+        for (Scenario terminator : terminators) {
+            generatingTrail(terminator, new ArrayList<Scenario>(), allScenarios, journeys, controlClass, compositeFilter);
         }
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
@@ -65,7 +66,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                     .append("If a step is not found in journeys, it is either dependent on ")
                     .append("steps that don't lead to a journey start, or there are no terminators ")
                     .append("downstream of this step.")
-                    .toString(), unusedScenariosFilter.getScenarios().get(0).toString()));
+                    .toString(), unusedScenariosFilter.getScenarios().get(0).getCls().toString()));
         }
 
         //go through journeys and remove any that are redundant
@@ -102,27 +103,27 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         return journeys;
     }
 
-    private void generatingTrail(Class currentScenario, List<Class> trail, List<Class> allScenarios, List<Journey> journeys, Class<?> controlClass, Filter filter) {
+    private void generatingTrail(Scenario currentScenario, List<Scenario> trail, List<Scenario> allScenarios, List<Journey> journeys, Class<?> controlClass, Filter filter) {
 
         //walk backwards up the trail looking for a repeat of the currentScenario. If one appears before a ReEntrantTerminator, then we have an infinite cycle.
-        ListIterator<Class> iterator = trail.listIterator(trail.size());
+        ListIterator<Scenario> iterator = trail.listIterator(trail.size());
         while (iterator.hasPrevious()) {
-            Class scenario = iterator.previous();
+            Scenario scenario = iterator.previous();
 
             //A ReEntrantTerminator has a limit to its entry in a journey.  So there cannot be infinite cycles if we have encountered this here.
-            if (findAnnotation(ReEntrantTerminator.class, scenario) != null) {
+            if (findAnnotation(ReEntrantTerminator.class, scenario.getCls()) != null) {
                 break;
             }
 
             //Normal terminators are ok too.
-            if (findAnnotation(Terminator.class, scenario) != null) {
+            if (findAnnotation(Terminator.class, scenario.getCls()) != null) {
                 break;
             }
 
 
             //if we find the current scenario in the trail already, without ReEntrantTerminators between, we have an infinite loop.
             if (scenario == currentScenario) {
-                List<Class> infiniteLoop = new ArrayList<Class>();
+                List<Scenario> infiniteLoop = new ArrayList<Scenario>();
 
                 while (iterator.hasNext()) {
                     infiniteLoop.add(iterator.next());
@@ -132,8 +133,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                 Collections.reverse(infiniteLoop);
 
                 StringBuilder buffer = new StringBuilder();
-                for (Class cls : infiniteLoop) {
-                    String[] parts = cls.toString().split("[.]");
+                for (Scenario s : infiniteLoop) {
+                    String[] parts = s.getCls().toString().split("[.]");
                     buffer.append(parts[parts.length - 1]);
                     buffer.append(" ");
                 }
@@ -144,13 +145,13 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         trail.add(currentScenario);
 
-        Step currentStepAnnotation = findAnnotation(Step.class, currentScenario);
+        Step currentStepAnnotation = findAnnotation(Step.class, currentScenario.getCls());
 
         boolean beginningOfTrail = currentStepAnnotation.value()[0] == Step.Null.class;
 
         if (beginningOfTrail) {
             //we are copying the trail as the current trail may be part of another trail.  There could be a few of them.
-            List<Class> newTrail = new ArrayList<Class>(trail);
+            List<Scenario> newTrail = new ArrayList<Scenario>(trail);
             Collections.reverse(newTrail);
 
             Journey candidateJourney = new Journey(newTrail, controlClass);
@@ -162,27 +163,27 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             for (Class preceedingStep : currentStepAnnotation.value()) {
 
                 Scenario:
-                for (Class scenario : allScenarios) {
+                for (Scenario scenario : allScenarios) {
 
                     //if this scenario doesn't preceed the current step, we don't use it.
-                    boolean scenarioIsNotAPreceedingStep = !preceedingStep.isAssignableFrom(scenario);
+                    boolean scenarioIsNotAPreceedingStep = !preceedingStep.isAssignableFrom(scenario.getCls());
                     if (scenarioIsNotAPreceedingStep) {
                         continue;
                     }
 
                     //if this scenario is a terminator we don't use it.
-                    boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario) != null;
+                    boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario.getCls()) != null;
                     if (isATerminatingScenario) {
                         continue;
                     }
 
                     //if this scenario is a ReEntrantTerminator and its limit is reached, we don't use it.
-                    ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, scenario);
+                    ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, scenario.getCls());
                     if (reEntrantTerminator != null) {
                         Integer limit = reEntrantTerminator.value();
                         Integer count = 0;
-                        for (Class cls : trail) {
-                            if (cls == scenario) {
+                        for (Scenario s : trail) {
+                            if (s == scenario) {
                                 count++;
                             }
                             if (count == limit) {
@@ -192,9 +193,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                     }
 
                     //if the journey already has a scenario for this scenario's step, and it is different from this scenario, we don't use it.
-                    for (Class cls : trail) {
+                    for (Scenario s : trail) {
 
-                        if (preceedingStep.isAssignableFrom(cls) && cls != scenario) {
+                        if (preceedingStep.isAssignableFrom(s.getCls()) && s != scenario) {
                             continue Scenario;
                         }
                     }
@@ -205,9 +206,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         trail.remove(trail.size() - 1);
     }
 
-    private void findTerminatngScenarios(List<Class> allScenarios, List<Class> terminators) {
-        for (Class<?> scenario : allScenarios) {
-            boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario) != null;
+    private void findTerminatngScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
+        for (Scenario scenario : allScenarios) {
+            boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario.getCls()) != null;
 
             if (isATerminatingScenario) {
                 terminators.add(scenario);
@@ -215,9 +216,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
     }
 
-    private void findReEntrantTerminatngScenarios(List<Class> allScenarios, List<Class> terminators) {
-        for (Class<?> scenario : allScenarios) {
-            boolean isATerminatingScenario = findAnnotation(ReEntrantTerminator.class, scenario) != null;
+    private void findReEntrantTerminatngScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
+        for (Scenario scenario : allScenarios) {
+            boolean isATerminatingScenario = findAnnotation(ReEntrantTerminator.class, scenario.getCls()) != null;
 
             if (isATerminatingScenario) {
                 terminators.add(scenario);
@@ -225,32 +226,32 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
     }
 
-    private void findDanglingScenarios(List<Class> allScenarios, List<Class> terminators) {
+    private void findDanglingScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
 
         //collect all scenarios that don't have @RunWith
-        List<Class> friendlyScenarios = new ArrayList<Class>();
-        for (Class scenario : allScenarios) {
-            if (getValueOfFieldAnnotatedWith(newInstance(scenario, "step"), OnlyRunWith.class) == null) {
+        List<Scenario> friendlyScenarios = new ArrayList<Scenario>();
+        for (Scenario scenario : allScenarios) {
+            if (getValueOfFieldAnnotatedWith(newInstance(scenario.getCls(), "step"), OnlyRunWith.class) == null) {
                 friendlyScenarios.add(scenario);
             }
         }
 
 
-        List<Class> possibleTerminators = new ArrayList<Class>(allScenarios);
-        for (Iterator<Class> i = possibleTerminators.iterator(); i.hasNext(); ) {
-            Class clz = i.next();
-            boolean isATerminatingScenario = findAnnotation(Terminator.class, clz) != null;
+        List<Scenario> possibleTerminators = new ArrayList<Scenario>(allScenarios);
+        for (Iterator<Scenario> i = possibleTerminators.iterator(); i.hasNext(); ) {
+            Scenario scenario = i.next();
+            boolean isATerminatingScenario = findAnnotation(Terminator.class, scenario.getCls()) != null;
             if (isATerminatingScenario) {
                 i.remove();
             }
         }
 
-
-        List<Class> implicitTerminators = new ArrayList<Class>(possibleTerminators);
-        for (Class possibleTerminator : possibleTerminators) {
-            for (Class scenario : friendlyScenarios) { //if a friendly scenario references the possible terminator, it is not a terminator
-                for (Class<?> referencedStep : findAnnotation(Step.class, scenario).value()) {
-                    if (referencedStep.isAssignableFrom(possibleTerminator)) {
+        //go through the friendly scenarios (scenarios we know will be in a journey, no @RunWith), and remove scenarios that are referenced by them.
+        List<Scenario> implicitTerminators = new ArrayList<Scenario>(possibleTerminators);
+        for (Scenario possibleTerminator : possibleTerminators) {
+            for (Scenario scenario : friendlyScenarios) { //if a friendly scenario references the possible terminator, it is not a terminator
+                for (Class<?> referencedStep : findAnnotation(Step.class, scenario.getCls()).value()) {
+                    if (referencedStep.isAssignableFrom(possibleTerminator.getCls())) {
                         implicitTerminators.remove(possibleTerminator);
                     }
                 }
@@ -316,10 +317,10 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         @Override
         public boolean match(Journey journey) {
 
-            Iterator<Class> stepIterator = journey.getSteps().iterator();
+            Iterator<Scenario> stepIterator = journey.getSteps().iterator();
             while (stepIterator.hasNext()) {
-                Class step = stepIterator.next();
-                Predicate predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step, "step"), OnlyRunWith.class);
+                Scenario step = stepIterator.next();
+                Predicate predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step.getCls(), "step"), OnlyRunWith.class);
                 if (predicate != null) {
                     boolean valid = conditionalLogic.matches(predicate, journey.getSteps());
                     if (!valid) {
@@ -333,23 +334,23 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private static class UnusedScenariosFilter implements Filter {
 
-        private List<Class> scenarios;
+        private List<Scenario> scenarios;
 
-        public UnusedScenariosFilter(List<Class> scenarios) {
-            this.scenarios = new ArrayList<Class>(scenarios);
+        public UnusedScenariosFilter(List<Scenario> scenarios) {
+            this.scenarios = new ArrayList<Scenario>(scenarios);
         }
 
         @Override
         public boolean match(Journey journey) {
 
-            for (Class step : journey.getSteps()) {
+            for (Scenario step : journey.getSteps()) {
                 scenarios.remove(step);
             }
 
             return true;
         }
 
-        public List<Class> getScenarios() {
+        public List<Scenario> getScenarios() {
             return scenarios;
         }
     }
@@ -372,9 +373,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private static class JourneyImage {
 
-        private List<List<Class>> image = new ArrayList<List<Class>>();
+        private List<List<Scenario>> image = new ArrayList<List<Scenario>>();
 
-        public boolean match(List<Class> steps) {
+        public boolean match(List<Scenario> steps) {
 
             if (image.size() < steps.size()) {
                 return false;
@@ -388,10 +389,10 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             return true;
         }
 
-        public void add(List<Class> steps) {
+        public void add(List<Scenario> steps) {
             for (int i = 0; i < steps.size(); i++) {
                 if (image.size() == i) {
-                    image.add(new ArrayList<Class>());
+                    image.add(new ArrayList<Scenario>());
                 }
                 if (!image.get(i).contains(steps.get(i))) {
                     image.get(i).add(steps.get(i));
@@ -400,9 +401,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
     }
 
-    private class ClassComparator implements Comparator<Class> {
+    private class ClassComparator implements Comparator<Scenario> {
         @Override
-        public int compare(Class lhs, Class rhs) {
+        public int compare(Scenario lhs, Scenario rhs) {
             return lhs.getName().compareTo(rhs.getName());
         }
     }

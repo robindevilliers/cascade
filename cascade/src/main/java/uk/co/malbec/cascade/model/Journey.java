@@ -2,12 +2,13 @@ package uk.co.malbec.cascade.model;
 
 
 import org.junit.runner.Description;
+import uk.co.malbec.cascade.Scenario;
 
 import java.util.List;
 
 public class Journey {
 
-    private List<Class> steps;
+    private List<Scenario> steps;
 
     private Class<?> controlClass;
 
@@ -15,7 +16,7 @@ public class Journey {
 
     private String name;
 
-    public Journey(List<Class> steps, Class<?> controlClass) {
+    public Journey(List<Scenario> steps, Class<?> controlClass) {
         this.steps = steps;
         this.controlClass = controlClass;
     }
@@ -23,13 +24,13 @@ public class Journey {
     public void init(int index) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("Test[").append(index).append("] ");
-        for (Class<?> cls : steps) {
-            uk.co.malbec.cascade.annotations.Description description = cls.getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
+        for (Scenario scenario : steps) {
+            uk.co.malbec.cascade.annotations.Description description = scenario.getCls().getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
             if (description != null) {
                 buffer.append(description.value());
             } else {
                 buffer.append(" ");
-                String[] parts = cls.toString().split("[.]");
+                String[] parts = scenario.getCls().toString().split("[.]");
                 buffer.append(parts[parts.length - 1]);
                 buffer.append(" ");
             }
@@ -38,7 +39,7 @@ public class Journey {
         description = Description.createTestDescription(controlClass, name);
     }
 
-    public List<Class> getSteps() {
+    public List<Scenario> getSteps() {
         return steps;
     }
 

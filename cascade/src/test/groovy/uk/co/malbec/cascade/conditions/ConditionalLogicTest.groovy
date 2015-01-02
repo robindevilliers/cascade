@@ -1,9 +1,9 @@
 package uk.co.malbec.cascade.conditions
 
 import org.junit.Test
+import uk.co.malbec.cascade.Scenario
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
-import uk.co.malbec.cascade.conditions.ConditionalLogic
 
 import static uk.co.malbec.cascade.conditions.Predicates.not
 import static uk.co.malbec.cascade.conditions.Predicates.or
@@ -12,7 +12,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.and
 
 class ConditionalLogicTest {
 
-    List<Class> steps = [OpenLoginPage, Successful, PostLoginAlert.UserAccountLockedAlert] as List<Class>
+    List<Scenario> steps = [new Scenario(OpenLoginPage), new Scenario(Successful), new Scenario(PostLoginAlert.UserAccountLockedAlert)] as List<Scenario>
 
     @Test
     def void "the withStep predicate should return true"() {

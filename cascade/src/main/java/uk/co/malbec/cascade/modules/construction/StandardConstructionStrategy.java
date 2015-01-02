@@ -1,6 +1,7 @@
 package uk.co.malbec.cascade.modules.construction;
 
 
+import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.annotations.Clear;
 import uk.co.malbec.cascade.annotations.Given;
 import uk.co.malbec.cascade.annotations.Setup;
@@ -22,12 +23,12 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
         control.set(newInstance(controlClass, "control"));
 
         steps.set(new ArrayList<Object>());
-        Map<Class, Object> singletons = new HashMap<Class, Object>();
-        for (Class clazz : journey.getSteps()) {
-            if (singletons.get(clazz) == null) {
-                singletons.put(clazz, newInstance(clazz, "step"));
+        Map<Scenario, Object> singletons = new HashMap<Scenario, Object>();
+        for (Scenario scenario : journey.getSteps()) {
+            if (singletons.get(scenario) == null) {
+                singletons.put(scenario, newInstance(scenario.getCls(), "step"));
             }
-            steps.get().add(singletons.get(clazz));
+            steps.get().add(singletons.get(scenario));
         }
 
         collectSuppliedFields(control.get(), scope);

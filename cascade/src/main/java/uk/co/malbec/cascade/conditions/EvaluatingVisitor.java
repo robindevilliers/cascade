@@ -1,14 +1,20 @@
 package uk.co.malbec.cascade.conditions;
 
+import uk.co.malbec.cascade.Scenario;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class EvaluatingVisitor implements Visitor {
 
     private boolean result;
-    private List<Class> steps;
+    private List<Class> scenarioClasses;
 
-    public EvaluatingVisitor(List<Class> steps){
-        this.steps = steps;
+    public EvaluatingVisitor(List<Scenario> scenarios){
+        scenarioClasses = new ArrayList<Class>();
+        for (Scenario scenario : scenarios){
+            scenarioClasses.add(scenario.getCls());
+        }
     }
 
     @Override
@@ -36,12 +42,12 @@ public class EvaluatingVisitor implements Visitor {
     @Override
     public void visit(WithStepPredicate withStepPredicate) {
         //TODO - add code so that I can define a step interface here as well as a concrete class.
-        result = steps.contains(withStepPredicate.getStep());
+        result = scenarioClasses.contains(withStepPredicate.getStep());
     }
 
     @Override
     public void visit(StepAtPredicate stepAtPredicate) {
-        result = steps.size() > stepAtPredicate.getIndex() && steps.get(stepAtPredicate.getIndex()).equals(stepAtPredicate.getStep());
+        result = scenarioClasses.size() > stepAtPredicate.getIndex() && scenarioClasses.get(stepAtPredicate.getIndex()).equals(stepAtPredicate.getStep());
     }
 
     @Override

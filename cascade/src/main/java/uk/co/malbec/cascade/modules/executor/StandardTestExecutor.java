@@ -4,6 +4,7 @@ package uk.co.malbec.cascade.modules.executor;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
+import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.events.Handler;
 import uk.co.malbec.cascade.exception.CascadeException;
@@ -79,14 +80,14 @@ public class StandardTestExecutor implements TestExecutor {
 
         boolean comma = false;
         int index = 0;
-        for (Class step: journey.getSteps()){
+        for (Scenario scenario: journey.getSteps()){
             if (comma){
                 System.out.println(",");
             }
             System.out.print("\tstepAt(");
             System.out.print(index++);
             System.out.print(",");
-            System.out.print(step.getCanonicalName());
+            System.out.print(scenario.getCls().getCanonicalName());
             System.out.print(".class)");
             comma = true;
         }

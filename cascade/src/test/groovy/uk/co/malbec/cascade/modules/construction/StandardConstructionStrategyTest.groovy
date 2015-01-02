@@ -2,8 +2,8 @@ package uk.co.malbec.cascade.modules.construction
 
 import org.junit.Before
 import org.junit.Test
+import uk.co.malbec.cascade.Scenario
 import uk.co.malbec.cascade.model.Journey
-import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy
 import uk.co.malbec.cascade.utils.Reference
 import uk.co.malbec.cascade.annotations.*
 
@@ -29,7 +29,7 @@ StandardConstructionStrategy standardConstructionStrategy
     def void "given a control class and a journey, the construction strategy should instantiate and bind all participants in a test"(){
 
         //given
-        Journey journey = new Journey([DoStuff], TestControl)
+        Journey journey = new Journey([new Scenario(DoStuff)], TestControl)
         Reference<Object> controlReference = new Reference<Object>()
         Reference<List<Object>> stepsReference = new Reference<List<Object>>()
         
