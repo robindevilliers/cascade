@@ -14,9 +14,11 @@ import uk.co.malbec.cascade.modules.JourneyGenerator;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.concurrent.*;
 
 import static java.lang.String.format;
 import static java.util.Collections.sort;
+import static java.util.Collections.synchronizedList;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
 
@@ -28,7 +30,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         this.conditionalLogic = conditionalLogic;
     }
 
-    public List<Journey> generateJourneys(List<Scenario> allScenarios, Class<?> controlClass, Filter filter) {
+    public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter) {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
 
         //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
         sort(allScenarios, new ClassComparator());
@@ -36,7 +39,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         OnlyRunWithFilter onlyRunWithFilter = new OnlyRunWithFilter(conditionalLogic);
         UnusedScenariosFilter unusedScenariosFilter = new UnusedScenariosFilter(allScenarios);
         RedundantFilter redundantFilter = new RedundantFilter();
-        Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, filter, redundantFilter);
+        final Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, filter, redundantFilter);
 
         List<Scenario> terminators = new ArrayList<Scenario>();
 
@@ -52,9 +55,27 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
         sort(terminators, new ClassComparator());
 
-        List<Journey> journeys = new ArrayList<Journey>();
-        for (Scenario terminator : terminators) {
-            generatingTrail(terminator, new ArrayList<Scenario>(), allScenarios, journeys, controlClass, compositeFilter);
+        final List<Journey> journeys = synchronizedList(new ArrayList<Journey>());
+        List<Future> futures = new ArrayList<>();
+        for (final Scenario terminator : terminators) {
+            futures.add(executorService.submit(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    generatingTrail(terminator, new ArrayList<Scenario>(), allScenarios, journeys, controlClass, compositeFilter);
+                    return null;
+                }
+            }));
+        }
+
+        for (Future future : futures) {
+            try {
+                future.get();//this will generate any exceptions that are thrown in the worker threads.
+            } catch (InterruptedException e) {
+                //not going to happen
+                throw new CascadeException("unexpected interrupted exception thrown from thread pool");
+            } catch (ExecutionException e) {
+                throw (RuntimeException) e.getCause();
+            }
         }
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
@@ -70,6 +91,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
 
         //go through journeys and remove any that are redundant
+        //we generate an image of all other journeys and then test if the current journey is redundant.
         Iterator<Journey> journeyIterator = journeys.iterator();
         while (journeyIterator.hasNext()) {
             Journey journey = journeyIterator.next();
@@ -327,7 +349,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         private List<Scenario> scenarios;
 
         public UnusedScenariosFilter(List<Scenario> scenarios) {
-            this.scenarios = new ArrayList<Scenario>(scenarios);
+            this.scenarios = synchronizedList(new ArrayList<>(scenarios));
         }
 
         @Override
@@ -350,7 +372,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         private JourneyImage journeyImage = new JourneyImage();
 
         @Override
-        public boolean match(Journey journey) {
+        public synchronized boolean match(Journey journey) {
 
             if (journeyImage.match(journey.getSteps())) {
                 return false;
