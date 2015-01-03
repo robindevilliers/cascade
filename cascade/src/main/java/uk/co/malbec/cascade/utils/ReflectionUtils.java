@@ -5,9 +5,12 @@ import uk.co.malbec.cascade.annotations.Supplies;
 import uk.co.malbec.cascade.exception.CascadeException;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ReflectionUtils {
@@ -81,6 +84,18 @@ public class ReflectionUtils {
             }
         }
         return null;
+    }
+
+    public static <T> T[] getValuesOfFieldsAnnotatedWith(Object subject, Class annotationClass, Class<T> expectedClass) {
+        List<T> results = new ArrayList<>();
+        for (Field field : subject.getClass().getDeclaredFields()) {
+
+            Annotation annotation = field.getAnnotation(annotationClass);
+            if (annotation != null) {
+                results.add((T) getFieldValue(field, subject));
+            }
+        }
+        return results.toArray((T[])Array.newInstance(expectedClass, 0));
     }
 
     public static Object getFieldValue(Field field, Object instance) {

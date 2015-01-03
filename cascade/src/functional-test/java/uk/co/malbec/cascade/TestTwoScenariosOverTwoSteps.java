@@ -73,7 +73,7 @@ public class TestTwoScenariosOverTwoSteps {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -87,7 +87,7 @@ public class TestTwoScenariosOverTwoSteps {
         assertEquals(1, children.size());
 
         org.junit.runner.Description child0 = children.get(0);
-        assertEquals("Do ThisDo That(uk.co.malbec.cascade.TestTwoScenariosOverTwoSteps$TestBasicMain)", child0.getDisplayName());
+        assertEquals("Test[1] Do ThisDo That(uk.co.malbec.cascade.TestTwoScenariosOverTwoSteps$TestBasicMain)", child0.getDisplayName());
 
         cascade.run(runNotifierMock);
 

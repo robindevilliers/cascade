@@ -86,7 +86,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -100,10 +100,10 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
         assertEquals(2, children.size());
 
         org.junit.runner.Description child0 = children.get(0);
-        assertTrue(child0.getDisplayName().startsWith("Do The Other"));
+        assertTrue(child0.getDisplayName().startsWith("Test[1] Do The Other"));
 
         org.junit.runner.Description child1 = children.get(1);
-        assertTrue(child1.getDisplayName().startsWith("Do ThisDo That"));
+        assertTrue(child1.getDisplayName().startsWith("Test[2] Do ThisDo That"));
 
         cascade.run(runNotifierMock);
 

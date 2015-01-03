@@ -25,13 +25,15 @@ import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
     private ConditionalLogic conditionalLogic;
+    private int threadPoolSize;
 
-    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic) {
+    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic, int threadPoolSize) {
         this.conditionalLogic = conditionalLogic;
+        this.threadPoolSize = threadPoolSize;
     }
 
     public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter) {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
         sort(allScenarios, new ClassComparator());

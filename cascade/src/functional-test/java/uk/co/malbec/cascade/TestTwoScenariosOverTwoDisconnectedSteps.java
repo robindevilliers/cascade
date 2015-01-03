@@ -76,7 +76,7 @@ public class TestTwoScenariosOverTwoDisconnectedSteps {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -90,10 +90,11 @@ public class TestTwoScenariosOverTwoDisconnectedSteps {
         assertEquals(2, children.size());
 
         org.junit.runner.Description child0 = children.get(0);
-        assertTrue(child0.getDisplayName().startsWith("Do That"));
+        System.out.println(child0.getDisplayName());
+        assertTrue(child0.getDisplayName().startsWith("Test[1] Do This"));
 
         org.junit.runner.Description child1 = children.get(1);
-        assertTrue(child1.getDisplayName().startsWith("Do This"));
+        assertTrue(child1.getDisplayName().startsWith("Test[2] Do That"));
 
         cascade.run(runNotifierMock);
 
@@ -106,15 +107,15 @@ public class TestTwoScenariosOverTwoDisconnectedSteps {
         verify(runNotifierMock).fireTestStarted(child0);
         verify(runNotifierMock).fireTestFinished(child0);
 
-        assertEquals("[1]", doThatSetupCalled.toString());
-        assertEquals("[2]", doThatExecuteCalled.toString());
-        assertEquals("[3]", doThatCheckCalled.toString());
-        assertEquals("[4]", doThatClearCalled.toString());
+        assertEquals("[5]", doThatSetupCalled.toString());
+        assertEquals("[6]", doThatExecuteCalled.toString());
+        assertEquals("[7]", doThatCheckCalled.toString());
+        assertEquals("[8]", doThatClearCalled.toString());
 
-        assertEquals("[5]", doThisSetupCalled.toString());
-        assertEquals("[6]", doThisExecuteCalled.toString());
-        assertEquals("[7]", doThisCheckCalled.toString());
-        assertEquals("[8]", doThisClearCalled.toString());
+        assertEquals("[1]", doThisSetupCalled.toString());
+        assertEquals("[2]", doThisExecuteCalled.toString());
+        assertEquals("[3]", doThisCheckCalled.toString());
+        assertEquals("[4]", doThisClearCalled.toString());
     }
 
 
