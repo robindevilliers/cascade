@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.cascade.conditions.Predicates.*;
 
 @RunWith(CascadeRunner.class)
-@Scan("uk.co.malbec.onlinebankingexample.steps")
+@Scan({"uk.co.malbec.onlinebankingexample.steps", "uk.co.malbec.onlinebankingexample.pages"})
 //@StepPostHandler(WaitASecond.class)
 public class OnlineBankingTests {
 
@@ -32,7 +32,7 @@ public class OnlineBankingTests {
         root.setLevel(Level.INFO);
     }
 
-  /*  @FilterTests
+    /*@FilterTests
     Predicate filter1 = and(
             stepAt(0,uk.co.malbec.onlinebankingexample.steps.OpenLandingPage.class),
             stepAt(1,uk.co.malbec.onlinebankingexample.steps.Login.SuccessfulLogin.class),
@@ -55,8 +55,9 @@ public class OnlineBankingTests {
             stepAt(18,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
             stepAt(19,uk.co.malbec.onlinebankingexample.steps.OpenEditAddress.class),
             stepAt(20,uk.co.malbec.onlinebankingexample.steps.EditAddress.class)
-    );
+    );*/
 
+/*
     @FilterTests
     Predicate filter2 = and(
             stepAt(0,uk.co.malbec.onlinebankingexample.steps.OpenLandingPage.class),

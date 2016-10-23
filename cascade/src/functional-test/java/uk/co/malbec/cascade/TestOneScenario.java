@@ -18,27 +18,31 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class TestOneScenario {
 
-    static int count;
+    static int operationCount;
 
-    static List<Integer> doThisSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
+    static List<Integer> doThisGivenCalled = new ArrayList<Integer>();
+    static List<Integer> doThisWhenCalled = new ArrayList<Integer>();
     static List<Integer> doThisClearCalled = new ArrayList<Integer>();
+
+    static List<Integer> beHereGivenCalled = new ArrayList<Integer>();
+    static List<Integer> beHereCheckCalled = new ArrayList<Integer>();
+    static List<Integer> beHereClearCalled = new ArrayList<Integer>();
 
     @Before
     public void setup() {
-        count = 0;
-        doThisSetupCalled.clear();
-        doThisExecuteCalled.clear();
-        doThisCheckCalled.clear();
+        operationCount = 0;
+        doThisGivenCalled.clear();
+        doThisWhenCalled.clear();
         doThisClearCalled.clear();
+
+        beHereGivenCalled.clear();
+        beHereCheckCalled.clear();
+        beHereClearCalled.clear();
     }
 
     @Test
@@ -50,15 +54,24 @@ public class TestOneScenario {
             add(Do.class);
         }});
 
+        when(classpathScannerMock.getTypesAnnotatedWith(Page.class)).thenReturn(new HashSet<Class<?>>() {{
+            add(Be.class);
+        }});
+
         when(classpathScannerMock.getSubTypesOf(Do.class)).thenReturn(new HashSet<Class>() {{
             add(Do.DoThis.class);
+        }});
+
+        when(classpathScannerMock.getSubTypesOf(Be.class)).thenReturn(new HashSet<Class>() {{
+            add(Be.BeHere.class);
         }});
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
         //when
-        Cascade cascade = new Cascade(classpathScannerMock,
-                new ScenarioFinder(),
+        Cascade<Step, Page> cascade = new Cascade<>(classpathScannerMock,
+                new EdgeFinder<>(Step.class),
+                new VertexFinder<>(Page.class),
                 new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
@@ -73,22 +86,24 @@ public class TestOneScenario {
         assertEquals(1, children.size());
 
         org.junit.runner.Description child = children.get(0);
-        assertEquals("Test[1] Do This(uk.co.malbec.cascade.TestOneScenario$TestBasicMain)", child.getDisplayName());
+        assertEquals("Test[1] Do ThisBe Here(uk.co.malbec.cascade.TestOneScenario$TestBasicMain)", child.getDisplayName());
 
         cascade.run(runNotifierMock);
 
         //then
-        verify(classpathScannerMock).initialise("uk.co.mytest.steps");
+        verify(classpathScannerMock, times(2)).initialise("uk.co.mytest.steps");
         verify(classpathScannerMock).getTypesAnnotatedWith(Step.class);
         verify(classpathScannerMock).getSubTypesOf(Do.class);
 
         verify(runNotifierMock).fireTestStarted(child);
         verify(runNotifierMock).fireTestFinished(child);
 
-        assertEquals("[1]", doThisSetupCalled.toString());
-        assertEquals("[2]", doThisExecuteCalled.toString());
-        assertEquals("[3]", doThisCheckCalled.toString());
-        assertEquals("[4]", doThisClearCalled.toString());
+        assertEquals("[1]", doThisGivenCalled.toString());
+        assertEquals("[2]", beHereGivenCalled.toString());
+        assertEquals("[3]", doThisWhenCalled.toString());
+        assertEquals("[4]", beHereCheckCalled.toString());
+        assertEquals("[5]", doThisClearCalled.toString());
+        assertEquals("[6]", beHereClearCalled.toString());
     }
 
     @Step
@@ -99,34 +114,51 @@ public class TestOneScenario {
 
             @Given
             public void setup() {
-                count++;
-                doThisSetupCalled.add(count);
+                operationCount++;
+                doThisGivenCalled.add(operationCount);
             }
 
             @When
             public void execute() {
-                count++;
-                doThisExecuteCalled.add(count);
-            }
-
-            @Then
-            public void check(Throwable f) {
-                count++;
-                doThisCheckCalled.add(count);
+                operationCount++;
+                doThisWhenCalled.add(operationCount);
             }
 
             @Clear
             public void cleanup() {
-                count++;
-                doThisClearCalled.add(count);
+                operationCount++;
+                doThisClearCalled.add(operationCount);
             }
         }
     }
 
+    @Page(Do.class)
+    public interface Be {
+
+        @Description("Be Here")
+        public class BeHere implements Be {
+
+            @Given
+            public void setup() {
+                operationCount++;
+                beHereGivenCalled.add(operationCount);
+            }
+
+            @Then
+            public void check(Throwable f) {
+                operationCount++;
+                beHereCheckCalled.add(operationCount);
+            }
+
+            @Clear
+            public void cleanup() {
+                operationCount++;
+                beHereClearCalled.add(operationCount);
+            }
+        }
+    }
 
     @Scan("uk.co.mytest.steps")
     public static class TestBasicMain {
-
     }
-
 }

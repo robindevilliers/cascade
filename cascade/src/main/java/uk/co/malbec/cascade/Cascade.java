@@ -7,14 +7,17 @@ import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.*;
 import uk.co.malbec.cascade.utils.Reference;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cascade {
+public class Cascade<E extends Annotation, V extends Annotation> {
 
     private ClasspathScanner classpathScanner;
 
-    private ScenarioFinder scenarioFinder;
+    private EdgeFinder<E> edgeFinder;
+
+    private VertexFinder<V> vertexFinder;
 
     private JourneyGenerator journeyGenerator;
 
@@ -29,13 +32,15 @@ public class Cascade {
     private List<Journey> journeys = new ArrayList<Journey>();
 
     public Cascade(ClasspathScanner classpathScanner,
-                   ScenarioFinder scenarioFinder,
+                   EdgeFinder<E> edgeFinder,
+                   VertexFinder<V> vertexFinder,
                    JourneyGenerator journeyGenerator,
                    ConstructionStrategy constructionStrategy,
                    TestExecutor testExecutor,
                    FilterStrategy filterStrategy) {
         this.classpathScanner = classpathScanner;
-        this.scenarioFinder = scenarioFinder;
+        this.edgeFinder = edgeFinder;
+        this.vertexFinder = vertexFinder;
         this.journeyGenerator = journeyGenerator;
         this.constructionStrategy = constructionStrategy;
         this.testExecutor = testExecutor;
@@ -49,8 +54,11 @@ public class Cascade {
         testExecutor.init(controlClass);
 
         String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
-        List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
-        journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
+        //TODO - we need validation that a Step/Edge has a When.
+        List<Edge> edges = edgeFinder.findEdges(packagesToScan, classpathScanner);
+        //TODO - we need validation that a Page/Vertex has a Then.
+        List<Vertex> vertices = vertexFinder.findVertex(packagesToScan, classpathScanner);
+        journeys = journeyGenerator.generateJourneys(edges, vertices, controlClass, filterStrategy);
     }
 
     public Description getDescription() {
@@ -76,8 +84,8 @@ public class Cascade {
                 constructionStrategy.tearDown(control, steps);
             } catch (RuntimeException e) {
                 StringBuilder journeyDescription = new StringBuilder();
-                for (Scenario scenario : journey.getSteps()) {
-                    String[] tokens = scenario.toString().split("\\.");
+                for (Thig edge : journey.getTrail()) {
+                    String[] tokens = edge.toString().split("\\.");
 
                     journeyDescription.append(tokens[tokens.length - 1]).append("\n");
                 }

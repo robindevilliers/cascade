@@ -14,7 +14,7 @@ import static uk.co.malbec.onlinebankingexample.Utilities.assertElementIsNotPres
 import static uk.co.malbec.onlinebankingexample.Utilities.assertElementPresent;
 import static uk.co.malbec.onlinebankingexample.Utilities.assertTextEquals;
 
-@Step({Challenge.class, Notice.class, BackToPorfolio.class})
+//@Step({Challenge.class, Notice.class, BackToPorfolio.class})
 public interface Portfolio {
 
     public class CurrentAccountOnly implements Portfolio {

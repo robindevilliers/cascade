@@ -20,7 +20,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(Portfolio.class)
+//@Step(Portfolio.class)
 @ReEntrantTerminator(1)
 public interface OpenAccountPage {
 

@@ -1,7 +1,8 @@
 package uk.co.malbec.cascade.modules.construction;
 
 
-import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Edge;
+import uk.co.malbec.cascade.Thig;
 import uk.co.malbec.cascade.annotations.Clear;
 import uk.co.malbec.cascade.annotations.Given;
 import uk.co.malbec.cascade.annotations.Setup;
@@ -22,13 +23,13 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
 
         control.set(newInstance(controlClass, "control"));
 
-        steps.set(new ArrayList<Object>());
-        Map<Scenario, Object> singletons = new HashMap<Scenario, Object>();
-        for (Scenario scenario : journey.getSteps()) {
-            if (singletons.get(scenario) == null) {
-                singletons.put(scenario, newInstance(scenario.getCls(), "step"));
+        steps.set(new ArrayList<>());
+        Map<Thig, Object> singletons = new HashMap<>();
+        for (Thig edge : journey.getTrail()) {
+            if (singletons.get(edge) == null) {
+                singletons.put(edge, newInstance(edge.getCls(), "thig"));
             }
-            steps.get().add(singletons.get(scenario));
+            steps.get().add(singletons.get(edge));
         }
 
         collectSuppliedFields(control.get(), scope);
@@ -41,7 +42,7 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
             injectDemandedFields(step, scope);
         }
 
-
+        //execute Given methods
         Set<Object> alreadyInitialised = new HashSet<Object>();
         for (Object step : steps.get()) {
             if (!alreadyInitialised.contains(step)) {
@@ -49,6 +50,7 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
                 alreadyInitialised.add(step);
             }
         }
+
 
         for (Object step : steps.get()) {
             collectSuppliedFields(step, scope);

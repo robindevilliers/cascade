@@ -9,7 +9,7 @@ import uk.co.malbec.cascade.annotations.When;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(OpenPersonalPage.class)
+//@Step(OpenPersonalPage.class)
 public class OpenEditEmail {
     @Demands
     public WebDriver webDriver;

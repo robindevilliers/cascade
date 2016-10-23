@@ -1,6 +1,7 @@
 package uk.co.malbec.cascade.conditions;
 
-import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Edge;
+import uk.co.malbec.cascade.Thig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,10 @@ public class EvaluatingVisitor implements Visitor {
     private boolean result;
     private List<Class> scenarioClasses;
 
-    public EvaluatingVisitor(List<Scenario> scenarios){
-        scenarioClasses = new ArrayList<Class>();
-        for (Scenario scenario : scenarios){
-            scenarioClasses.add(scenario.getCls());
+    public EvaluatingVisitor(List<Thig> thigs){
+        scenarioClasses = new ArrayList<>();
+        for (Thig thig : thigs){
+            scenarioClasses.add(thig.getCls());
         }
     }
 

@@ -4,11 +4,12 @@ package uk.co.malbec.onlinebankingexample.steps;
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.annotations.Terminator;
+import uk.co.malbec.onlinebankingexample.pages.LandingPage;
 
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(OpenLandingPage.class)
+@Step(LandingPage.class)
 public interface Login {
     public class SuccessfulLogin implements Login {
 

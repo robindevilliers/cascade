@@ -2,7 +2,7 @@ package uk.co.malbec.cascade.modules.filtering
 
 import org.junit.Before
 import org.junit.Test
-import uk.co.malbec.cascade.Scenario
+import uk.co.malbec.cascade.Edge
 import uk.co.malbec.cascade.annotations.FilterTests
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.conditions.ConditionalLogic
@@ -32,8 +32,8 @@ class StandardFilterStrategyTest {
 
         standardFilterStrategy.init(TestClassWithNoFilters)
 
-        Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(BadPassword)], TestClass);
-        Journey successfulJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(Successful)], TestClass);
+        Journey badPasswordJourney = new Journey([new Edge(OpenLoginPage), new Edge(BadPassword)], TestClass);
+        Journey successfulJourney = new Journey([new Edge(OpenLoginPage), new Edge(Successful)], TestClass);
 
         assert standardFilterStrategy.match(badPasswordJourney)
         assert standardFilterStrategy.match(successfulJourney)
@@ -44,8 +44,8 @@ class StandardFilterStrategyTest {
 
         standardFilterStrategy.init(TestClassWithManyFilters)
 
-        Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(BadPassword)], TestClass);
-        Journey successfulJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(Successful)], TestClass);
+        Journey badPasswordJourney = new Journey([new Edge(OpenLoginPage), new Edge(BadPassword)], TestClass);
+        Journey successfulJourney = new Journey([new Edge(OpenLoginPage), new Edge(Successful)], TestClass);
 
         assert standardFilterStrategy.match(badPasswordJourney)
         assert standardFilterStrategy.match(successfulJourney)
@@ -55,8 +55,8 @@ class StandardFilterStrategyTest {
     def void "given a filter, the filter strategy should return as appropriate"(){
         standardFilterStrategy.predicates = [new WithStepPredicate(BadPassword)] as Predicate[]
 
-        Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(BadPassword)], TestClass);
-        Journey successfulJourney = new Journey([new Scenario(OpenLoginPage), new Scenario(Successful)], TestClass);
+        Journey badPasswordJourney = new Journey([new Edge(OpenLoginPage), new Edge(BadPassword)], TestClass);
+        Journey successfulJourney = new Journey([new Edge(OpenLoginPage), new Edge(Successful)], TestClass);
 
         assert standardFilterStrategy.match(badPasswordJourney)
         assert !standardFilterStrategy.match(successfulJourney)

@@ -1,13 +1,14 @@
 package uk.co.malbec.cascade.modules;
 
 
-import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Edge;
+import uk.co.malbec.cascade.Vertex;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.generator.Filter;
 
 import java.util.List;
 
 public interface JourneyGenerator {
-    public List<Journey> generateJourneys(List<Scenario> scenarios, Class<?> controlClass, Filter filter);
+    List<Journey> generateJourneys(List<Edge> edges, List<Vertex> vertices, Class<?> controlClass, Filter filter);
 
 }

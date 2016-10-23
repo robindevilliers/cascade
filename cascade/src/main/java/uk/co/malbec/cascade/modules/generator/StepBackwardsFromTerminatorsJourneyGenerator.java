@@ -1,7 +1,9 @@
 package uk.co.malbec.cascade.modules.generator;
 
 
-import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Edge;
+import uk.co.malbec.cascade.Thig;
+import uk.co.malbec.cascade.Vertex;
 import uk.co.malbec.cascade.annotations.OnlyRunWith;
 
 
@@ -32,40 +34,39 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         this.threadPoolSize = threadPoolSize;
     }
 
-    public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter) {
+    public List<Journey> generateJourneys(final List<Edge> allEdges, final List<Vertex> allVertices, final Class<?> controlClass, Filter filter) {
         ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
-        //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
-        sort(allScenarios, new ClassComparator());
+        //sort the edges and vertices so that the generation of journeys is always deterministic from the users point of view.
+        sort(allEdges, new EdgeComparator());
+        sort(allVertices, new VertexComparator());
 
         OnlyRunWithFilter onlyRunWithFilter = new OnlyRunWithFilter(conditionalLogic);
-        UnusedScenariosFilter unusedScenariosFilter = new UnusedScenariosFilter(allScenarios);
+        UnusedEdgesFilter unusedEdgesFilter = new UnusedEdgesFilter(allEdges);
+        UnusedVerticesFilter unusedVerticesFilter = new UnusedVerticesFilter(allVertices);
         RedundantFilter redundantFilter = new RedundantFilter();
-        final Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, filter, redundantFilter);
+        final Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedEdgesFilter, unusedVerticesFilter, filter, redundantFilter);
 
-        List<Scenario> terminators = new ArrayList<Scenario>();
+        List<Vertex> terminators = new ArrayList<>();
 
-        //these are scenarios marked with a Terminator annotation - explicit terminators.
-        findTerminatngScenarios(allScenarios, terminators);
+        //these are vertices marked with a Terminator annotation - explicit terminators.
+        findTerminatingVertices(allVertices, terminators);
 
         //these are scenarios marked with a ReEntrantTerminator annotation - these are terminators but only after already being in the journey n number of times.
-        findReEntrantTerminatngScenarios(allScenarios, terminators);
+        findReEntrantTerminatngVertices(allVertices, terminators);
 
         //these are scenarios that belong to steps that are not followed by other steps - implicit terminators.
-        findDanglingScenarios(allScenarios, terminators);
+        findDanglingVertices(allEdges, allVertices, terminators);
 
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
-        sort(terminators, new ClassComparator());
+        sort(terminators, new VertexComparator());
 
-        final List<Journey> journeys = synchronizedList(new ArrayList<Journey>());
+        final List<Journey> journeys = synchronizedList(new ArrayList<>());
         List<Future> futures = new ArrayList<>();
-        for (final Scenario terminator : terminators) {
-            futures.add(executorService.submit(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    generatingTrail(terminator, new ArrayList<Scenario>(), allScenarios, journeys, controlClass, compositeFilter);
-                    return null;
-                }
+        for (final Vertex terminator : terminators) {
+            futures.add(executorService.submit(() -> {
+                generatingTrail(terminator, new ArrayList<>(), allEdges, allVertices, journeys, controlClass, compositeFilter);
+                return null;
             }));
         }
 
@@ -81,15 +82,22 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
-        if (!unusedScenariosFilter.getScenarios().isEmpty()) {
+        if (!unusedEdgesFilter.getEdges().isEmpty()) {
             throw new CascadeException(format(new StringBuilder()
-                    .append("Invalid configuration: Scenario %s not found in any journey: ")
+                    .append("Invalid configuration: Step %s not found in any journey: ")
                     .append("This journey generator calculates journeys by finding terminators ")
                     .append("and walking backwards to the steps that start journeys. ")
-                    .append("If a step is not found in journeys, it is either dependent on ")
-                    .append("steps that don't lead to a journey start, or there are no terminators ")
-                    .append("downstream of this step.")
-                    .toString(), unusedScenariosFilter.getScenarios().get(0).getCls().toString()));
+                    .append("This step is not transitively connected to a start of a journey")
+                    .toString(), unusedEdgesFilter.getEdges().get(0).getCls().toString()));
+        }
+
+        if (!unusedVerticesFilter.getVertices().isEmpty()) {
+            throw new CascadeException(format(new StringBuilder()
+                    .append("Invalid configuration: Vertex %s not found in any journey: ")
+                    .append("This journey generator calculates journeys by finding terminators ")
+                    .append("and walking backwards to the steps that start journeys. ")
+                    .append("This vertex is not transitively connected to a start of a journey")
+                    .toString(), unusedEdgesFilter.getEdges().get(0).getCls().toString()));
         }
 
         //go through journeys and remove any that are redundant
@@ -102,11 +110,11 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
             for (Journey reference : journeys) {
                 if (!reference.equals(journey)) {
-                    journeyImage.add(reference.getSteps());
+                    journeyImage.add(reference.getTrail());
                 }
             }
 
-            if (journeyImage.match(journey.getSteps())) {
+            if (journeyImage.match(journey.getTrail())) {
                 journeyIterator.remove();
             }
         }
@@ -117,47 +125,45 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             index++;
         }
 
-        sort(journeys, new Comparator<Journey>() {
-            @Override
-            public int compare(Journey lhs, Journey rhs) {
-                return lhs.getName().compareTo(rhs.getName());
-            }
-        });
+        sort(journeys, (lhs, rhs) -> lhs.getName().compareTo(rhs.getName()));
 
         return journeys;
     }
 
-    private void generatingTrail(Scenario currentScenario, List<Scenario> trail, List<Scenario> allScenarios, List<Journey> journeys, Class<?> controlClass, Filter filter) {
+    private void generatingTrail(Thig currentThig, List<Thig> trail, List<Edge> allEdges, List<Vertex> allVertices, List<Journey> journeys, Class<?> controlClass, Filter filter) {
 
         //walk backwards up the trail looking for a repeat of the currentScenario. If one appears before a ReEntrantTerminator, then we have an infinite cycle.
-        ListIterator<Scenario> iterator = trail.listIterator(trail.size());
+        ListIterator<Thig> iterator = trail.listIterator(trail.size());
         while (iterator.hasPrevious()) {
-            Scenario scenario = iterator.previous();
+            Thig thig = iterator.previous();
 
-            //A ReEntrantTerminator has a limit to its entry in a journey.  So there cannot be infinite cycles if we have encountered this here.
-            if (scenario.isReEntrantTerminator()) {
-                break;
+            if (thig instanceof Vertex) {
+                Vertex vertex = (Vertex) thig;
+
+                //A ReEntrantTerminator has a limit to its entry in a journey.  So there cannot be infinite cycles if we have encountered this here.
+                if (vertex.isReEntrantTerminator()) {
+                    break;
+                }
+
+                //Normal terminators are ok too.
+                if (vertex.isTerminator()) {
+                    break;
+                }
             }
-
-            //Normal terminators are ok too.
-            if (scenario.isTerminator()) {
-                break;
-            }
-
 
             //if we find the current scenario in the trail already, without ReEntrantTerminators between, we have an infinite loop.
-            if (scenario == currentScenario) {
-                List<Scenario> infiniteLoop = new ArrayList<Scenario>();
+            if (thig == currentThig) {
+                List<Thig> infiniteLoop = new ArrayList<>();
 
                 while (iterator.hasNext()) {
                     infiniteLoop.add(iterator.next());
                 }
-                infiniteLoop.add(currentScenario);
+                infiniteLoop.add(currentThig);
 
                 Collections.reverse(infiniteLoop);
 
                 StringBuilder buffer = new StringBuilder();
-                for (Scenario s : infiniteLoop) {
+                for (Thig s : infiniteLoop) {
                     String[] parts = s.getCls().toString().split("[.]");
                     buffer.append(parts[parts.length - 1]);
                     buffer.append(" ");
@@ -167,13 +173,13 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             }
         }
 
-        trail.add(currentScenario);
+        trail.add(currentThig);
 
-        boolean beginningOfTrail = currentScenario.getSteps()[0] == Step.Null.class;
+        boolean beginningOfTrail = currentThig instanceof Edge ? ((Edge) currentThig).getPrecedingVertices()[0] == Step.Null.class : false;
 
         if (beginningOfTrail) {
             //we are copying the trail as the current trail may be part of another trail.  There could be a few of them.
-            List<Scenario> newTrail = new ArrayList<Scenario>(trail);
+            List<Thig> newTrail = new ArrayList<>(trail);
             Collections.reverse(newTrail);
 
             Journey candidateJourney = new Journey(newTrail, controlClass);
@@ -181,90 +187,117 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                 journeys.add(candidateJourney);
             }
         } else {
+            if (currentThig instanceof Edge) {
+                Edge currentEdge = (Edge) currentThig;
 
-            for (Class preceedingStep : currentScenario.getSteps()) {
 
-                Scenario:
-                for (Scenario scenario : allScenarios) {
+                for (Class<?> precedingVertex : currentEdge.getPrecedingVertices()) {
+                    Scenario:
+                    for (Vertex vertex : allVertices) {
 
-                    //if this scenario doesn't preceed the current step, we don't use it.
-                    boolean scenarioIsNotAPreceedingStep = !preceedingStep.isAssignableFrom(scenario.getCls());
-                    if (scenarioIsNotAPreceedingStep) {
-                        continue;
-                    }
+                        //if this scenario doesn't preceed the current step, we don't use it.
+                        boolean vertexIsNotPreceding = !precedingVertex.isAssignableFrom(vertex.getCls());
+                        if (vertexIsNotPreceding) {
+                            continue;
+                        }
 
-                    if (scenario.isTerminator()) {
-                        continue;
-                    }
+                        if (vertex.isTerminator()) {
+                            continue;
+                        }
 
-                    //if this scenario is a ReEntrantTerminator and its limit is reached, we don't use it.
+                        //if this scenario is a ReEntrantTerminator and its limit is reached, we don't use it.
 
-                    if (scenario.isReEntrantTerminator()) {
-                        Integer count = 0;
-                        for (Scenario s : trail) {
-                            if (s == scenario) {
-                                count++;
+                        if (vertex.isReEntrantTerminator()) {
+                            Integer count = 0;
+                            for (Thig s : trail) {
+                                if (s == vertex) {
+                                    count++;
+                                }
+                                if (count == vertex.getReEntrantCount()) {
+                                    continue Scenario;
+                                }
                             }
-                            if (count == scenario.getReEntrantCount()) {
+                        }
+
+                        //if the journey already has a scenario for this scenario's step, and it is different from this scenario, we don't use it.
+                        for (Thig s : trail) {
+                            if (precedingVertex.isAssignableFrom(s.getCls()) && s != vertex) {
                                 continue Scenario;
                             }
                         }
+                        generatingTrail(vertex, trail, allEdges, allVertices, journeys, controlClass, filter);
                     }
-
-                    //if the journey already has a scenario for this scenario's step, and it is different from this scenario, we don't use it.
-                    for (Scenario s : trail) {
-
-                        if (preceedingStep.isAssignableFrom(s.getCls()) && s != scenario) {
-                            continue Scenario;
-                        }
-                    }
-                    generatingTrail(scenario, trail, allScenarios, journeys, controlClass, filter);
                 }
             }
+
+            if (currentThig instanceof Vertex) {
+                Vertex currentVertex = (Vertex) currentThig;
+
+                for (Class<?> precedingEdge : currentVertex.getPrecedingEdges()) {
+                    Scenario:
+                    for (Edge edge : allEdges) {
+
+                        //if this scenario doesn't preceed the current step, we don't use it.
+                        boolean edgeIsNotPreceding = !precedingEdge.isAssignableFrom(edge.getCls());
+                        if (edgeIsNotPreceding) {
+                            continue;
+                        }
+
+                        //if the journey already has a scenario for this scenario's step, and it is different from this scenario, we don't use it.
+                        for (Thig s : trail) {
+                            if (precedingEdge.isAssignableFrom(s.getCls()) && s != edge) {
+                                continue Scenario;
+                            }
+                        }
+                        generatingTrail(edge, trail, allEdges, allVertices, journeys, controlClass, filter);
+                    }
+                }
+            }
+
         }
         trail.remove(trail.size() - 1);
     }
 
-    private void findTerminatngScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
-        for (Scenario scenario : allScenarios) {
-            if (scenario.isTerminator()) {
-                terminators.add(scenario);
+    private void findTerminatingVertices(List<Vertex> allVertices, List<Vertex> terminators) {
+        for (Vertex vertex : allVertices) {
+            if (vertex.isTerminator()) {
+                terminators.add(vertex);
             }
         }
     }
 
-    private void findReEntrantTerminatngScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
-        for (Scenario scenario : allScenarios) {
-            if (scenario.isReEntrantTerminator()) {
-                terminators.add(scenario);
+    private void findReEntrantTerminatngVertices(List<Vertex> allVertices, List<Vertex> terminators) {
+        for (Vertex vertex : allVertices) {
+            if (vertex.isReEntrantTerminator()) {
+                terminators.add(vertex);
             }
         }
     }
 
-    private void findDanglingScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
+    private void findDanglingVertices(List<Edge> allEdges, List<Vertex> allVertices, List<Vertex> terminators) {
 
-        //collect all scenarios that don't have @RunWith
-        List<Scenario> friendlyScenarios = new ArrayList<Scenario>();
-        for (Scenario scenario : allScenarios) {
-            if (getValueOfFieldAnnotatedWith(newInstance(scenario.getCls(), "step"), OnlyRunWith.class) == null) {
-                friendlyScenarios.add(scenario);
+        //collect all edges that don't have @RunWith
+        List<Edge> friendlyEdges = new ArrayList<>();
+        for (Edge edge : allEdges) {
+            if (getValueOfFieldAnnotatedWith(newInstance(edge.getCls(), "step"), OnlyRunWith.class) == null) {
+                friendlyEdges.add(edge);
             }
         }
 
 
-        List<Scenario> possibleTerminators = new ArrayList<Scenario>(allScenarios);
-        for (Iterator<Scenario> i = possibleTerminators.iterator(); i.hasNext(); ) {
-            Scenario scenario = i.next();
-            if (scenario.isTerminator()) {
+        List<Vertex> possibleTerminators = new ArrayList<>(allVertices);
+        for (Iterator<Vertex> i = possibleTerminators.iterator(); i.hasNext(); ) {
+            Vertex vertex = i.next();
+            if (vertex.isTerminator()) {
                 i.remove();
             }
         }
 
         //go through the friendly scenarios (scenarios we know will be in a journey, no @RunWith), and remove scenarios that are referenced by them.
-        List<Scenario> implicitTerminators = new ArrayList<Scenario>(possibleTerminators);
-        for (Scenario possibleTerminator : possibleTerminators) {
-            for (Scenario scenario : friendlyScenarios) { //if a friendly scenario references the possible terminator, it is not a terminator
-                for (Class<?> referencedStep : scenario.getSteps()) {
+        List<Vertex> implicitTerminators = new ArrayList<>(possibleTerminators);
+        for (Vertex possibleTerminator : possibleTerminators) {
+            for (Edge edge : friendlyEdges) { //if a friendly edge references the possible terminator vertex, it is not a terminator
+                for (Class<?> referencedStep : edge.getPrecedingVertices()) {
                     if (referencedStep.isAssignableFrom(possibleTerminator.getCls())) {
                         implicitTerminators.remove(possibleTerminator);
                     }
@@ -331,12 +364,12 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         @Override
         public boolean match(Journey journey) {
 
-            Iterator<Scenario> stepIterator = journey.getSteps().iterator();
+            Iterator<Thig> stepIterator = journey.getTrail().iterator();
             while (stepIterator.hasNext()) {
-                Scenario step = stepIterator.next();
-                Predicate predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step.getCls(), "step"), OnlyRunWith.class);
+                Thig step = stepIterator.next();
+                Predicate predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step.getCls(), "thig"), OnlyRunWith.class);
                 if (predicate != null) {
-                    boolean valid = conditionalLogic.matches(predicate, journey.getSteps());
+                    boolean valid = conditionalLogic.matches(predicate, journey.getTrail());
                     if (!valid) {
                         return false;
                     }
@@ -346,26 +379,49 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
     }
 
-    private static class UnusedScenariosFilter implements Filter {
+    private static class UnusedEdgesFilter implements Filter {
 
-        private List<Scenario> scenarios;
+        private List<Edge> edges;
 
-        public UnusedScenariosFilter(List<Scenario> scenarios) {
-            this.scenarios = synchronizedList(new ArrayList<>(scenarios));
+        public UnusedEdgesFilter(List<Edge> edges) {
+            this.edges = synchronizedList(new ArrayList<>(edges));
         }
 
         @Override
         public boolean match(Journey journey) {
 
-            for (Scenario step : journey.getSteps()) {
-                scenarios.remove(step);
+            for (Thig step : journey.getTrail()) {
+                edges.remove(step);
             }
 
             return true;
         }
 
-        public List<Scenario> getScenarios() {
-            return scenarios;
+        public List<Edge> getEdges() {
+            return edges;
+        }
+    }
+
+    private static class UnusedVerticesFilter implements Filter {
+
+        private List<Vertex> vertices;
+
+        public UnusedVerticesFilter(List<Vertex> vertices) {
+            this.vertices = synchronizedList(new ArrayList<>(vertices));
+        }
+
+        @Override
+        public boolean match(Journey journey) {
+
+            for (Thig step : journey.getTrail()) {
+                vertices.remove(step);
+            }
+
+            return true;
+        }
+
+        public List<Vertex> getVertices() {
+            return vertices;
         }
     }
 
@@ -376,10 +432,10 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         @Override
         public synchronized boolean match(Journey journey) {
 
-            if (journeyImage.match(journey.getSteps())) {
+            if (journeyImage.match(journey.getTrail())) {
                 return false;
             } else {
-                journeyImage.add(journey.getSteps());
+                journeyImage.add(journey.getTrail());
                 return true;
             }
         }
@@ -387,9 +443,9 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private static class JourneyImage {
 
-        private List<List<Scenario>> image = new ArrayList<List<Scenario>>();
+        private List<List<Thig>> image = new ArrayList<>();
 
-        public boolean match(List<Scenario> steps) {
+        public boolean match(List<Thig> steps) {
 
             if (image.size() < steps.size()) {
                 return false;
@@ -403,10 +459,10 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
             return true;
         }
 
-        public void add(List<Scenario> steps) {
+        public void add(List<Thig> steps) {
             for (int i = 0; i < steps.size(); i++) {
                 if (image.size() == i) {
-                    image.add(new ArrayList<Scenario>());
+                    image.add(new ArrayList<>());
                 }
                 if (!image.get(i).contains(steps.get(i))) {
                     image.get(i).add(steps.get(i));
@@ -415,9 +471,16 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
     }
 
-    private class ClassComparator implements Comparator<Scenario> {
+    private class EdgeComparator implements Comparator<Edge> {
         @Override
-        public int compare(Scenario lhs, Scenario rhs) {
+        public int compare(Edge lhs, Edge rhs) {
+            return lhs.getName().compareTo(rhs.getName());
+        }
+    }
+
+    private class VertexComparator implements Comparator<Vertex> {
+        @Override
+        public int compare(Vertex lhs, Vertex rhs) {
             return lhs.getName().compareTo(rhs.getName());
         }
     }

@@ -7,7 +7,7 @@ import uk.co.malbec.cascade.utils.Reference;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(OpenEditAddress.class)
+//@Step(OpenEditAddress.class)
 @ReEntrantTerminator(1)
 public class EditAddress {
 

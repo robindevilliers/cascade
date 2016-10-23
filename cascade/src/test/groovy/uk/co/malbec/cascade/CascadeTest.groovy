@@ -20,40 +20,45 @@ import static org.mockito.Mockito.*
 
 class CascadeTest {
 
-    Cascade cascade;
+    Cascade cascade
 
-    ClasspathScanner classpathScannerMock = mock(ClasspathScanner);
+    ClasspathScanner classpathScannerMock = mock(ClasspathScanner)
 
-    ScenarioFinder scenarioFinderMock = mock(ScenarioFinder);
+    EdgeFinder edgeFinderMock = mock(EdgeFinder)
 
-    JourneyGenerator journeyGeneratorMock = mock(JourneyGenerator);
+    VertexFinder vertexFinderMock = mock(VertexFinder)
 
-    ConstructionStrategy constructionStrategyMock = mock(ConstructionStrategy);
+    JourneyGenerator journeyGeneratorMock = mock(JourneyGenerator)
 
-    TestExecutor testExecutorMock = mock(TestExecutor);
+    ConstructionStrategy constructionStrategyMock = mock(ConstructionStrategy)
 
-    FilterStrategy filterStrategyMock = mock(FilterStrategy);
+    TestExecutor testExecutorMock = mock(TestExecutor)
 
-    RunNotifier runNotifierMock = mock(RunNotifier);
+    FilterStrategy filterStrategyMock = mock(FilterStrategy)
+
+    RunNotifier runNotifierMock = mock(RunNotifier)
 
     @Before
     public void "initialisation"() {
-        cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock);
+        cascade = new Cascade(classpathScannerMock, edgeFinderMock, vertexFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock);
     }
 
     @After
     public void "cleanup"(){
-        verifyNoMoreInteractions(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock)
+        verifyNoMoreInteractions(classpathScannerMock, edgeFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock)
     }
 
     @Test
     public void "given start of test, the cascade class should find scenarios and delegate to journey generator to generate journeys"() {
         //given
-        List<Scenario> scenariosMock = mock(List)
-        when(scenarioFinderMock.findScenarios(any(String[]), any(ClasspathScanner))).thenReturn(scenariosMock)
+        List<Edge> edgeFinderMock = mock(List)
+        when(this.edgeFinderMock.findEdges(any(String[]), any(ClasspathScanner))).thenReturn(edgeFinderMock)
+
+        List<Vertex> vertexFinderMock = mock(List)
+        when(this.vertexFinderMock.findVertex(any(String[]), any(ClasspathScanner))).thenReturn(vertexFinderMock)
 
         List<Journey> journeysMock = mock(List)
-        when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock))).thenReturn(journeysMock)
+        when(journeyGeneratorMock.generateJourneys(any(List), any(List), any(Class), eq(filterStrategyMock))).thenReturn(journeysMock)
 
         //When
         cascade.init(TestClass);
@@ -61,8 +66,8 @@ class CascadeTest {
         //then
         verify(filterStrategyMock).init(TestClass);
         verify(testExecutorMock).init(TestClass);
-        verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
-        verify(journeyGeneratorMock).generateJourneys(scenariosMock, TestClass, filterStrategyMock)
+        verify(this.edgeFinderMock).findEdges(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
+        verify(journeyGeneratorMock).generateJourneys(edgeFinderMock, vertexFinderMock, TestClass, filterStrategyMock)
 
         assert journeysMock == cascade.journeys
         assert TestClass == cascade.controlClass
@@ -71,7 +76,7 @@ class CascadeTest {
     @Test
     public void "given a generated cascade test suit, a call to getDescription should generate a description for each journey"() {
         //given
-        cascade.journeys = [new Journey([new Scenario(Her), new Scenario(Him)], TestClass), new Journey([new Scenario(Him), new Scenario(Her)], TestClass)]
+        cascade.journeys = [new Journey([new Edge(Her), new Edge(Him)], TestClass), new Journey([new Edge(Him), new Edge(Her)], TestClass)]
 
         int i = 1;
         for (Journey journey : cascade.journeys){
@@ -92,7 +97,7 @@ class CascadeTest {
     @Test
     public void "given a request to run, the cascade class should setup, execute and then teardown all journeys "() {
         //given
-        List<Journey> journeys = [new Journey([new Scenario(Her), new Scenario(Him)], TestClass), new Journey([new Scenario(Him), new Scenario(Her)], TestClass)]
+        List<Journey> journeys = [new Journey([new Edge(Her), new Edge(Him)], TestClass), new Journey([new Edge(Him), new Edge(Her)], TestClass)]
         cascade.journeys = journeys
         int i = 1;
         for (Journey journey : cascade.journeys){

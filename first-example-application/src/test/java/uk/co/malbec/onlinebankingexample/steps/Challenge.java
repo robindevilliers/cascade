@@ -8,7 +8,7 @@ import static java.lang.Integer.parseInt;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(Login.class)
+//@Step(Login.class)
 public interface Challenge {
     public class PassChallenge implements Challenge {
 

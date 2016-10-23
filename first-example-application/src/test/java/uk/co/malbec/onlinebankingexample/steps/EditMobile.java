@@ -10,7 +10,7 @@ import uk.co.malbec.cascade.utils.Reference;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(OpenEditMobile.class)
+//@Step(OpenEditMobile.class)
 public class EditMobile {
 
     @Demands

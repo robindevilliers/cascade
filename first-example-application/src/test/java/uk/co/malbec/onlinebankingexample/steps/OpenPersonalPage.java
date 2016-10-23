@@ -11,7 +11,7 @@ import java.util.Map;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(Portfolio.class)
+//@Step(Portfolio.class)
 public class OpenPersonalPage {
 
     @Demands

@@ -2,13 +2,15 @@ package uk.co.malbec.cascade.model;
 
 
 import org.junit.runner.Description;
-import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Edge;
+import uk.co.malbec.cascade.Thig;
+import uk.co.malbec.cascade.Vertex;
 
 import java.util.List;
 
 public class Journey {
 
-    private List<Scenario> steps;
+    private List<Thig> trail;
 
     private Class<?> controlClass;
 
@@ -16,21 +18,22 @@ public class Journey {
 
     private String name;
 
-    public Journey(List<Scenario> steps, Class<?> controlClass) {
-        this.steps = steps;
+    public Journey(List<Thig> trail, Class<?> controlClass) {
+        this.trail = trail;
         this.controlClass = controlClass;
     }
 
     public void init(int index) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("Test[").append(index).append("] ");
-        for (Scenario scenario : steps) {
-            uk.co.malbec.cascade.annotations.Description description = scenario.getCls().getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
+
+        for (Thig thig : trail) {
+            uk.co.malbec.cascade.annotations.Description description = thig.getCls().getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
             if (description != null) {
                 buffer.append(description.value());
             } else {
                 buffer.append(" ");
-                String[] parts = scenario.getCls().toString().split("[.]");
+                String[] parts = thig.getCls().toString().split("[.]");
                 buffer.append(parts[parts.length - 1]);
                 buffer.append(" ");
             }
@@ -39,8 +42,8 @@ public class Journey {
         description = Description.createTestDescription(controlClass, name);
     }
 
-    public List<Scenario> getSteps() {
-        return steps;
+    public List<Thig> getTrail() {
+        return trail;
     }
 
     public Description getDescription() {

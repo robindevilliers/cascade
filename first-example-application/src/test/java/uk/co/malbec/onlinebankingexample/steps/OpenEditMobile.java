@@ -6,7 +6,7 @@ import uk.co.malbec.cascade.annotations.*;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(OpenPersonalPage.class)
+//@Step(OpenPersonalPage.class)
 @ReEntrantTerminator(1)
 public class OpenEditMobile {
 

@@ -9,7 +9,7 @@ import uk.co.malbec.cascade.annotations.When;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step({EditAddress.class, EditEmail.class, EditMobile.class, OpenAccountPage.class, SetupStandingOrder.class})
+//@Step({EditAddress.class, EditEmail.class, EditMobile.class, OpenAccountPage.class, SetupStandingOrder.class})
 public class BackToPorfolio {
 
     @Demands

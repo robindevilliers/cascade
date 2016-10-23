@@ -7,7 +7,6 @@ import uk.co.malbec.cascade.conditions.Predicate;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.FilterStrategy;
 
-import static uk.co.malbec.cascade.utils.ReflectionUtils.getValueOfFieldAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.getValuesOfFieldsAnnotatedWith;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
 
@@ -33,7 +32,7 @@ public class StandardFilterStrategy implements FilterStrategy {
         }
 
         for (Predicate predicate : predicates) {
-            if (conditionalLogic.matches(predicate, journey.getSteps())) {
+            if (conditionalLogic.matches(predicate, journey.getTrail())) {
                 return true;
             }
         }

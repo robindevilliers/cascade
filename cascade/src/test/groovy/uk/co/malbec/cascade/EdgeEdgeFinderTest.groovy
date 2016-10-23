@@ -8,15 +8,15 @@ import uk.co.malbec.cascade.modules.ClasspathScanner
 
 import static org.mockito.Mockito.*
 
-class ScenarioFinderTest {
+class EdgeEdgeFinderTest {
 
-    ScenarioFinder scenarioFinder
+    EdgeFinder scenarioFinder
 
     ClasspathScanner classpathScannerMock = mock(ClasspathScanner);
 
     @Before
     public void "initialisation"() {
-        scenarioFinder = new ScenarioFinder()
+        scenarioFinder = new EdgeFinder(Step.class)
     }
 
     @After
@@ -36,7 +36,7 @@ class ScenarioFinderTest {
         )
 
         //when
-        List<Class> scenarios = scenarioFinder.findScenarios(paths, classpathScannerMock)
+        List<Class> scenarios = scenarioFinder.findEdges(paths, classpathScannerMock)
 
         //then
         verify(classpathScannerMock).initialise(paths[0])
@@ -63,7 +63,7 @@ class ScenarioFinderTest {
         ]  as Set<Class>)
 
         //when
-        List<Class> scenarios = scenarioFinder.findScenarios(paths, classpathScannerMock)
+        List<Class> scenarios = scenarioFinder.findEdges(paths, classpathScannerMock)
 
         //then
         verify(classpathScannerMock).initialise(paths[0])

@@ -10,7 +10,7 @@ import java.util.List;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(Challenge.class)
+//@Step(Challenge.class)
 public interface Notice {
 
     public class AcceptOneNotice implements Notice {

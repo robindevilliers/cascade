@@ -9,7 +9,7 @@ import java.util.List;
 import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
-@Step(OpenPaymentsPage.class)
+//@Step(OpenPaymentsPage.class)
 @ReEntrantTerminator(1)
 public interface SetupStandingOrder {
 

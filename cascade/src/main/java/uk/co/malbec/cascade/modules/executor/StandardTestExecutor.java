@@ -4,7 +4,8 @@ package uk.co.malbec.cascade.modules.executor;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
-import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Edge;
+import uk.co.malbec.cascade.Thig;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.events.Handler;
 import uk.co.malbec.cascade.exception.CascadeException;
@@ -80,14 +81,14 @@ public class StandardTestExecutor implements TestExecutor {
 
         boolean comma = false;
         int index = 0;
-        for (Scenario scenario: journey.getSteps()){
+        for (Thig edge : journey.getTrail()){
             if (comma){
                 System.out.println(",");
             }
             System.out.print("\tstepAt(");
             System.out.print(index++);
             System.out.print(",");
-            System.out.print(scenario.getCls().getCanonicalName());
+            System.out.print(edge.getCls().getCanonicalName());
             System.out.print(".class)");
             comma = true;
         }
@@ -127,6 +128,7 @@ public class StandardTestExecutor implements TestExecutor {
                 }
             }
 
+            //TODO - consider getting rid of step handlers - if steps have either When or then and not both, then this is redundant
             StepHandler stepHandlerAnnotation = step.getClass().getAnnotation(StepHandler.class);
             if (stepHandlerAnnotation != null){
                 for (Class cls : stepHandlerAnnotation.value()){
