@@ -5,6 +5,7 @@ out
 *.iws
 *.iml
 .gradle
+.idea
 
 # Package Files #
 *.jar
