@@ -35,7 +35,7 @@ public class OpenLandingPage {
     //TODO - if throwable not supplied here, then we don't expect an exception??  likewise when there is no then clause
     public void then(Throwable f) {
         assertNull(f);
-        assertEquals("Fiery Horse Banking", webDriver.getTitle());
+        assertEquals("Tabby Banking", webDriver.getTitle());
         assertElementPresent(webDriver, "[test-form-login]");
     }
 
