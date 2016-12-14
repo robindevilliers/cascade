@@ -16,11 +16,9 @@ public class CascadeRunner extends Runner {
 
     public CascadeRunner(Class<?> testClass) {
 
-        //TODO - now that we have a thread pool and image based filtering of redundant journeys in the generator, we don't have a deterministic generator anymore.
-        //it can generate different sets of journeys given a different ordering of execution of threads by the operating system.
         cascade = new Cascade(new ReflectionsClasspathScanner(),
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 10),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));

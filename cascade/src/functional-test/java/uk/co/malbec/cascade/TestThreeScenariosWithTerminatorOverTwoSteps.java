@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.annotations.Terminator;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.modules.ClasspathScanner;
 import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy;
@@ -19,27 +20,25 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TestThreeScenariosWithTerminatorOverTwoSteps {
 
     static int count;
-    static List<Integer> doThisSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThisClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThisSetupCalled = new ArrayList<>();
+    static List<Integer> doThisExecuteCalled = new ArrayList<>();
+    static List<Integer> doThisCheckCalled = new ArrayList<>();
+    static List<Integer> doThisClearCalled = new ArrayList<>();
 
-    static List<Integer> doThatSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThatExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThatCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThatClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThatSetupCalled = new ArrayList<>();
+    static List<Integer> doThatExecuteCalled = new ArrayList<>();
+    static List<Integer> doThatCheckCalled = new ArrayList<>();
+    static List<Integer> doThatClearCalled = new ArrayList<>();
 
-    static List<Integer> doTheOtherSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doTheOtherExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doTheOtherCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doTheOtherClearCalled = new ArrayList<Integer>();
+    static List<Integer> doTheOtherSetupCalled = new ArrayList<>();
+    static List<Integer> doTheOtherExecuteCalled = new ArrayList<>();
+    static List<Integer> doTheOtherCheckCalled = new ArrayList<>();
+    static List<Integer> doTheOtherClearCalled = new ArrayList<>();
 
 
     @Before
@@ -86,7 +85,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -137,7 +136,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
     public interface DoOne {
 
         @uk.co.malbec.cascade.annotations.Description("Do This")
-        public class DoThis implements DoOne {
+        class DoThis implements DoOne {
 
             @Given
             public void setup() {
@@ -167,7 +166,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
 
         @uk.co.malbec.cascade.annotations.Description("Do The Other")
         @Terminator
-        public class DoTheOther implements DoOne {
+        class DoTheOther implements DoOne {
 
             @Given
             public void setup() {
@@ -200,7 +199,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
 
 
         @uk.co.malbec.cascade.annotations.Description("Do That")
-        public class DoThat implements DoTwo {
+        class DoThat implements DoTwo {
 
             @Given
             public void setup() {

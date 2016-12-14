@@ -1,6 +1,5 @@
 package uk.co.malbec.cascade.modules.generator
 
-
 import org.junit.Before
 import org.junit.Test
 import uk.co.malbec.cascade.Scenario
@@ -14,10 +13,9 @@ import uk.co.malbec.cascade.exception.CascadeException
 import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.modules.FilterStrategy
 
-import static org.mockito.Mockito.mock
 import static org.mockito.Matchers.any
-import static org.mockito.Mockito.*
-
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.when
 import static uk.co.malbec.cascade.conditions.Predicates.withStep
 
 class StepBackwardsFromTerminatorsJourneyGeneratorTest {
@@ -28,7 +26,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
     @Before
     def void "initialisation"() {
-        backwardsFromTerminatorsJourneyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(),1)
+        backwardsFromTerminatorsJourneyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic())
     }
 
     @Test

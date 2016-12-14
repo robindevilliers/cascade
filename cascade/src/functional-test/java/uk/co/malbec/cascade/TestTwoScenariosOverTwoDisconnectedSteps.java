@@ -19,22 +19,20 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TestTwoScenariosOverTwoDisconnectedSteps {
 
     static int count;
-    static List<Integer> doThisSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThisClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThisSetupCalled = new ArrayList<>();
+    static List<Integer> doThisExecuteCalled = new ArrayList<>();
+    static List<Integer> doThisCheckCalled = new ArrayList<>();
+    static List<Integer> doThisClearCalled = new ArrayList<>();
 
-    static List<Integer> doThatSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThatExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThatCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThatClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThatSetupCalled = new ArrayList<>();
+    static List<Integer> doThatExecuteCalled = new ArrayList<>();
+    static List<Integer> doThatCheckCalled = new ArrayList<>();
+    static List<Integer> doThatClearCalled = new ArrayList<>();
 
 
     @Before
@@ -76,7 +74,7 @@ public class TestTwoScenariosOverTwoDisconnectedSteps {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -123,7 +121,7 @@ public class TestTwoScenariosOverTwoDisconnectedSteps {
     public interface DoOne {
 
         @uk.co.malbec.cascade.annotations.Description("Do This")
-        public class DoThis implements DoOne {
+        class DoThis implements DoOne {
 
             @Given
             public void setup() {
@@ -156,7 +154,7 @@ public class TestTwoScenariosOverTwoDisconnectedSteps {
 
 
         @uk.co.malbec.cascade.annotations.Description("Do That")
-        public class DoThat implements DoTwo {
+        class DoThat implements DoTwo {
 
             @Given
             public void setup() {

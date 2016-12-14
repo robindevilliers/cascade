@@ -23,15 +23,15 @@ public class TestTwoScenarios {
 
     static int count;
 
-    static List<Integer> doThisSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThisClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThisSetupCalled = new ArrayList<>();
+    static List<Integer> doThisExecuteCalled = new ArrayList<>();
+    static List<Integer> doThisCheckCalled = new ArrayList<>();
+    static List<Integer> doThisClearCalled = new ArrayList<>();
 
-    static List<Integer> doThatSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThatExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThatCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThatClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThatSetupCalled = new ArrayList<>();
+    static List<Integer> doThatExecuteCalled = new ArrayList<>();
+    static List<Integer> doThatCheckCalled = new ArrayList<>();
+    static List<Integer> doThatClearCalled = new ArrayList<>();
 
 
     @Before
@@ -68,7 +68,7 @@ public class TestTwoScenarios {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(),1),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -113,7 +113,7 @@ public class TestTwoScenarios {
     public interface Do {
 
         @Description("Do This")
-        public class DoThis implements Do {
+        class DoThis implements Do {
 
             @Given
             public void setup() {
@@ -141,7 +141,7 @@ public class TestTwoScenarios {
         }
 
         @Description("Do That")
-        public class DoThat implements Do {
+        class DoThat implements Do {
 
             @Given
             public void setup() {

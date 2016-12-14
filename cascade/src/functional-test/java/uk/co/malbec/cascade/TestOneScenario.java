@@ -16,21 +16,17 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class TestOneScenario {
 
     static int count;
 
-    static List<Integer> doThisSetupCalled = new ArrayList<Integer>();
-    static List<Integer> doThisExecuteCalled = new ArrayList<Integer>();
-    static List<Integer> doThisCheckCalled = new ArrayList<Integer>();
-    static List<Integer> doThisClearCalled = new ArrayList<Integer>();
+    static List<Integer> doThisSetupCalled = new ArrayList<>();
+    static List<Integer> doThisExecuteCalled = new ArrayList<>();
+    static List<Integer> doThisCheckCalled = new ArrayList<>();
+    static List<Integer> doThisClearCalled = new ArrayList<>();
 
     @Before
     public void setup() {
@@ -59,7 +55,7 @@ public class TestOneScenario {
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic(), 1),
+                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()));
@@ -95,7 +91,7 @@ public class TestOneScenario {
     public interface Do {
 
         @Description("Do This")
-        public class DoThis implements Do {
+        class DoThis implements Do {
 
             @Given
             public void setup() {

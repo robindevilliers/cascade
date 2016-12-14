@@ -3,8 +3,6 @@ package uk.co.malbec.cascade.modules.generator;
 
 import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.annotations.OnlyRunWith;
-
-
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.conditions.Predicate;
@@ -14,7 +12,6 @@ import uk.co.malbec.cascade.modules.JourneyGenerator;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
-import java.util.concurrent.*;
 
 import static java.lang.String.format;
 import static java.util.Collections.sort;
@@ -25,15 +22,12 @@ import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
     private ConditionalLogic conditionalLogic;
-    private int threadPoolSize;
 
-    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic, int threadPoolSize) {
+    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic) {
         this.conditionalLogic = conditionalLogic;
-        this.threadPoolSize = threadPoolSize;
     }
 
     public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter) {
-        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
         sort(allScenarios, new ClassComparator());
@@ -43,7 +37,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         RedundantFilter redundantFilter = new RedundantFilter();
         final Filter compositeFilter = new CompositeFilter(onlyRunWithFilter, unusedScenariosFilter, filter, redundantFilter);
 
-        List<Scenario> terminators = new ArrayList<Scenario>();
+        List<Scenario> terminators = new ArrayList<>();
 
         //these are scenarios marked with a Terminator annotation - explicit terminators.
         findTerminatngScenarios(allScenarios, terminators);
@@ -57,39 +51,19 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
         sort(terminators, new ClassComparator());
 
-        final List<Journey> journeys = synchronizedList(new ArrayList<Journey>());
-        List<Future> futures = new ArrayList<>();
+        final List<Journey> journeys = new ArrayList<>();
         for (final Scenario terminator : terminators) {
-            futures.add(executorService.submit(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    generatingTrail(terminator, new ArrayList<Scenario>(), allScenarios, journeys, controlClass, compositeFilter);
-                    return null;
-                }
-            }));
-        }
-
-        for (Future future : futures) {
-            try {
-                future.get();//this will generate any exceptions that are thrown in the worker threads.
-            } catch (InterruptedException e) {
-                //not going to happen
-                throw new CascadeException("unexpected interrupted exception thrown from thread pool");
-            } catch (ExecutionException e) {
-                throw (RuntimeException) e.getCause();
-            }
+            generatingTrail(terminator, new ArrayList<Scenario>(), allScenarios, journeys, controlClass, compositeFilter);
         }
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
         if (!unusedScenariosFilter.getScenarios().isEmpty()) {
-            throw new CascadeException(format(new StringBuilder()
-                    .append("Invalid configuration: Scenario %s not found in any journey: ")
-                    .append("This journey generator calculates journeys by finding terminators ")
-                    .append("and walking backwards to the steps that start journeys. ")
-                    .append("If a step is not found in journeys, it is either dependent on ")
-                    .append("steps that don't lead to a journey start, or there are no terminators ")
-                    .append("downstream of this step.")
-                    .toString(), unusedScenariosFilter.getScenarios().get(0).getCls().toString()));
+            throw new CascadeException(format("Invalid configuration: Scenario %s not found in any journey: " +
+                    "This journey generator calculates journeys by finding terminators " +
+                    "and walking backwards to the steps that start journeys. " +
+                    "If a step is not found in journeys, it is either dependent on " +
+                    "steps that don't lead to a journey start, or there are no terminators " +
+                    "downstream of this step.", unusedScenariosFilter.getScenarios().get(0).getCls().toString()));
         }
 
         //go through journeys and remove any that are redundant
@@ -147,7 +121,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
             //if we find the current scenario in the trail already, without ReEntrantTerminators between, we have an infinite loop.
             if (scenario == currentScenario) {
-                List<Scenario> infiniteLoop = new ArrayList<Scenario>();
+                List<Scenario> infiniteLoop = new ArrayList<>();
 
                 while (iterator.hasNext()) {
                     infiniteLoop.add(iterator.next());
@@ -173,7 +147,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         if (beginningOfTrail) {
             //we are copying the trail as the current trail may be part of another trail.  There could be a few of them.
-            List<Scenario> newTrail = new ArrayList<Scenario>(trail);
+            List<Scenario> newTrail = new ArrayList<>(trail);
             Collections.reverse(newTrail);
 
             Journey candidateJourney = new Journey(newTrail, controlClass);
@@ -244,7 +218,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
     private void findDanglingScenarios(List<Scenario> allScenarios, List<Scenario> terminators) {
 
         //collect all scenarios that don't have @RunWith
-        List<Scenario> friendlyScenarios = new ArrayList<Scenario>();
+        List<Scenario> friendlyScenarios = new ArrayList<>();
         for (Scenario scenario : allScenarios) {
             if (getValueOfFieldAnnotatedWith(newInstance(scenario.getCls(), "step"), OnlyRunWith.class) == null) {
                 friendlyScenarios.add(scenario);
@@ -252,7 +226,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
 
 
-        List<Scenario> possibleTerminators = new ArrayList<Scenario>(allScenarios);
+        List<Scenario> possibleTerminators = new ArrayList<>(allScenarios);
         for (Iterator<Scenario> i = possibleTerminators.iterator(); i.hasNext(); ) {
             Scenario scenario = i.next();
             if (scenario.isTerminator()) {
@@ -261,7 +235,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         }
 
         //go through the friendly scenarios (scenarios we know will be in a journey, no @RunWith), and remove scenarios that are referenced by them.
-        List<Scenario> implicitTerminators = new ArrayList<Scenario>(possibleTerminators);
+        List<Scenario> implicitTerminators = new ArrayList<>(possibleTerminators);
         for (Scenario possibleTerminator : possibleTerminators) {
             for (Scenario scenario : friendlyScenarios) { //if a friendly scenario references the possible terminator, it is not a terminator
                 for (Class<?> referencedStep : scenario.getSteps()) {
@@ -295,7 +269,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         Class superClass = subject.getSuperclass();
         if (superClass != null) {
-            return findAnnotation(annotationClass, superClass);
+            return (T) findAnnotation(annotationClass, superClass);
         }
         return null;
     }
@@ -331,9 +305,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         @Override
         public boolean match(Journey journey) {
 
-            Iterator<Scenario> stepIterator = journey.getSteps().iterator();
-            while (stepIterator.hasNext()) {
-                Scenario step = stepIterator.next();
+            for (Scenario step : journey.getSteps()) {
                 Predicate predicate = (Predicate) getValueOfFieldAnnotatedWith(newInstance(step.getCls(), "step"), OnlyRunWith.class);
                 if (predicate != null) {
                     boolean valid = conditionalLogic.matches(predicate, journey.getSteps());
@@ -387,7 +359,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private static class JourneyImage {
 
-        private List<List<Scenario>> image = new ArrayList<List<Scenario>>();
+        private List<List<Scenario>> image = new ArrayList<>();
 
         public boolean match(List<Scenario> steps) {
 
