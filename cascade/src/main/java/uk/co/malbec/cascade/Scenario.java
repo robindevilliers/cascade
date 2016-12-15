@@ -1,12 +1,16 @@
 package uk.co.malbec.cascade;
 
-import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.annotations.ReEntrantTerminator;
+import uk.co.malbec.cascade.annotations.Step;
+import uk.co.malbec.cascade.annotations.Terminator;
 
 import java.lang.annotation.Annotation;
 
 public class Scenario {
 
-    private Class cls;
+    private Class<?> cls;
+
+    private Class<?> stateCls;
 
     private boolean isTerminator;
 
@@ -16,10 +20,10 @@ public class Scenario {
 
     private Class[] steps;
 
-    public Scenario(Class cls) {
+    public Scenario(Class<?> cls, Class<?> stateCls) {
         this.cls = cls;
+        this.stateCls = stateCls;
         steps = findAnnotation(Step.class, cls).value();
-
         isTerminator = findAnnotation(Terminator.class, cls) != null;
 
         ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, cls);
@@ -34,6 +38,10 @@ public class Scenario {
 
     public Class<?> getCls() {
         return cls;
+    }
+
+    public Class<?> getStateCls() {
+        return stateCls;
     }
 
     public String getName() {
@@ -73,7 +81,6 @@ public class Scenario {
         return cls != null ? cls.hashCode() : 0;
     }
 
-
     private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Class<?> subject) {
         T step = subject.getAnnotation(annotationClass);
         if (step != null) {
@@ -89,7 +96,7 @@ public class Scenario {
 
         Class superClass = subject.getSuperclass();
         if (superClass != null) {
-            return findAnnotation(annotationClass, superClass);
+            return (T) findAnnotation(annotationClass, superClass);
         }
         return null;
     }

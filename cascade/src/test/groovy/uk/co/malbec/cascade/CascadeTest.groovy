@@ -8,12 +8,9 @@ import org.junit.runner.notification.RunNotifier
 import uk.co.malbec.cascade.annotations.Scan
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.model.Journey
-import uk.co.malbec.cascade.modules.ClasspathScanner
-import uk.co.malbec.cascade.modules.ConstructionStrategy
-import uk.co.malbec.cascade.modules.FilterStrategy
-import uk.co.malbec.cascade.modules.JourneyGenerator
-import uk.co.malbec.cascade.modules.TestExecutor
+import uk.co.malbec.cascade.modules.*
 import uk.co.malbec.cascade.utils.Reference
+
 import static org.mockito.Matchers.any
 import static org.mockito.Matchers.eq
 import static org.mockito.Mockito.*
@@ -71,7 +68,7 @@ class CascadeTest {
     @Test
     public void "given a generated cascade test suit, a call to getDescription should generate a description for each journey"() {
         //given
-        cascade.journeys = [new Journey([new Scenario(Her), new Scenario(Him)], TestClass), new Journey([new Scenario(Him), new Scenario(Her)], TestClass)]
+        cascade.journeys = [new Journey([new Scenario(clazz, Her), new Scenario(clazz, Him)], TestClass), new Journey([new Scenario(clazz, Him), new Scenario(clazz, Her)], TestClass)]
 
         int i = 1;
         for (Journey journey : cascade.journeys){
@@ -92,7 +89,7 @@ class CascadeTest {
     @Test
     public void "given a request to run, the cascade class should setup, execute and then teardown all journeys "() {
         //given
-        List<Journey> journeys = [new Journey([new Scenario(Her), new Scenario(Him)], TestClass), new Journey([new Scenario(Him), new Scenario(Her)], TestClass)]
+        List<Journey> journeys = [new Journey([new Scenario(clazz, Her), new Scenario(clazz, Him)], TestClass), new Journey([new Scenario(clazz, Him), new Scenario(clazz, Her)], TestClass)]
         cascade.journeys = journeys
         int i = 1;
         for (Journey journey : cascade.journeys){

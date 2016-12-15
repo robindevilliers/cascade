@@ -18,20 +18,20 @@ public class ScenarioFinder {
             Set<Class<?>> steps = classpathScanner.getTypesAnnotatedWith(Step.class);
 
             for (Class<?> step : steps) {
-                findScenarios(scenarios, step, classpathScanner);
+                findScenarios(scenarios, step, classpathScanner, step);
             }
         }
         return scenarios;
     }
 
-    private void findScenarios(List<Scenario> scenarios, Class<?> clazz, ClasspathScanner classpathScanner) {
+    private void findScenarios(List<Scenario> scenarios, Class<?> clazz, ClasspathScanner classpathScanner, Class<?> stateClazz) {
         if (clazz.isInterface()) {
             Set<Class> subtypes = classpathScanner.getSubTypesOf(clazz);
             for (Class subType : subtypes) {
-                findScenarios(scenarios, subType, classpathScanner);
+                findScenarios(scenarios, subType, classpathScanner, stateClazz);
             }
         } else {
-            scenarios.add(new Scenario(clazz));
+            scenarios.add(new Scenario(clazz, stateClazz));
         }
     }
 }

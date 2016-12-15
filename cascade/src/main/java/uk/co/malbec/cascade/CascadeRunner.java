@@ -4,6 +4,7 @@ import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
+import uk.co.malbec.cascade.modules.completeness.StandardCompletenessStrategy;
 import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy;
 import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy;
@@ -21,7 +22,9 @@ public class CascadeRunner extends Runner {
                 new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
-                new StandardFilterStrategy(new ConditionalLogic()));
+                new StandardFilterStrategy(new ConditionalLogic()),
+                new StandardCompletenessStrategy()
+        );
         cascade.init(testClass);
     }
 

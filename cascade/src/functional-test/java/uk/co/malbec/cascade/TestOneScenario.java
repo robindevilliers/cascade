@@ -6,6 +6,7 @@ import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.modules.ClasspathScanner;
+import uk.co.malbec.cascade.modules.completeness.StandardCompletenessStrategy;
 import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy;
 import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy;
@@ -58,7 +59,8 @@ public class TestOneScenario {
                 new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
-                new StandardFilterStrategy(new ConditionalLogic()));
+                new StandardFilterStrategy(new ConditionalLogic()),
+                new StandardCompletenessStrategy());
 
         cascade.init(TestBasicMain.class);
 

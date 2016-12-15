@@ -24,6 +24,8 @@ public class Cascade {
 
     private FilterStrategy filterStrategy;
 
+    private CompletenessStrategy completenessStrategy;
+
     private Class<?> controlClass;
 
     private List<Journey> journeys = new ArrayList<Journey>();
@@ -33,13 +35,15 @@ public class Cascade {
                    JourneyGenerator journeyGenerator,
                    ConstructionStrategy constructionStrategy,
                    TestExecutor testExecutor,
-                   FilterStrategy filterStrategy) {
+                   FilterStrategy filterStrategy,
+                   CompletenessStrategy completenessStrategy) {
         this.classpathScanner = classpathScanner;
         this.scenarioFinder = scenarioFinder;
         this.journeyGenerator = journeyGenerator;
         this.constructionStrategy = constructionStrategy;
         this.testExecutor = testExecutor;
         this.filterStrategy = filterStrategy;
+        this.completenessStrategy = completenessStrategy;
     }
 
     public void init(Class<?> controlClass){
@@ -47,10 +51,13 @@ public class Cascade {
 
         filterStrategy.init(controlClass);
         testExecutor.init(controlClass);
+        completenessStrategy.init(controlClass);
 
         String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
         List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
-        journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
+        List<Journey> journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
+
+        this.journeys = completenessStrategy.filter(journeys);
     }
 
     public Description getDescription() {

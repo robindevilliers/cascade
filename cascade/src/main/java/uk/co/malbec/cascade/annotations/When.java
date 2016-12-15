@@ -6,4 +6,7 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 public @interface When {
+    String transitionId() default Null;
+
+    String Null = "";
 }

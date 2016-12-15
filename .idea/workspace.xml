@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bc9d71e0-e836-47a6-b25e-a98d2a2bc605" name="Default" comment="removed thread pool from journey generator so that test generation is deterministic">
+    <list default="true" id="bc9d71e0-e836-47a6-b25e-a98d2a2bc605" name="Default" comment="added completeness levels">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Completeness.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/CompletenessLevel.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/CompletenessStrategy.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/completeness/StandardCompletenessStrategy.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestOneScenario.java" afterPath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestOneScenario.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosOverTwoSteps.java" afterPath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosOverTwoSteps.java" />
@@ -9,9 +13,25 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenarios.java" afterPath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenarios.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java" afterPath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoSteps.java" afterPath="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoSteps.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Cascade.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Cascade.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/CascadeRunner.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/CascadeRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Scenario.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Scenario.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/ScenarioFinder.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/ScenarioFinder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Step.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Step.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Then.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Then.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/When.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/When.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ClasspathScanner.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ClasspathScanner.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ConstructionStrategy.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ConstructionStrategy.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/JourneyGenerator.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/JourneyGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/TestExecutor.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/TestExecutor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/utils/ReflectionUtils.java" afterPath="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/utils/ReflectionUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/CascadeTest.groovy" afterPath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/CascadeTest.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/conditions/ConditionalLogicTest.groovy" afterPath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/conditions/ConditionalLogicTest.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/model/JourneyTest.groovy" afterPath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/model/JourneyTest.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/construction/StandardConstructionStrategyTest.groovy" afterPath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/construction/StandardConstructionStrategyTest.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/filtering/StandardFilterStrategyTest.groovy" afterPath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/filtering/StandardFilterStrategyTest.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy" afterPath="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java" afterPath="$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java" />
     </list>
     <ignored path="cascade.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,116 +83,131 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="StandardCompletenessStrategy.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/completeness/StandardCompletenessStrategy.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="61" column="25" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
+              <folding>
+                <element signature="e#1153#1658#0" expanded="true" />
+                <element signature="e#1657#1658#0" expanded="true" />
+                <element signature="e#1774#2285#0" expanded="true" />
+                <element signature="e#2284#2285#0" expanded="true" />
+                <element signature="e#2896#2897#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="When.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/When.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Then.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Then.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="12" column="21" selection-start-line="8" selection-start-column="4" selection-end-line="12" selection-end-column="21" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Step.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Step.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReflectionUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/utils/ReflectionUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OpenPaymentsPage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenPaymentsPage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="124" column="16" selection-start-line="124" selection-start-column="16" selection-end-line="124" selection-end-column="16" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="OnlineBankingTests.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="16" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CascadeRunner.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/CascadeRunner.java">
+      <file leaf-file-name="CompletenessLevel.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/CompletenessLevel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.22727273">
+              <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Cascade.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Cascade.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScenarioFinder.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/ScenarioFinder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3726708">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TestTwoScenariosOverTwoDisconnectedSteps.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="156" column="8" selection-start-line="156" selection-start-column="8" selection-end-line="156" selection-end-column="8" />
+              <caret line="65" column="53" selection-start-line="65" selection-start-column="53" selection-end-line="65" selection-end-column="53" />
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="e#2547#2555#0" expanded="true" />
+                <marker date="1481744349567" expanded="true" signature="2428:3358" placeholder="//..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestOneScenario.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestOneScenario.java">
+      <file leaf-file-name="Application.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/first-example-application/src/main/java/uk/co/malbec/onlinebankingexample/Application.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TestThreeScenariosWithTerminatorOverTwoSteps.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosWithTerminatorOverTwoSteps.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="201" column="8" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="8" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StepBackwardsFromTerminatorsJourneyGenerator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="171" column="21" selection-start-line="171" selection-start-column="21" selection-end-line="171" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="44" column="66" selection-start-line="44" selection-start-column="66" selection-end-line="44" selection-end-column="66" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scenario.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Scenario.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-              <folding>
-                <element signature="e#1205#1206#0" expanded="true" />
-                <element signature="e#1233#1234#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TestThreeScenariosOverTwoSteps.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosOverTwoSteps.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="199" column="8" selection-start-line="199" selection-start-column="8" selection-end-line="199" selection-end-column="8" />
+              <caret line="136" column="0" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="AnnotationType" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -962,19 +997,34 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java" />
         <option value="$PROJECT_DIR$/first-example-application/src/main/resources/head.vm" />
         <option value="$PROJECT_DIR$/first-example-application/src/main/resources/templates/index.vm" />
         <option value="$PROJECT_DIR$/first-example-application/build.gradle" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java" />
+        <option value="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ClasspathScanner.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ConstructionStrategy.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/JourneyGenerator.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/TestExecutor.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Completeness.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/CompletenessLevel.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/CompletenessStrategy.java" />
         <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/CascadeRunner.java" />
-        <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenarios.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/ScenarioFinder.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Scenario.java" />
         <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoSteps.java" />
         <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestOneScenario.java" />
-        <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java" />
-        <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosWithTerminatorOverTwoSteps.java" />
-        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java" />
         <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosOverTwoSteps.java" />
-        <option value="$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy" />
+        <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosWithTerminatorOverTwoSteps.java" />
+        <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenarios.java" />
+        <option value="$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Cascade.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/utils/ReflectionUtils.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Then.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Step.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/When.java" />
+        <option value="$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/completeness/StandardCompletenessStrategy.java" />
+        <option value="$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java" />
       </list>
     </option>
   </component>
@@ -1016,7 +1066,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1320,11 +1369,160 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="construction" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="annotations" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="functional-test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cascade" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1332,7 +1530,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="JUnit.StepBackwardsFromTerminatorsJourneyGeneratorTest">
+  <component name="RunManager" selected="JUnit.OnlineBankingTests">
     <configuration default="false" name="OnlineBankingTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -1683,39 +1881,45 @@
       <option name="project" value="LOCAL" />
       <updated>1471787811610</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="removed thread pool from journey generator so that test generation is deterministic">
+      <created>1481724646503</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1481724646503</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 11h 10m 08s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 10h 38m 37s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 11h 10m 52s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 19h 15m 00s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 11h 13m 27s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 19h 16m 26s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 11h 13m 55s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 19h 19m 13s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 11h 14m 57s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 19h 19m 38s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 11h 32m 32s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 19h 33m 54s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 14h 06m 15s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 19h 52m 27s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="OnlineBankingTests - 2016.12.14 at 14h 06m 43s.xml">
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 22h 02m 56s.xml">
       <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StepBackwardsFromTerminatorsJourneyGeneratorTest - 2016.12.14 at 14h 05m 06s.xml">
-      <configuration name="StepBackwardsFromTerminatorsJourneyGeneratorTest" configurationId="JUnit" />
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 22h 04m 17s.xml">
+      <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StepBackwardsFromTerminatorsJourneyGeneratorTest - 2016.12.14 at 14h 05m 21s.xml">
-      <configuration name="StepBackwardsFromTerminatorsJourneyGeneratorTest" configurationId="JUnit" />
+    <history-entry file="OnlineBankingTests - 2016.12.15 at 22h 04m 58s.xml">
+      <configuration name="OnlineBankingTests" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
@@ -1723,27 +1927,27 @@
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2247285" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40350878" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30409357" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48036757" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2925347" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4243943" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3168403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.09982639" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55806184" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="SBT" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23976608" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1784,20 +1988,14 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixed selenium and logo" />
     <MESSAGE value="removed thread pool from journey generator so that test generation is deterministic" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed thread pool from journey generator so that test generation is deterministic" />
+    <MESSAGE value="added completeness levels" />
+    <option name="LAST_COMMIT_MESSAGE" value="added completeness levels" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenPaymentsPage.java</url>
-          <line>137</line>
-          <properties />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="1" />
+      <option name="time" value="17" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1806,115 +2004,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/Notice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/Utilities.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenAccountPage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenLandingPage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenPaymentsPage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/main/java/uk/co/malbec/onlinebankingexample/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/Utilities.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example-application/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.142857">
-          <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/BackToPorfolio.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/CancelStandingOrder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/EditAddress.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/EditEmail.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/EditMobile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1926,7 +2015,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="194" column="10" selection-start-line="194" selection-start-column="10" selection-end-line="194" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1934,7 +2022,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-10.714286">
           <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1942,15 +2029,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenLandingPage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1958,7 +2036,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="35" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1966,7 +2043,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="32" column="39" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1974,7 +2050,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1982,7 +2057,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1990,7 +2064,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1998,15 +2071,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenPaymentsPage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="51" selection-start-line="34" selection-start-column="37" selection-end-line="34" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2022,7 +2086,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2030,15 +2093,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-25.178572">
           <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/JourneyGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2046,15 +2100,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="24" column="19" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/FilterStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2062,15 +2107,92 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/first-example-application/src/main/java/uk/co/malbec/onlinebankingexample/BackendService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="263" column="16" selection-start-line="263" selection-start-column="16" selection-end-line="263" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="171" column="21" selection-start-line="171" selection-start-column="21" selection-end-line="171" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ConstructionStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="77" selection-start-line="9" selection-start-column="77" selection-end-line="9" selection-end-column="77" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/utils/ReflectionUtils.java">
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/TestExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Scan.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/FilterStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/JourneyGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Completeness.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="72" selection-start-line="3" selection-start-column="72" selection-end-line="3" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/ClasspathScanner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/scanner/ReflectionsClasspathScanner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/CompletenessStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2082,120 +2204,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Cascade.java">
+    <entry file="jar:///usr/java/default/src.zip!/java/util/List.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="47" column="23" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
-          <folding>
-            <marker date="1481714021182" expanded="true" signature="2125:3055" placeholder="//..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/main/java/uk/co/malbec/onlinebankingexample/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="94" column="0" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/main/java/uk/co/malbec/onlinebankingexample/BackendService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="263" column="16" selection-start-line="263" selection-start-column="16" selection-end-line="263" selection-end-column="16" />
-          <folding>
-            <element signature="e#12255#12256#0" expanded="true" />
-            <element signature="e#12297#12298#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenarios.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="143" column="8" selection-start-line="143" selection-start-column="8" selection-end-line="143" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoSteps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="151" column="8" selection-start-line="151" selection-start-column="8" selection-end-line="151" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestOneScenario.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="93" column="8" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="156" column="8" selection-start-line="156" selection-start-column="8" selection-end-line="156" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosWithTerminatorOverTwoSteps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="201" column="8" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Scenario.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-          <folding>
-            <element signature="e#1205#1206#0" expanded="true" />
-            <element signature="e#1233#1234#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosOverTwoSteps.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="199" column="8" selection-start-line="199" selection-start-column="8" selection-end-line="199" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="171" column="21" selection-start-line="171" selection-start-column="21" selection-end-line="171" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="44" column="66" selection-start-line="44" selection-start-column="66" selection-end-line="44" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="16" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="16" />
+          <caret line="543" column="6" selection-start-line="543" selection-start-column="6" selection-end-line="543" selection-end-column="6" />
           <folding />
         </state>
       </provider>
@@ -2203,15 +2215,211 @@
     <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/CascadeRunner.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+          <caret line="27" column="18" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/ScenarioFinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3726708">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Scenario.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
+          <folding>
+            <element signature="e#1112#1113#0" expanded="false" />
+            <element signature="e#1143#1144#0" expanded="false" />
+            <element signature="e#1868#1869#0" expanded="false" />
+            <element signature="e#1923#1924#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/executor/StandardTestExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="115" column="43" selection-start-line="115" selection-start-column="43" selection-end-line="115" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/model/Journey.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoSteps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestOneScenario.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="66" selection-start-line="61" selection-start-column="66" selection-end-line="62" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosOverTwoSteps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="91" column="50" selection-start-line="91" selection-start-column="50" selection-end-line="91" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestThreeScenariosWithTerminatorOverTwoSteps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="92" column="50" selection-start-line="92" selection-start-column="50" selection-end-line="92" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenarios.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="50" selection-start-line="75" selection-start-column="50" selection-end-line="75" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/functional-test/java/uk/co/malbec/cascade/TestTwoScenariosOverTwoDisconnectedSteps.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/test/groovy/uk/co/malbec/cascade/modules/generator/StepBackwardsFromTerminatorsJourneyGeneratorTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="246" column="17" selection-start-line="246" selection-start-column="17" selection-end-line="246" selection-end-column="17" />
+          <folding>
+            <marker date="1481726599907" expanded="false" signature="72:775" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenLandingPage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#692#693#0" expanded="false" />
+            <element signature="e#739#740#0" expanded="false" />
+            <element signature="e#1313#1314#0" expanded="false" />
+            <element signature="e#1346#1347#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/utils/ReflectionUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/steps/OpenPaymentsPage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="124" column="16" selection-start-line="124" selection-start-column="16" selection-end-line="124" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Step.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/Then.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="21" selection-start-line="8" selection-start-column="4" selection-end-line="12" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/When.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/modules/completeness/StandardCompletenessStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="25" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
+          <folding>
+            <element signature="e#1153#1658#0" expanded="true" />
+            <element signature="e#1657#1658#0" expanded="true" />
+            <element signature="e#1774#2285#0" expanded="true" />
+            <element signature="e#2284#2285#0" expanded="true" />
+            <element signature="e#2896#2897#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/Cascade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="53" selection-start-line="65" selection-start-column="53" selection-end-line="65" selection-end-column="53" />
+          <folding>
+            <element signature="e#2547#2555#0" expanded="true" />
+            <marker date="1481744349567" expanded="true" signature="2428:3358" placeholder="//..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/first-example-application/src/main/java/uk/co/malbec/onlinebankingexample/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="136" column="0" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/first-example-application/src/test/java/uk/co/malbec/onlinebankingexample/OnlineBankingTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cascade/src/main/java/uk/co/malbec/cascade/annotations/CompletenessLevel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.22727273">
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
           <folding />
         </state>
       </provider>

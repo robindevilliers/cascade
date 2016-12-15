@@ -40,6 +40,18 @@ public class ReflectionUtils {
         return null;
     }
 
+    public static <T extends Annotation> T findMethodAnnotation(Class<T> annotationClass, Class subject) {
+
+        for (Method method : subject.getMethods()) {
+            T annotation = method.getAnnotation(annotationClass);
+            if (annotation != null) {
+                return annotation;
+            }
+        }
+        return null;
+    }
+
+
     public static void collectSuppliedFields(Object subject, Map<String, Object> scope) {
         for (Field field : subject.getClass().getDeclaredFields()) {
             Supplies supplies = field.getAnnotation(Supplies.class);

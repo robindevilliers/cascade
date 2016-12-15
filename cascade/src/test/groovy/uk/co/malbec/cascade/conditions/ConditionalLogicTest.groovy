@@ -5,14 +5,11 @@ import uk.co.malbec.cascade.Scenario
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.annotations.Terminator
 
-import static uk.co.malbec.cascade.conditions.Predicates.not
-import static uk.co.malbec.cascade.conditions.Predicates.or
-import static uk.co.malbec.cascade.conditions.Predicates.withStep
-import static uk.co.malbec.cascade.conditions.Predicates.and
+import static uk.co.malbec.cascade.conditions.Predicates.*
 
 class ConditionalLogicTest {
 
-    List<Scenario> steps = [new Scenario(OpenLoginPage), new Scenario(Successful), new Scenario(PostLoginAlert.UserAccountLockedAlert)] as List<Scenario>
+    List<Scenario> steps = [new Scenario(clazz, OpenLoginPage), new Scenario(clazz, Successful), new Scenario(clazz, PostLoginAlert.UserAccountLockedAlert)] as List<Scenario>
 
     @Test
     def void "the withStep predicate should return true"() {

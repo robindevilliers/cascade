@@ -8,6 +8,5 @@ import uk.co.malbec.cascade.modules.generator.Filter;
 import java.util.List;
 
 public interface JourneyGenerator {
-    public List<Journey> generateJourneys(List<Scenario> scenarios, Class<?> controlClass, Filter filter);
-
+    List<Journey> generateJourneys(List<Scenario> scenarios, Class<?> controlClass, Filter filter);
 }

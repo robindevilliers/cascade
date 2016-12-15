@@ -1,14 +1,12 @@
 package uk.co.malbec.cascade.annotations;
 
+import uk.co.malbec.cascade.Completeness;
 
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface Step {
-    Class[] value() default Null.class;
-
-    class Null {
-    }
+public @interface CompletenessLevel {
+    Completeness value();
 }
