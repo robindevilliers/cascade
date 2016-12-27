@@ -8,6 +8,8 @@ out
 .idea
 .idea/**
 .DS_Store
+first-example-application/selenium-drivers/*
+
 
 # Package Files #
 *.jar
