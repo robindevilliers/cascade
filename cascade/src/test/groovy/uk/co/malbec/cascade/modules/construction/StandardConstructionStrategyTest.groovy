@@ -29,7 +29,7 @@ StandardConstructionStrategy standardConstructionStrategy
     def void "given a control class and a journey, the construction strategy should instantiate and bind all participants in a test"(){
 
         //given
-        Journey journey = new Journey([new Scenario(clazz, DoStuff)], TestControl)
+        Journey journey = new Journey([new Scenario(DoStuff.class, DoStuff)], TestControl)
         Reference<Object> controlReference = new Reference<Object>()
         Reference<List<Object>> stepsReference = new Reference<List<Object>>()
         

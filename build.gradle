@@ -4,12 +4,6 @@ allprojects {
     apply plugin: 'idea'
     group = 'uk.co.malbec.cascade'
     version = '1.0'
-    idea {
-        project {
-//            jdkName = '1.7'
-//            languageLevel = '1.7'
-        }
-    }
 }
 
 subprojects {

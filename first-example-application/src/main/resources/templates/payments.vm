@@ -208,7 +208,15 @@
                                    </div>
                                    <div class="col-md-8">
                                        <input test-input-type-specified type="radio" style="display: inline-block;vertical-align: middle;width: auto;" name="type"  value="specified"></input>&nbsp;
-                                       <input test-input-date name="date" type="date" style="display: inline-block;vertical-align: middle;width: auto;" class="form-control datepicker" size="10" maxlength="10"></input>
+                                       <input test-input-date-day name="dateDay" type="text"
+                                              style="display: inline-block;vertical-align: middle;width: auto;"
+                                              class="form-control text-left number" size="2" maxlength="2"></input>
+                                       <input test-input-date-month name="dateMonth" type="text"
+                                              style="display: inline-block;vertical-align: middle;width: auto;"
+                                              class="form-control text-left number" size="2" maxlength="2"></input>
+                                       <input test-input-date-year name="dateYear" type="text"
+                                              style="display: inline-block;vertical-align: middle;width: auto;"
+                                              class="form-control text-left number" size="4" maxlength="4"></input>
                                    </div>
                                 </div>
                                 <div class="row">

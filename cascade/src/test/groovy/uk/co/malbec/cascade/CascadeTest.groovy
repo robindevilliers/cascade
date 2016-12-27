@@ -19,23 +19,25 @@ class CascadeTest {
 
     Cascade cascade;
 
-    ClasspathScanner classpathScannerMock = mock(ClasspathScanner);
+    ClasspathScanner classpathScannerMock = mock(ClasspathScanner)
 
-    ScenarioFinder scenarioFinderMock = mock(ScenarioFinder);
+    ScenarioFinder scenarioFinderMock = mock(ScenarioFinder)
 
-    JourneyGenerator journeyGeneratorMock = mock(JourneyGenerator);
+    JourneyGenerator journeyGeneratorMock = mock(JourneyGenerator)
 
-    ConstructionStrategy constructionStrategyMock = mock(ConstructionStrategy);
+    ConstructionStrategy constructionStrategyMock = mock(ConstructionStrategy)
 
-    TestExecutor testExecutorMock = mock(TestExecutor);
+    TestExecutor testExecutorMock = mock(TestExecutor)
 
-    FilterStrategy filterStrategyMock = mock(FilterStrategy);
+    FilterStrategy filterStrategyMock = mock(FilterStrategy)
 
-    RunNotifier runNotifierMock = mock(RunNotifier);
+    CompletenessStrategy completenessStrategy = mock(CompletenessStrategy)
+
+    RunNotifier runNotifierMock = mock(RunNotifier)
 
     @Before
     public void "initialisation"() {
-        cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock);
+        cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock, completenessStrategy);
     }
 
     @After
@@ -51,6 +53,7 @@ class CascadeTest {
 
         List<Journey> journeysMock = mock(List)
         when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock))).thenReturn(journeysMock)
+        when(completenessStrategy.filter(journeysMock)).thenReturn(journeysMock)
 
         //When
         cascade.init(TestClass);
@@ -60,6 +63,7 @@ class CascadeTest {
         verify(testExecutorMock).init(TestClass);
         verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
         verify(journeyGeneratorMock).generateJourneys(scenariosMock, TestClass, filterStrategyMock)
+        verify(completenessStrategy).filter(journeysMock)
 
         assert journeysMock == cascade.journeys
         assert TestClass == cascade.controlClass
@@ -68,7 +72,7 @@ class CascadeTest {
     @Test
     public void "given a generated cascade test suit, a call to getDescription should generate a description for each journey"() {
         //given
-        cascade.journeys = [new Journey([new Scenario(clazz, Her), new Scenario(clazz, Him)], TestClass), new Journey([new Scenario(clazz, Him), new Scenario(clazz, Her)], TestClass)]
+        cascade.journeys = [new Journey([new Scenario(Her.class, Her), new Scenario(Him.class, Him)], TestClass), new Journey([new Scenario(Him.class, Him), new Scenario(Her.class, Her)], TestClass)]
 
         int i = 1;
         for (Journey journey : cascade.journeys){
@@ -89,7 +93,7 @@ class CascadeTest {
     @Test
     public void "given a request to run, the cascade class should setup, execute and then teardown all journeys "() {
         //given
-        List<Journey> journeys = [new Journey([new Scenario(clazz, Her), new Scenario(clazz, Him)], TestClass), new Journey([new Scenario(clazz, Him), new Scenario(clazz, Her)], TestClass)]
+        List<Journey> journeys = [new Journey([new Scenario(Her.class, Her), new Scenario(Him.class, Him)], TestClass), new Journey([new Scenario(Him.class, Him), new Scenario(Her.class, Her)], TestClass)]
         cascade.journeys = journeys
         int i = 1;
         for (Journey journey : cascade.journeys){

@@ -78,7 +78,9 @@ public interface SetupStandingOrder {
             enterText(webDriver, "[test-input-sort-code-two]", "22");
             enterText(webDriver, "[test-input-sort-code-three]", "33");
             click(webDriver, "[test-input-type-specified]");
-            enterText(webDriver, "[test-input-date]", "12/30/14");
+            enterText(webDriver, "[test-input-date-day]", "12");
+            enterText(webDriver, "[test-input-date-month]", "30");
+            enterText(webDriver, "[test-input-date-year]", "2014");
             select(webDriver, "[test-input-period]", "Monthly");
             enterText(webDriver, "[test-input-amount]", "12.00");
             click(webDriver, "[test-setup-cta]");

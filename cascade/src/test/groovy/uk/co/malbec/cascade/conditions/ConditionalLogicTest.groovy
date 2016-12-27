@@ -9,7 +9,8 @@ import static uk.co.malbec.cascade.conditions.Predicates.*
 
 class ConditionalLogicTest {
 
-    List<Scenario> steps = [new Scenario(clazz, OpenLoginPage), new Scenario(clazz, Successful), new Scenario(clazz, PostLoginAlert.UserAccountLockedAlert)] as List<Scenario>
+    List<Scenario> steps = [new Scenario(OpenLoginPage.class, OpenLoginPage), new Scenario(Successful.class, Successful),
+                            new Scenario(PostLoginAlert.UserAccountLockedAlert.class, PostLoginAlert.UserAccountLockedAlert)] as List<Scenario>
 
     @Test
     def void "the withStep predicate should return true"() {

@@ -6,19 +6,19 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
-jar {
-    baseName = 'gs-spring-boot'
-    version = '0.1.0'
-}
+//jar {
+//    baseName = 'gs-spring-boot'
+//    version = '0.1.0'
+//}
 
 repositories {
     mavenCentral()
@@ -38,8 +38,9 @@ dependencies {
     testCompile('org.jboss.resteasy:resteasy-client:3.0.9.Final')
     testCompile('org.jboss.resteasy:resteasy-jackson-provider:3.0.9.Final')
     testCompile project(":cascade")
-    testCompile('org.seleniumhq.selenium:selenium-firefox-driver:2.51.0')
-    testCompile('org.seleniumhq.selenium:selenium-support:2.51.0')
+    testCompile "org.reflections:reflections:0.9.9-RC1"
+    testCompile('org.seleniumhq.selenium:selenium-chrome-driver:3.0.1')
+    testCompile('org.seleniumhq.selenium:selenium-support:3.0.1')
 }
 
 task wrapper(type: Wrapper) {
@@ -49,12 +50,26 @@ task wrapper(type: Wrapper) {
 
 ExecutorService executorService
 
+test {
+    systemProperty "webdriver.chrome.driver", "$projectDir/selenium-drivers/chromedriver"
+}
+
 test.doFirst {
     executorService = Executors.newSingleThreadExecutor()
     executorService.submit({
         tasks.findMainClass.execute()
         tasks.bootRun.execute()
     } as Runnable)
+
+    while (true) {
+        try {
+            'http://localhost:8080'.toURL().text
+            break
+        } catch (Exception e) {
+            sleep 1000
+        }
+    }
+
 }
 
 test.doLast {

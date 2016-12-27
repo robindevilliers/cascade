@@ -1,11 +1,8 @@
 package uk.co.malbec.onlinebankingexample.steps;
 
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.chrome.ChromeDriver;
 import uk.co.malbec.cascade.annotations.*;
 
 import static junit.framework.Assert.assertNull;
@@ -21,7 +18,7 @@ public class OpenLandingPage {
 
     @Given
     public void given() {
-        webDriver = new FirefoxDriver();
+        webDriver = new ChromeDriver();
     }
 
     @When

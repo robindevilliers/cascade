@@ -2,8 +2,6 @@ package uk.co.malbec.onlinebankingexample.controller;
 
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,19 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import uk.co.malbec.onlinebankingexample.Utils;
 import uk.co.malbec.onlinebankingexample.model.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.joda.time.DateTime.*;
-import static org.joda.time.format.DateTimeFormat.*;
+import static org.joda.time.DateTime.parse;
+import static org.joda.time.format.DateTimeFormat.forPattern;
 
 @Controller
 public class PaymentsController {
@@ -65,7 +63,9 @@ public class PaymentsController {
                             @RequestParam String sortCodeTwo,
                             @RequestParam String sortCodeThree,
                             @RequestParam String type,
-                            @RequestParam String date,
+                            @RequestParam String dateDay,
+                            @RequestParam String dateMonth,
+                            @RequestParam String dateYear,
                             @RequestParam String period,
                             @RequestParam String amount) {
 
@@ -146,7 +146,7 @@ public class PaymentsController {
             }
 
         } else {
-            dueDate = parse(date, forPattern("MM/dd/yyyy")).toDate();
+            dueDate = parse(String.format("%s/%s/%s", dateDay, dateMonth, dateYear), forPattern("MM/dd/yyyy")).toDate();
         }
 
         if (dueDate != null) {
@@ -250,17 +250,11 @@ public class PaymentsController {
     }
 
     private ModelAndView populatePaymentsView(User user, ModelAndView modelAndView) {
+        modelAndView.addObject("currentAccountPresent", Utils.isAccountPresent(user, AccountType.Current));
         modelAndView.addObject("displayLogin", false);
         modelAndView.addObject("standingOrders", user.getStandingOrders());
         modelAndView.addObject("recentPayments", user.getRecentPayments());
-
-        boolean savingAccountPresent = false;
-        for (Account account : user.getAccounts()) {
-            if (account.getType().equals(AccountType.Saver)) {
-                savingAccountPresent = true;
-            }
-        }
-        modelAndView.addObject("savingAccountPresent", savingAccountPresent);
+        modelAndView.addObject("savingAccountPresent", Utils.isAccountPresent(user, AccountType.Saver));
 
         return modelAndView;
     }

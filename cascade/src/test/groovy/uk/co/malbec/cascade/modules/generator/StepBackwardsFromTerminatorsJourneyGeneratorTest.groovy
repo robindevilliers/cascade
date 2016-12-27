@@ -35,14 +35,14 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //when
         List<Journey> journeys = backwardsFromTerminatorsJourneyGenerator.generateJourneys([
-                new Scenario(clazz, OpenLoginPage),
-                new Scenario(clazz, BadPassword),
-                new Scenario(clazz, Successful),
-                new Scenario(clazz, PostLoginAlert.UserAccountLockedAlert),
-                new Scenario(clazz, PostLoginAlert.InformationAlert),
-                new Scenario(clazz, DisplayAccountsList.MortgageAccount),
-                new Scenario(clazz, DisplayAccountsList.SaverAccount),
-                new Scenario(clazz, DisplaySaverAccount)
+                new Scenario(OpenLoginPage.class, OpenLoginPage),
+                new Scenario(BadPassword.class, BadPassword),
+                new Scenario(Successful.class, Successful),
+                new Scenario(PostLoginAlert.UserAccountLockedAlert.class, PostLoginAlert.UserAccountLockedAlert),
+                new Scenario(PostLoginAlert.InformationAlert.class, PostLoginAlert.InformationAlert),
+                new Scenario(DisplayAccountsList.MortgageAccount.class, DisplayAccountsList.MortgageAccount),
+                new Scenario(DisplayAccountsList.SaverAccount.class, DisplayAccountsList.SaverAccount),
+                new Scenario(DisplaySaverAccount.class, DisplaySaverAccount)
         ], TestClass, filterStrategyMock)
 
         //then
@@ -51,9 +51,9 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //we should have the simplest most happy journey for mortgages
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, DisplayAccountsList.MortgageAccount) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(DisplayAccountsList.MortgageAccount.class, DisplayAccountsList.MortgageAccount) &&
                     steps.empty
         }
         assert journey: "expected a journey successful password challenge followed by the account list page showing mortgage"
@@ -62,10 +62,10 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //we should have the simplest most happy journey for saver accounts
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, DisplayAccountsList.SaverAccount) &&
-                    steps.remove(0) == new Scenario(clazz, DisplaySaverAccount) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(DisplayAccountsList.SaverAccount.class, DisplayAccountsList.SaverAccount) &&
+                    steps.remove(0) == new Scenario(DisplaySaverAccount.class, DisplaySaverAccount) &&
                     steps.empty
         }
         assert journey: "expected a journey successful password challenge followed by the account list page showing saver account and then the saver account page"
@@ -74,10 +74,10 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //we should have the journey that includes an optional informational message that does not terminate
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, PostLoginAlert.InformationAlert) &&
-                    steps.remove(0) == new Scenario(clazz, DisplayAccountsList.MortgageAccount) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(PostLoginAlert.InformationAlert.class, PostLoginAlert.InformationAlert) &&
+                    steps.remove(0) == new Scenario(DisplayAccountsList.MortgageAccount.class, DisplayAccountsList.MortgageAccount) &&
                     steps.empty
         }
         assert journey: "expected a journey successful password challenge followed by an informational message and then the mortgage list page"
@@ -86,9 +86,9 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         // we should have the journey that has the account locked alert which is a terminating journey
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, PostLoginAlert.UserAccountLockedAlert) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(PostLoginAlert.UserAccountLockedAlert.class, PostLoginAlert.UserAccountLockedAlert) &&
                     steps.empty
         }
         assert journey: "expected a journey successful password challenge and a message stating that the account is locked"
@@ -98,11 +98,11 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //simplest journey first
         journey = journeys.find { it ->
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, BadPassword) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, DisplayAccountsList.SaverAccount) &&
-                    steps.remove(0) == new Scenario(clazz, DisplaySaverAccount) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(DisplayAccountsList.SaverAccount.class, DisplayAccountsList.SaverAccount) &&
+                    steps.remove(0) == new Scenario(DisplaySaverAccount.class, DisplaySaverAccount) &&
                     steps.empty
         }
         assert journey: "expected a journey with a failed password, followed by a success and then the saver list page and then the saver details."
@@ -111,11 +111,11 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //informational message with bad password
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, BadPassword) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, PostLoginAlert.InformationAlert) &&
-                    steps.remove(0) == new Scenario(clazz, DisplayAccountsList.MortgageAccount) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(PostLoginAlert.InformationAlert.class, PostLoginAlert.InformationAlert) &&
+                    steps.remove(0) == new Scenario(DisplayAccountsList.MortgageAccount.class, DisplayAccountsList.MortgageAccount) &&
                     steps.empty
         }
         assert journey: "expected a journey with a failed password, followed by a success, an information message and then the mortgage list page."
@@ -124,12 +124,12 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //informational message with bad password
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, BadPassword) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, PostLoginAlert.InformationAlert) &&
-                    steps.remove(0) == new Scenario(clazz, DisplayAccountsList.SaverAccount) &&
-                    steps.remove(0) == new Scenario(clazz, DisplaySaverAccount) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(PostLoginAlert.InformationAlert.class, PostLoginAlert.InformationAlert) &&
+                    steps.remove(0) == new Scenario(DisplayAccountsList.SaverAccount.class, DisplayAccountsList.SaverAccount) &&
+                    steps.remove(0) == new Scenario(DisplaySaverAccount.class, DisplaySaverAccount) &&
                     steps.empty
         }
         assert journey: "expected a journey with a failed password, followed by a success, an information message and then the saver list page and then the saver details page."
@@ -138,10 +138,10 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //user account locked with bad password
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
-            return steps.remove(0) == new Scenario(clazz, OpenLoginPage) &&
-                    steps.remove(0) == new Scenario(clazz, BadPassword) &&
-                    steps.remove(0) == new Scenario(clazz, Successful) &&
-                    steps.remove(0) == new Scenario(clazz, PostLoginAlert.UserAccountLockedAlert) &&
+            return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
+                    steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
+                    steps.remove(0) == new Scenario(Successful.class, Successful) &&
+                    steps.remove(0) == new Scenario(PostLoginAlert.UserAccountLockedAlert.class, PostLoginAlert.UserAccountLockedAlert) &&
                     steps.empty
         }
         assert journey: "expected a journey with a failed password, followed by a success and a message stating that the account is locked"
@@ -199,9 +199,9 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //when
         List<Journey> journeys = backwardsFromTerminatorsJourneyGenerator.generateJourneys([
-                new Scenario(clazz, OpenLandingPage),
-                new Scenario(clazz, OpenHomePage),
-                new Scenario(clazz, OpenDetailsPage)
+                new Scenario(OpenLandingPage.class, OpenLandingPage),
+                new Scenario(OpenHomePage.class, OpenHomePage),
+                new Scenario(OpenDetailsPage.class, OpenDetailsPage)
         ], TestClass, filterStrategyMock)
 
         //then
@@ -211,11 +211,11 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         journey = journeys.find {
             List<Class> steps = new ArrayList(it.steps)
             return steps.size() == 5 &&
-                    steps.remove(0) == new Scenario(clazz, OpenLandingPage) &&
-                    steps.remove(0) == new Scenario(clazz, OpenHomePage) &&
-                    steps.remove(0) == new Scenario(clazz, OpenDetailsPage) &&
-                    steps.remove(0) == new Scenario(clazz, OpenHomePage) &&
-                    steps.remove(0) == new Scenario(clazz, OpenDetailsPage) &&
+                    steps.remove(0) == new Scenario(OpenLandingPage.class, OpenLandingPage) &&
+                    steps.remove(0) == new Scenario(OpenHomePage.class, OpenHomePage) &&
+                    steps.remove(0) == new Scenario(OpenDetailsPage.class, OpenDetailsPage) &&
+                    steps.remove(0) == new Scenario(OpenHomePage.class, OpenHomePage) &&
+                    steps.remove(0) == new Scenario(OpenDetailsPage.class, OpenDetailsPage) &&
                     steps.empty
         }
         assert journey: "expected a journey with the open details page occurring exactly twice and the journey should end on the open details page"
@@ -231,9 +231,9 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         try {
             //when
             backwardsFromTerminatorsJourneyGenerator.generateJourneys([
-                    new Scenario(clazz, OpenHomePage),
-                    new Scenario(clazz, OpenDetailsPageThatDoesntTerminate),
-                    new Scenario(clazz, OpenDetailsPage)
+                    new Scenario(OpenHomePage.class, OpenHomePage),
+                    new Scenario(OpenDetailsPageThatDoesntTerminate.class, OpenDetailsPageThatDoesntTerminate),
+                    new Scenario(OpenDetailsPage.class, OpenDetailsPage)
             ], TestClass, filterStrategyMock)
 
             assert false: "An infinite loop exists, so an exception is expected"
@@ -268,8 +268,8 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         try {
             //when
             backwardsFromTerminatorsJourneyGenerator.generateJourneys([
-                    new Scenario(clazz, A),
-                    new Scenario(clazz, B)
+                    new Scenario(A.class, A),
+                    new Scenario(B.class, B)
             ], TestClass, filterStrategyMock)
 
             assert false: "An infinite loop exists, so an exception is expected"
@@ -287,9 +287,9 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         try {
             //when
             backwardsFromTerminatorsJourneyGenerator.generateJourneys([
-                    new Scenario(clazz, A),
-                    new Scenario(clazz, B),
-                    new Scenario(clazz, C)
+                    new Scenario(A.class, A),
+                    new Scenario(B.class, B),
+                    new Scenario(C.class, C)
             ], TestClass, filterStrategyMock)
 
             assert false: "An infinite loop exists, so an exception is expected"

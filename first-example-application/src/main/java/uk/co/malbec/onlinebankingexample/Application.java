@@ -30,16 +30,14 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
-import uk.co.malbec.onlinebankingexample.model.Account;
-import uk.co.malbec.onlinebankingexample.model.AccountType;
-import uk.co.malbec.onlinebankingexample.model.User;
-import uk.co.malbec.onlinebankingexample.tools.TestTool;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.joda.time.DateTime.parse;
 import static org.joda.time.format.DateTimeFormat.forPattern;
@@ -110,18 +108,6 @@ public class Application {
                     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
                         if (modelAndView == null) {
                             modelAndView = new ModelAndView();
-                        }
-
-                        User user = (User) request.getSession().getAttribute("user");
-                        if (user != null && user.getAccounts() != null){
-                            boolean currentAccountPresent = false;
-                            for (Account account: user.getAccounts()){
-                                if (account.getType().equals(AccountType.Current)){
-                                    currentAccountPresent = true;
-                                    break;
-                                }
-                            }
-                            modelAndView.addObject("currentAccountPresent", currentAccountPresent);
                         }
 
                         modelAndView.addObject("number", numberTool);

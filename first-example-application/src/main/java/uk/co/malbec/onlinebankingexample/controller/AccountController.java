@@ -6,13 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import uk.co.malbec.onlinebankingexample.Utils;
 import uk.co.malbec.onlinebankingexample.model.Account;
 import uk.co.malbec.onlinebankingexample.model.AccountType;
 import uk.co.malbec.onlinebankingexample.model.RecentPayment;
 import uk.co.malbec.onlinebankingexample.model.User;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @Controller
 public class AccountController {
@@ -39,6 +39,7 @@ public class AccountController {
         ModelAndView modelAndView = new ModelAndView("account");
         modelAndView.addObject("displayLogin", false);
         modelAndView.addObject("account", account);
+        modelAndView.addObject("currentAccountPresent", Utils.isAccountPresent(user, AccountType.Current));
 
         if (AccountType.Current.equals(account.getType())){
             Integer available = account.getBalance();

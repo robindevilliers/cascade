@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")
-@CompletenessLevel(Completeness.STATE_COMPLETE)
+@CompletenessLevel(Completeness.SCENARIO_COMPLETE)
 //@StepPostHandler(WaitASecond.class)
 public class OnlineBankingTests {
 
