@@ -15,11 +15,6 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
-//jar {
-//    baseName = 'gs-spring-boot'
-//    version = '0.1.0'
-//}
-
 repositories {
     mavenCentral()
 }
@@ -43,14 +38,30 @@ dependencies {
     testCompile('org.seleniumhq.selenium:selenium-support:3.0.1')
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
-}
 
 
 ExecutorService executorService
+String WEB_DRIVER_FILE = "$projectDir/selenium-drivers/chromedriver"
 
 test {
+    doFirst {
+        if (!new File(WEB_DRIVER_FILE).exists()){
+            println """|==============================================================================================
+                |ERROR ERROR ERROR
+                |The chomedriver is not available for use.
+                |The first-example-application expects a chromedriver binary to be available at:
+                |
+                | $WEB_DRIVER_FILE
+                |
+                |These drivers can be obtained from this url for your particular platform:
+                |
+                | https://sites.google.com/a/chromium.org/chromedriver/downloads
+                |
+                |Please make sure the driver that is intalled matches the version of Chrome you have installed.
+                |==============================================================================================""".stripMargin()
+            throw new GradleScriptException("Invalid configuration", null);
+        }
+    }
     systemProperty "webdriver.chrome.driver", "$projectDir/selenium-drivers/chromedriver"
 }
 
@@ -58,7 +69,8 @@ test.doFirst {
     executorService = Executors.newSingleThreadExecutor()
     executorService.submit({
         tasks.findMainClass.execute()
-        tasks.bootRun.execute()
+        pid = tasks.bootRun.execute()
+
     } as Runnable)
 
     while (true) {
@@ -69,10 +81,28 @@ test.doFirst {
             sleep 1000
         }
     }
-
 }
 
 test.doLast {
-    executorService.shutdownNow()
+    def sout = new StringBuilder()
+    def serr = new StringBuilder()
+    String[] cmd = [
+        "/bin/sh",
+        "-c",
+        "ps -ax | grep onlinebankingexample.Application | grep -v grep | cut -f 1 -d ' '"
+    ]
+
+    def process = Runtime.getRuntime().exec(cmd)
+    process.consumeProcessOutput(sout, serr)
+    process.waitFor()
+    if (process.exitValue() != 0 ){
+        throw new GradleScriptException("PID script failed to execute.  First example application might still be running on port 8080.", null);
+    }
+
+    def killProcess = Runtime.getRuntime().exec("kill -9 " + sout.toString().trim())
+    killProcess.waitFor()
+    if (killProcess.exitValue() != 0 ){
+        throw new GradleScriptException("Skill script failed to execute.  First example application might still be running on port 8080.", null);
+    }
 }
 
