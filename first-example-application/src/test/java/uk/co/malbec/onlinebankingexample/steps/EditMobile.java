@@ -7,7 +7,6 @@ import uk.co.malbec.cascade.annotations.Then;
 import uk.co.malbec.cascade.annotations.When;
 import uk.co.malbec.cascade.utils.Reference;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenEditMobile.class)
@@ -27,8 +26,7 @@ public class EditMobile {
     }
 
     @Then
-    public void then(Throwable f){
-        assertNull(f);
+    public void then() {
         assertTextEquals(webDriver, "[test-field-mobile]", "0789 1234 7765");
         mobileHasBeenEdited.set(true);
     }

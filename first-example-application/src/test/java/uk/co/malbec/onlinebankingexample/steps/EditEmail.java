@@ -4,7 +4,6 @@ import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.utils.Reference;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenEditEmail.class)
@@ -25,8 +24,7 @@ public class EditEmail {
     }
 
     @Then
-    public void then(Throwable f) {
-        assertNull(f);
+    public void then() {
         assertTextEquals(webDriver, "[test-field-email]", "robin@theoreticalcity.co.uk");
         emailHasBeenEdited.set(true);
     }

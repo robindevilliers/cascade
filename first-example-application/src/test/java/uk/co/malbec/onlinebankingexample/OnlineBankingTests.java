@@ -55,15 +55,10 @@ public class OnlineBankingTests {
             stepAt(18,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
             stepAt(19,uk.co.malbec.onlinebankingexample.steps.OpenEditAddress.class),
             stepAt(20,uk.co.malbec.onlinebankingexample.steps.EditAddress.class)
-    );
-
-    @FilterTests
-    Predicate filter2 = and(
-            stepAt(0,uk.co.malbec.onlinebankingexample.steps.OpenLandingPage.class),
-            stepAt(1,uk.co.malbec.onlinebankingexample.steps.Login.FailedLogin.class)
     );*/
-    //Predicate filter = or(withStep(Login.FailedLogin.class), withStep(Challenge.FailChallenge.class));
-    //Predicate filter = and(withStep(Notice.AcceptOneNotice.class), withStep(Portfolio.CurrentAccountOnly.class),  withStep(EditAddress.class), withStep(EditMobile.class));
+
+//    @FilterTests
+//    Predicate filter = withStep(Login.FailedLogin.class);
 
     @Demands
     String username;

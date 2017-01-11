@@ -106,10 +106,10 @@ class CascadeTest {
 
         //then
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0]);
+        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0], reporter);
 
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1]);
+        verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1], reporter);
 
         verify(constructionStrategyMock, times(2)).tearDown(any(Reference), any(Reference));
     }

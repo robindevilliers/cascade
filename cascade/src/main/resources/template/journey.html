@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cascade Reports</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+
+<script id="tab-headers-template" type="text/html">
+    <ul class="nav nav-pills" role="tablist">
+        <% _.each(tabs, function(tab) {%>
+        <li role="presentation" class="<%if (tab.active){%>active<%}%>">
+            <a href="#<%=tab.id%>" aria-controls="home" role="tab" data-toggle="tab"><%=tab.title%></a>
+        </li>
+        <%});%>
+    </ul>
+</script>
+
+<script id="tab-panels-template" type="text/html">
+    <div class="tab-content">
+        <% _.each(tabs, function(tab) {%>
+        <div role="tabpanel" class="tab-pane <%if (tab.active){%>active<%}%>" id="<%=tab.id%>">
+            <div class="panel panel-<%=tab.panel%>">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><%=tab.title%></h4>
+                </div>
+
+                <div id="tab-body" class="panel-body">
+
+                </div>
+            </div>
+        </div>
+        <%});%>
+    </div>
+</script>
+
+<script id="journey-synopsis-panel-template" type="text/html">
+    <h4>Name</h4>
+    <p><%=name%></p>
+    <h4>Result</h4>
+    <p><%=result%></p>
+    <% if(result === 'FAILED'){%>
+    <h4>Assertion Failure</h4>
+    <p><%=assertionMessage%></p>
+    <%}%>
+    <% if(result === 'ERROR'){%>
+    <h4>Message</h4>
+    <p><%=errorMessage%></p>
+    <%}%>
+    <h4>Stack Trace</h4>
+    <p><%=stackTrace%></p>
+</script>
+
+<script id="journey-filter-template" type="text/html">
+    <p><%=filter%></p>
+</script>
+
+
+<script id="journey-analysis-template" type="text/html">
+    <% var gridWidth = dimensions.width * 20;%>
+    <% var gridHeight = dimensions.height * 20;%>
+    <svg width="<%=gridWidth%>" height="<%=gridHeight%>">
+        <defs>
+            <marker id="markerCircle" markerWidth="8" markerHeight="8" refX="5" refY="5">
+                <circle cx="5" cy="5" r="3" style="stroke: none; fill:#000000;"/>
+            </marker>
+
+            <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6"
+                    orient="auto">
+                <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;"/>
+            </marker>
+        </defs>
+
+
+        <!--<% for (var i = 0; i <= gridWidth; i = i + 20){%>-->
+        <!--<line x1="<%=i%>" y1="0" x2="<%=i%>" y2="<%=gridHeight%>" stroke-dasharray="5, 5" stroke-width="1" stroke="lightgray"/>-->
+        <!--<%}%>-->
+        <!--<% for (var i = 0; i <= gridHeight; i = i + 20){%>-->
+        <!--<line y1="<%=i%>" x1="0" y2="<%=i%>" x2="<%=gridWidth%>" stroke-dasharray="5, 5" stroke-width="1" stroke="lightgray"/>-->
+        <!--<%}%>-->
+
+        <%_.each(plots, function(plot) {%>
+        <%if (plot.type === 'state') {%>
+        <rect x="<%=plot.gridX * 20%>" y="<%=plot.gridY * 20%>" width="180" height="60" rx="15" ry="15" stroke="black" fill="white" stroke-dasharray="5, 5"/>
+        <text x="<%=plot.gridX * 20 + 20%>" y="<%=plot.gridY * 20 + 30%>" font-family="Verdana" font-size="12" fill="gray">
+            <%=plot.name%>
+        </text>
+        <%}%>
+        <%if (plot.type === 'path') { %>
+        <path d="<%=plot.getSpec().toString()%>" stroke="black" fill="none" style=" marker-start: url(#markerCircle); marker-end: url(#markerArrow); "/>
+        <%}%>
+        <%});%>
+
+        <!-- <rect x="10" y="10" width="180" height="80" rx="15" ry="15" stroke="black" fill="white"/>
+         <text x="18" y="48" font-family="Verdana" font-size="12">
+             SetupStandingOrderForNow
+         </text>-->
+
+
+    </svg>
+</script>
+
+
+<div class="container">
+
+    <h1>Cascade Reports
+        <small id="journey-id"></small>
+
+    </h1>
+    <p><a href="index.html" class="pull-right">Index</a></p>
+
+    <div id="tab-headers"></div>
+    <div id="tab-panels"></div>
+</div>
+
+
+<script src="jquery.min.js"></script>
+<script src="lodash.js"></script>
+<script src="bootstrap.min.js"></script>
+
+<script src="data/directory.js"></script>
+<script src="journey.js"></script>
+</body>
+</html>

@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import uk.co.malbec.cascade.annotations.*;
 
-import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.onlinebankingexample.Utilities.assertElementPresent;
 import static uk.co.malbec.onlinebankingexample.Utilities.waitForPage;
@@ -28,10 +27,7 @@ public class OpenLandingPage {
     }
 
     @Then
-    //TODO - when throwable argument is not suppied, then there must be a helpful error message
-    //TODO - if throwable not supplied here, then we don't expect an exception??  likewise when there is no then clause
-    public void then(Throwable f) {
-        assertNull(f);
+    public void then() {
         assertEquals("Tabby Banking", webDriver.getTitle());
         assertElementPresent(webDriver, "[test-form-login]");
     }

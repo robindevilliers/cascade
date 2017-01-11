@@ -6,7 +6,6 @@ import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.annotations.Then;
 import uk.co.malbec.cascade.annotations.When;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenPersonalPage.class)
@@ -21,8 +20,7 @@ public class OpenEditEmail {
     }
 
     @Then
-    public void then(Throwable f){
-        assertNull(f);
+    public void then() {
         assertTextEquals(webDriver, "[test-current-email-text]", "robin@imaginaryville.co.uk");
     }
 }

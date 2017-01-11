@@ -4,11 +4,9 @@ import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.utils.Reference;
 
-import javax.naming.ReferralException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Portfolio.class)
@@ -48,8 +46,7 @@ public class OpenPersonalPage {
     }
 
     @Then
-    public void then(Throwable f) {
-        assertNull(f);
+    public void then() {
         assertTextEquals(webDriver, "[test-field-name]", "Robin de Villiers");
         assertTextEquals(webDriver, "[test-field-nationality]", "British");
         assertTextEquals(webDriver, "[test-field-domicile]", "UK");

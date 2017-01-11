@@ -9,9 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.assertElementIsNotPresent;
-import static uk.co.malbec.onlinebankingexample.Utilities.assertElementPresent;
 import static uk.co.malbec.onlinebankingexample.Utilities.assertTextEquals;
 
 @Step({Challenge.class, Notice.class, BackToPorfolio.class})
@@ -36,8 +34,7 @@ public interface Portfolio {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertTextEquals(webDriver, "[test-row-1001] [test-field-account-name]", "Premium Current Account");
             assertTextEquals(webDriver, "[test-row-1001] [test-field-account-balance]", "£ 400.00");
         }
@@ -69,8 +66,7 @@ public interface Portfolio {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertTextEquals(webDriver, "[test-row-1001] [test-field-account-name]", "Premium Current Account");
             assertTextEquals(webDriver, "[test-row-1001] [test-field-account-balance]", "£ 400.00");
             assertTextEquals(webDriver, "[test-row-1002] [test-field-account-name]", "Easy Saver Account");
@@ -111,8 +107,7 @@ public interface Portfolio {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertTextEquals(webDriver, "[test-row-1001] [test-field-account-name]", "Premium Current Account");
             assertTextEquals(webDriver, "[test-row-1001] [test-field-account-balance]", "£ 400.00");
             assertTextEquals(webDriver, "[test-row-1002] [test-field-account-name]", "Easy Saver Account");
@@ -141,8 +136,7 @@ public interface Portfolio {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertTextEquals(webDriver, "[test-row-1004] [test-field-account-name]", "Fancy Mortgage");
             assertTextEquals(webDriver, "[test-row-1004] [test-field-account-balance]", "£ (154,987.00)");
             assertElementIsNotPresent(webDriver, "[test-link-payments]");

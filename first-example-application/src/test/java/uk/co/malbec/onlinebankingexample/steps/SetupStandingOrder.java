@@ -34,7 +34,7 @@ public interface SetupStandingOrder {
             click(webDriver, "[test-input-type-now]");
             select(webDriver, "[test-input-period]", "Monthly");
             enterText(webDriver, "[test-input-amount]", "12.00");
-            click(webDriver, "[test-setup-cta]");
+            click(webDriver, "[test-asdf-cta]");
             waitForPage(webDriver);
 
             expectedStandingOrders.add(new String[]{"magazine subscription", "rdevilliers", "98985656", "112233", null, "Monthly", "£ 12.00"});
@@ -90,9 +90,7 @@ public interface SetupStandingOrder {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
-
+        public void then() {
             int i = 0;
             for (String[] expected : expectedStandingOrders) {
                 assertStandingOrderRow(webDriver, "" + i, expected[0], expected[1], expected[2], expected[3], expected[4], expected[5], expected[6]);

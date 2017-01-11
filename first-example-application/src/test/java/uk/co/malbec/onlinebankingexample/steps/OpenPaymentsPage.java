@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
@@ -134,10 +133,7 @@ public class OpenPaymentsPage {
     }
 
     @Then
-    public void then(Throwable f) {
-        assertNull(f);
-
-
+    public void then() {
         int i = 0;
         for (String[] expected: expectedStandingOrders){
             assertStandingOrderRow(webDriver, "" + i, expected[0], expected[1] , expected[2],expected[3] ,expected[4] ,expected[5], expected[6]);

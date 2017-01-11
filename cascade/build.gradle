@@ -3,6 +3,8 @@ apply plugin: 'groovy'
 
 dependencies {
     compile "junit:junit:4.10"
+    compile 'javax.json:javax.json-api:1.0'
+    compile 'org.glassfish:javax.json:1.0.4'
     compile "org.reflections:reflections:0.9.9-RC1"
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile "org.codehaus.groovy:groovy-all:2.2.0"

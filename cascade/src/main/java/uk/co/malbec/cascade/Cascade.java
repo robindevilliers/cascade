@@ -26,6 +26,8 @@ public class Cascade {
 
     private CompletenessStrategy completenessStrategy;
 
+    private Reporter reporter;
+
     private Class<?> controlClass;
 
     private List<Journey> journeys = new ArrayList<Journey>();
@@ -36,7 +38,8 @@ public class Cascade {
                    ConstructionStrategy constructionStrategy,
                    TestExecutor testExecutor,
                    FilterStrategy filterStrategy,
-                   CompletenessStrategy completenessStrategy) {
+                   CompletenessStrategy completenessStrategy,
+                   Reporter reporter) {
         this.classpathScanner = classpathScanner;
         this.scenarioFinder = scenarioFinder;
         this.journeyGenerator = journeyGenerator;
@@ -44,17 +47,20 @@ public class Cascade {
         this.testExecutor = testExecutor;
         this.filterStrategy = filterStrategy;
         this.completenessStrategy = completenessStrategy;
+        this.reporter = reporter;
     }
 
-    public void init(Class<?> controlClass){
+    public void init(Class<?> controlClass) {
         this.controlClass = controlClass;
 
         filterStrategy.init(controlClass);
         testExecutor.init(controlClass);
         completenessStrategy.init(controlClass);
 
+
         String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
         List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
+        reporter.init(controlClass, scenarios);
         List<Journey> journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
 
         this.journeys = completenessStrategy.filter(journeys);
@@ -70,26 +76,40 @@ public class Cascade {
 
     public void run(RunNotifier notifier) {
 
-        for (Journey journey : journeys) {
-            try {
+        reporter.start();
+        try {
+            for (Journey journey : journeys) {
+                try {
+                    Reference<Object> control = new Reference<Object>();
+                    Reference<List<Object>> steps = new Reference<List<Object>>();
 
-                Reference<Object> control = new Reference<Object>();
-                Reference<List<Object>> steps = new Reference<List<Object>>();
+                    reporter.setupTest(journey);
 
-                constructionStrategy.setup(controlClass, journey, control, steps);
+                    constructionStrategy.setup(controlClass, journey, control, steps);
 
-                testExecutor.executeTest(notifier, journey.getDescription(), steps.get(), journey);
+                    reporter.startTest(journey, control, steps);
 
-                constructionStrategy.tearDown(control, steps);
-            } catch (RuntimeException e) {
-                StringBuilder journeyDescription = new StringBuilder();
-                for (Scenario scenario : journey.getSteps()) {
-                    String[] tokens = scenario.toString().split("\\.");
+                    testExecutor.executeTest(notifier, journey.getDescription(), steps.get(), journey, reporter);
 
-                    journeyDescription.append(tokens[tokens.length - 1]).append("\n");
+                    reporter.tearDown(control, steps);
+
+                    constructionStrategy.tearDown(control, steps);
+                } catch (RuntimeException e) {
+                    reporter.handleUnknownException(e, journey);
+
+                } finally {
+                    try {
+                        reporter.finishTest(journey);
+                    } catch (Throwable f) {
+                        f.printStackTrace();
+                    }
                 }
-                System.err.println(journeyDescription.toString());
-                throw e;
+            }
+        } finally {
+            try {
+                reporter.finish();
+            } catch (Throwable f) {
+                f.printStackTrace();
             }
         }
     }

@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface TestExecutor {
     void init(Class<?> controlClass);
-    void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey);
+
+    void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey, Reporter reporter);
 }

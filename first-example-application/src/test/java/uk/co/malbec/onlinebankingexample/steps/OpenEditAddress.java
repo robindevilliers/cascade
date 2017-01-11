@@ -6,7 +6,6 @@ import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.annotations.Then;
 import uk.co.malbec.cascade.annotations.When;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenPersonalPage.class)
@@ -22,8 +21,7 @@ public class OpenEditAddress {
     }
 
     @Then
-    public void then(Throwable f) {
-        assertNull(f);
+    public void then() {
         assertTextEquals(webDriver, "[test-current-address-text]", "7 Special Way, FairBank, ImaginaryVille, WOW007");
     }
 }

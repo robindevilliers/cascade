@@ -3,8 +3,6 @@ package uk.co.malbec.onlinebankingexample.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
 
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
-import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
@@ -94,9 +91,7 @@ public interface OpenAccountPage {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
-
+        public void then() {
             assertTextEquals(webDriver, "[test-field-account-name]", "Premium Current Account");
 
             assertAccountListRow(webDriver, "0", "30 Aug 2014", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor", "£ 45.43", "", "£ 400.00");
@@ -174,8 +169,7 @@ public interface OpenAccountPage {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertTextEquals(webDriver, "[test-field-account-name]", "Easy Saver Account");
 
             assertAccountListRow(webDriver, "0", "30 Aug 2014", "Nulla consequat massa quis enim", "£ 15.00", "", "£ 100.00");
@@ -253,8 +247,7 @@ public interface OpenAccountPage {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertEquals("Fancy Mortgage", webDriver.findElement(By.cssSelector("[test-field-account-name]")).getText());
 
             assertAccountListRow(webDriver, "0", "30 Aug 2014", "Nulla consequat massa quis enim", "£ 15.00", "", "£ (154,987.00)");

@@ -3,7 +3,6 @@ package uk.co.malbec.onlinebankingexample.steps;
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenPersonalPage.class)
@@ -20,8 +19,7 @@ public class OpenEditMobile {
     }
 
     @Then
-    public void then(Throwable f) {
-        assertNull(f);
+    public void then() {
         assertTextEquals(webDriver, "[test-current-mobile-text]", "0788 1234 567");
     }
 }

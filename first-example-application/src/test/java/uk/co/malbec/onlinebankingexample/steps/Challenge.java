@@ -5,7 +5,6 @@ import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.annotations.Terminator;
 
 import static java.lang.Integer.parseInt;
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Login.class)
@@ -34,8 +33,7 @@ public interface Challenge {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
         }
     }
 
@@ -58,8 +56,7 @@ public interface Challenge {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
+        public void then() {
             assertElementPresent(webDriver,"[test-form-login]");
             assertElementDisplayed(webDriver, "[test-dialog-authentication-failure]");
         }

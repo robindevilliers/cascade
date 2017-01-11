@@ -1,15 +1,15 @@
 package uk.co.malbec.cascade.modules.executor
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.Description;
-import org.junit.runner.notification.RunNotifier;
-import uk.co.malbec.cascade.annotations.*;
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.Description
+import org.junit.runner.notification.RunNotifier
+import uk.co.malbec.cascade.annotations.*
 import uk.co.malbec.cascade.events.Handler
 import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.modules.TestExecutor
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*
 
 public class StandardTestExecutorTest {
 
@@ -56,7 +56,7 @@ public class StandardTestExecutorTest {
 
         when(journey.getName()).thenReturn("description")
 
-        testExecutor.executeTest(runNotifier, description,[new BasicStep()], journey);
+        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, reporter);
 
         assert preHandlerCtrlCalled == 0
         assert preHandlerCalled == 1
@@ -87,7 +87,7 @@ public class StandardTestExecutorTest {
 
         when(journey.getName()).thenReturn("description")
 
-        testExecutor.executeTest(runNotifier, description,[new ExceptionStep()], journey);
+        testExecutor.executeTest(runNotifier, description, [new ExceptionStep()], journey, reporter);
 
         assert thrownException == receivedException
     }

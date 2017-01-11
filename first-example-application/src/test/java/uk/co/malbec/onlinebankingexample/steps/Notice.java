@@ -7,7 +7,6 @@ import uk.co.malbec.cascade.annotations.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertNull;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(Challenge.class)
@@ -27,9 +26,7 @@ public interface Notice {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
-
+        public void then() {
             assertTextEquals(webDriver, "[test-text-notice]", notices.get(0));
 
             click(webDriver, "[test-cta-continue]");
@@ -53,9 +50,7 @@ public interface Notice {
         }
 
         @Then
-        public void then(Throwable f) {
-            assertNull(f);
-
+        public void then() {
             assertTextEquals(webDriver, "[test-text-notice]", notices.get(0));
             click(webDriver, "[test-cta-continue]");
             waitForPage(webDriver);
