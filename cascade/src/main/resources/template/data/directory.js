@@ -110,6 +110,7 @@ var directoryData =
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.OpenEditEmail",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.Portfolio",
                     "uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage"
                 ]
             },
@@ -124,7 +125,15 @@ var directoryData =
                 "precedents": [
                     "uk.co.malbec.onlinebankingexample.steps.Challenge",
                     "uk.co.malbec.onlinebankingexample.steps.Notice",
-                    "uk.co.malbec.onlinebankingexample.steps.BackToPorfolio"
+                    "uk.co.malbec.onlinebankingexample.steps.BackToPorfolio",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
+                    "uk.co.malbec.onlinebankingexample.steps.EditAddress",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditEmail",
+                    "uk.co.malbec.onlinebankingexample.steps.EditEmail",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditMobile",
+                    "uk.co.malbec.onlinebankingexample.steps.EditMobile",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenAccountPage",
+                    "uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder"
                 ]
             },
             {
@@ -136,12 +145,15 @@ var directoryData =
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.CancelStandingOrder",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
                     "uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage"
                 ]
             },
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.Portfolio",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
                     "uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage"
                 ]
             },
@@ -155,24 +167,28 @@ var directoryData =
                 "name": "uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage",
                 "precedents": [
                     "uk.co.malbec.onlinebankingexample.steps.Portfolio",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
                     "uk.co.malbec.onlinebankingexample.steps.CancelStandingOrder"
                 ]
             },
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.OpenEditMobile",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.Portfolio",
                     "uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage"
                 ]
             },
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.Portfolio",
                     "uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage"
                 ]
             },
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.EditEmail",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
                     "uk.co.malbec.onlinebankingexample.steps.OpenEditEmail"
                 ]
             },

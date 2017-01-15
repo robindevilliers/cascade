@@ -111,7 +111,7 @@ function Coordinate(shape, verticalChannelWidths, horizontalChannelHeights, card
     }
 }
 
-
+//TODO - these calculations don't work  - some overlap in vertical channels occurs.
 function indexWidths(paths, dimensions) {
     var widths = [];
 
@@ -203,6 +203,7 @@ function indexWidths(paths, dimensions) {
     return widths;
 }
 
+//TODO - problem here too  - inline horizontals can go through same path as inline verts
 function indexHeights(paths, dimensions) {
     var heights = [];
 

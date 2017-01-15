@@ -34,16 +34,21 @@ function Plot(coordinateSystem) {
 
     function plotPaths(paths) {
 
-        var topPartials = _.map(paths, function (p) { return p[0]; });
-        var bottomPartials = _.map(paths, function (p) { return p[p.length - 1]; });
+        var topPartials = _.map(paths, function (p) {
+            return p[0];
+        });
+        var bottomPartials = _.map(paths, function (p) {
+            return p[p.length - 1];
+        });
 
         _.each(paths, function (path) {
             var coordinate;
             var plot = new PathPlot();
             var previousLeg = null;
 
+            var totalSharing, offset;
+
             _.each(path, function (leg) {
-                //TODO - if offset is over 4 then a different strategy must take place.
                 switch (leg.getType()) {
                     case LegTypeEnum.INLINE_VERTICAL:
                         coordinate = coordinateSystem
@@ -61,10 +66,23 @@ function Plot(coordinateSystem) {
                             .moveRight(Math.round(coordinateSystem.getShapeWidth() / 2))
                             .moveDown(coordinateSystem.getShapeHeight());
 
-                        plot.getSpec()
-                            .moveTo(coordinate.moveRightByOne().moveRight(calculateOffset(topPartials, leg, true)))
-                            .drawVerticalTo(coordinate.moveDown(leg.gridYIndex))
-                            .drawArc(coordinate.moveRightByOne().moveDownByOne(), 0);
+                        totalSharing = countSharingPartials(topPartials, leg);
+                        offset = calculateOffset(topPartials, leg, true);
+
+                        if (totalSharing < 4){
+                            plot.getSpec()
+                                .moveTo(coordinate.moveRightByOne().moveRight(offset))
+                                .drawVerticalTo(coordinate.moveDown(leg.gridYIndex))
+                                .drawArc(coordinate.moveRightByOne().moveDownByOne(), 0);
+                        } else if (totalSharing - offset < 5){
+                            plot.getSpec()
+                                .moveTo(coordinate.moveRightByOne().moveRight(offset - (totalSharing - 4)))
+                                .drawVerticalTo(coordinate.moveDown(leg.gridYIndex))
+                                .drawArc(coordinate.moveRightByOne().moveDownByOne(), 0);
+                        } else {
+                            plot.getSpec()
+                                .moveTo(coordinate.moveRightByOne().moveDown(leg.gridYIndex).moveDownByOne());
+                        }
                         break;
                     case LegTypeEnum.INLINE_TOP_LEFT:
                         coordinate = coordinateSystem
@@ -72,10 +90,23 @@ function Plot(coordinateSystem) {
                             .moveRight(Math.round(coordinateSystem.getShapeWidth() / 2))
                             .moveDown(coordinateSystem.getShapeHeight());
 
-                        plot.getSpec()
-                            .moveTo(coordinate.moveLeftByOne().moveLeft(calculateOffset(topPartials, leg, true)))
-                            .drawVerticalTo(coordinate.moveDown(leg.gridYIndex))
-                            .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 1);
+                        totalSharing = countSharingPartials(topPartials, leg);
+                        offset = calculateOffset(topPartials, leg, true);
+
+                        if (totalSharing < 4){
+                            plot.getSpec()
+                                .moveTo(coordinate.moveLeftByOne().moveLeft(offset))
+                                .drawVerticalTo(coordinate.moveDown(leg.gridYIndex))
+                                .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 1);
+                        } else if (totalSharing - offset < 5){
+                            plot.getSpec()
+                                .moveTo(coordinate.moveLeftByOne().moveLeft(offset - (totalSharing - 4)))
+                                .drawVerticalTo(coordinate.moveDown(leg.gridYIndex))
+                                .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 1);
+                        } else {
+                            plot.getSpec()
+                                .moveTo(coordinate.moveLeftByOne().moveDown(leg.gridYIndex).moveDownByOne());
+                        }
                         break;
                     case LegTypeEnum.ADJACENT_VERTICAL:
 
@@ -146,7 +177,6 @@ function Plot(coordinateSystem) {
 
                                     break;
                                 case DirectionEnum.DOWN:
-
                                     plot.getSpec().drawVerticalTo(coordinate
                                         .resetCardinalY(leg.y)
                                         .moveDown(coordinateSystem.getShapeHeight())
@@ -157,7 +187,7 @@ function Plot(coordinateSystem) {
                                             plot.getSpec().drawArc(coordinate.moveLeftByOne().moveDownByOne(), 1);
                                             break;
                                         case DirectionEnum.RIGHT:
-                                            plot.getSpec().drawArc(coordinate.moveRightByOne().moveDownByOne(), 1);
+                                            plot.getSpec().drawArc(coordinate.moveRightByOne().moveDownByOne(), 0);
                                             break;
                                     }
                                     break;
@@ -170,13 +200,29 @@ function Plot(coordinateSystem) {
                                 .resetCardinalX(leg.x)
                                 .moveRight(Math.round(coordinateSystem.getShapeWidth() / 2));
 
-                            plot.getSpec()
-                                .drawHorizontalTo(coordinate.moveRightByOne()
-                                    .moveRight(calculateOffset(bottomPartials, leg, false))
-                                    .moveRightByOne()
-                                )
-                                .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 0)
-                                .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
+                            totalSharing = countSharingPartials(bottomPartials, leg);
+                            offset = calculateOffset(bottomPartials, leg, false);
+
+                            if (totalSharing < 5){
+                                plot.getSpec()
+                                    .drawHorizontalTo(coordinate.moveRightByOne()
+                                        .moveRight(offset)
+                                        .moveRightByOne()
+                                    )
+                                    .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 0)
+                                    .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
+                            } else if (totalSharing - offset < 5) {
+                                plot.getSpec()
+                                    .drawHorizontalTo(coordinate.moveRightByOne()
+                                        .moveRight(offset - (totalSharing - 4))
+                                        .moveRightByOne()
+                                    )
+                                    .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 0)
+                                    .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
+                            } else {
+                                plot.getSpec()
+                                    .drawHorizontalTo(coordinate.moveRightByOne());
+                            }
 
                         } else if (leg.isType(LegTypeEnum.INLINE_BOTTOM_LEFT)) {
 
@@ -184,13 +230,30 @@ function Plot(coordinateSystem) {
                                 .resetCardinalX(leg.x)
                                 .moveRight(Math.round(coordinateSystem.getShapeWidth() / 2));
 
-                            plot.getSpec()
-                                .drawHorizontalTo(coordinate.moveLeftByOne()
-                                    .moveLeft(calculateOffset(bottomPartials, leg, false))
-                                    .moveLeftByOne()
-                                )
-                                .drawArc(coordinate.moveRightByOne().moveDownByOne(), 1)
-                                .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
+                            totalSharing = countSharingPartials(bottomPartials, leg);
+                            offset = calculateOffset(bottomPartials, leg, false);
+
+                            if (totalSharing < 5) {
+                                plot.getSpec()
+                                    .drawHorizontalTo(coordinate.moveLeftByOne()
+                                        .moveLeft(offset)
+                                        .moveLeftByOne()
+                                    )
+                                    .drawArc(coordinate.moveRightByOne().moveDownByOne(), 1)
+                                    .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
+                            } else if (totalSharing - offset < 5) {
+
+                                plot.getSpec()
+                                    .drawHorizontalTo(coordinate.moveLeftByOne()
+                                        .moveLeft(offset - (totalSharing - 4))
+                                        .moveLeftByOne()
+                                    )
+                                    .drawArc(coordinate.moveRightByOne().moveDownByOne(), 1)
+                                    .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
+                            } else {
+                                plot.getSpec()
+                                    .drawHorizontalTo(coordinate.moveLeftByOne());
+                            }
                         }
 
                         break;
@@ -200,6 +263,12 @@ function Plot(coordinateSystem) {
                 previousLeg = leg;
             });
             plots.push(plot);
+
+            function countSharingPartials(partials, leg) {
+                return _.filter(partials, function (p) {
+                    return p.getType() == leg.getType() && p.x == leg.x && p.y == leg.y;
+                }).length;
+            }
 
             function calculateOffset(partials, leg, top) {
                 return _.chain(partials)
