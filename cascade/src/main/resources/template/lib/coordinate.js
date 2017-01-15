@@ -1,30 +1,29 @@
 
 function CoordinateSystem(shape, stateTree, paths) {
-    this.cardinalDimensions = findDimensions(stateTree.getRootState());
-    this.shape = shape;
-    this.verticalChannelWidths = indexWidths(paths, this.cardinalDimensions);
-    this.horizontalChannelHeights = indexHeights(paths, this.cardinalDimensions);
+    var cardinalDimensions = findDimensions(stateTree.getRootState());
+    var verticalChannelWidths = indexWidths(paths, cardinalDimensions);
+    var horizontalChannelHeights = indexHeights(paths, cardinalDimensions);
 
     this.coordinateAtCardinalPoint = function (cardinalX, cardinalY) {
-        return new Coordinate(this.shape, this.verticalChannelWidths, this.horizontalChannelHeights, cardinalX, cardinalY);
+        return new Coordinate(shape, verticalChannelWidths, horizontalChannelHeights, cardinalX, cardinalY);
     };
     this.getVerticalChannelWidths = function () {
-        return this.verticalChannelWidths;
+        return verticalChannelWidths;
     };
     this.getHorizontalChannelHeights = function () {
-        return this.horizontalChannelHeights;
+        return horizontalChannelHeights;
     };
     this.getWidth = function () {
-        return _.sum(this.verticalChannelWidths) + this.cardinalDimensions.width * shape.width;
+        return _.sum(verticalChannelWidths) + cardinalDimensions.width * shape.width;
     };
     this.getHeight = function () {
-        return _.sum(this.horizontalChannelHeights) + this.cardinalDimensions.height * shape.height;
+        return _.sum(horizontalChannelHeights) + cardinalDimensions.height * shape.height;
     };
     this.getShapeWidth = function(){
-        return this.shape.width;
+        return shape.width;
     };
     this.getShapeHeight = function(){
-        return this.shape.height;
+        return shape.height;
     };
 
     function findDimensions(state) {
@@ -45,23 +44,19 @@ function CoordinateSystem(shape, stateTree, paths) {
 
 function Coordinate(shape, verticalChannelWidths, horizontalChannelHeights, cardinalX, cardinalY) {
 
-    this.shape = shape;
-    this.verticalChannelWidths = verticalChannelWidths;
-    this.horizontalChannelHeights = horizontalChannelHeights;
-
     this.cardinalX = cardinalX;
     this.cardinalY = cardinalY;
-    this.x = this.cardinalX * this.shape.width + sum(this.verticalChannelWidths, 0, this.cardinalX);
-    this.y = this.cardinalY * this.shape.height + sum(this.horizontalChannelHeights, 0, this.cardinalY);
+    this.x = this.cardinalX * shape.width + sum(verticalChannelWidths, 0, this.cardinalX);
+    this.y = this.cardinalY * shape.height + sum(horizontalChannelHeights, 0, this.cardinalY);
 
     this.resetCardinalX = function (cardinalX) {
         this.cardinalX = cardinalX;
-        this.x = this.cardinalX * this.shape.width + sum(this.verticalChannelWidths, 0, this.cardinalX);
+        this.x = this.cardinalX * shape.width + sum(verticalChannelWidths, 0, this.cardinalX);
         return this;
     };
     this.resetCardinalY = function (cardinalY) {
         this.cardinalY = cardinalY;
-        this.y = this.cardinalY * this.shape.height + sum(this.horizontalChannelHeights, 0, this.cardinalY);
+        this.y = this.cardinalY * shape.height + sum(horizontalChannelHeights, 0, this.cardinalY);
         return this;
     };
 
@@ -250,7 +245,6 @@ function indexHeights(paths, dimensions) {
                 })
         });
 
-
         placePartialsInChannel(channel, topPartials);
 
         //pull out all partials that are in the group don't have bottoms and do have horizontals.
@@ -261,7 +255,6 @@ function indexHeights(paths, dimensions) {
                     return leg.isType(LegTypeEnum.INLINE_BOTTOM_RIGHT) || leg.isType(LegTypeEnum.INLINE_BOTTOM_LEFT);
                 })
         });
-
 
         placePartialsInChannel(channel, topHorizontalPartials);
 
@@ -380,8 +373,6 @@ function indexHeights(paths, dimensions) {
 
                 channel.push(horizontal);
             }
-
         });
     }
-
 }

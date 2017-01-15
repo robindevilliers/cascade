@@ -1,7 +1,7 @@
 function StateTree(directory) {
     this.stateTree = generateStateTree(directory);
 
-    this.getRootState = function(){
+    this.getRootState = function () {
         return this.stateTree;
     };
 
@@ -9,6 +9,8 @@ function StateTree(directory) {
         assignStateWidth(this.stateTree);
         assignStateHeight(this.stateTree);
         assignStateCoordinates(this.stateTree, 0, 0);
+
+        return this;
 
         function assignStateCoordinates(state, x, y) {
             state.x = x;
@@ -43,7 +45,7 @@ function StateTree(directory) {
     };
 
 
-    this.squash = function() {
+    this.squash = function () {
 
         var height = this.stateTree.height;
 
@@ -67,6 +69,8 @@ function StateTree(directory) {
             largestSquare.processed = true;
             largestSquare = findLargestSquare(this.stateTree, 0);
         }
+
+        return this;
 
         function findAvailableCoordinates(grid, gridHeight, gridWidth, state, y, x) {
             if (x == gridWidth) {

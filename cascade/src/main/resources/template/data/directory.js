@@ -185,8 +185,11 @@ var directoryData =
             {
                 "name": "uk.co.malbec.onlinebankingexample.steps.BackToPorfolio",
                 "precedents": [
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditAddress",
                     "uk.co.malbec.onlinebankingexample.steps.EditAddress",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditEmail",
                     "uk.co.malbec.onlinebankingexample.steps.EditEmail",
+                    "uk.co.malbec.onlinebankingexample.steps.OpenEditMobile",
                     "uk.co.malbec.onlinebankingexample.steps.EditMobile",
                     "uk.co.malbec.onlinebankingexample.steps.OpenAccountPage",
                     "uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder"
