@@ -65,6 +65,6 @@ function InlineHorizontalLeg(sourceX, targetX, y, direction) {
     this.aspect = LegTypeEnum.INLINE_HORIZONTAL;
     this.sx = sourceX;
     this.tx = targetX;
-    this.t = y;
+    this.ty = y;
     this.direction = direction;
 }

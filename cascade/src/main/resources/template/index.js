@@ -4,19 +4,19 @@ renderJourneyLists();
 renderCoverageReport();
 
 function renderDashboard() {
-    var successesCount = _.size(_.filter(directory.items, function (journey) {
+    var successesCount = _.size(_.filter(directoryData.items, function (journey) {
         return journey.result === 'SUCCESS';
     }));
-    var failureCount = _.size(_.filter(directory.items, function (journey) {
+    var failureCount = _.size(_.filter(directoryData.items, function (journey) {
         return journey.result === 'FAILED';
     }));
-    var errorCount = _.size(_.filter(directory.items, function (journey) {
+    var errorCount = _.size(_.filter(directoryData.items, function (journey) {
         return journey.result === 'ERROR';
     }));
-    var totalCount = _.size(directory.items);
+    var totalCount = _.size(directoryData.items);
     var percentage = Math.round(successesCount / totalCount * 100);
 
-    var totalSeconds = Math.floor(directory.duration / 1000);
+    var totalSeconds = Math.floor(directoryData.duration / 1000);
     var minutes = Math.floor(totalSeconds / 60);
     var remainingSeconds = totalSeconds - (minutes * 60);
 
@@ -29,7 +29,7 @@ function renderDashboard() {
 }
 
 function renderTabPanels() {
-    var errorCount = _.size(_.filter(directory.items, function (journey) {
+    var errorCount = _.size(_.filter(directoryData.items, function (journey) {
         return journey.result !== 'SUCCESS';
     }));
 
@@ -53,11 +53,11 @@ function renderTabPanels() {
 function renderJourneyLists() {
     var journeysTemplate = _.template($("#journeys-template").text());
 
-    var badJourneys = _.filter(directory.items, function (journey) {
+    var badJourneys = _.filter(directoryData.items, function (journey) {
         return journey.result !== 'SUCCESS';
     });
 
-    $("#all-journeys #tab-body").html(journeysTemplate({journeys: directory.items}));
+    $("#all-journeys #tab-body").html(journeysTemplate({journeys: directoryData.items}));
     $("#failed-journeys #tab-body").html(journeysTemplate({journeys: badJourneys}));
 }
 
@@ -65,9 +65,9 @@ function renderCoverageReport() {
     var coverageTemplate = _.template($("#coverage-template").text());
     console.log('coverage report');
 
-    _.each(directory.items, function (journey) {
+    _.each(directoryData.items, function (journey) {
         journey.states = _.uniq(_.flatMap(journey.scenarios, function (journeyScenario) {
-            return _.map(_.filter(directory.scenarios, function (scenario) {
+            return _.map(_.filter(directoryData.scenarios, function (scenario) {
                 return scenario.name === journeyScenario;
             }), function (scenario) {
                 return scenario.state;
@@ -77,9 +77,9 @@ function renderCoverageReport() {
 
 
     var stateHistogram = {};
-    _.each(directory.states, function (state) {
+    _.each(directoryData.states, function (state) {
         var count = 0;
-        _.each(directory.items, function (journey) {
+        _.each(directoryData.items, function (journey) {
             if (_.some(journey.states, function (s) {
                     return s === state.name;
                 })) {
@@ -91,10 +91,10 @@ function renderCoverageReport() {
 
 
     var scenarioHistogram = {};
-    _.each(directory.scenarios, function (scenario) {
+    _.each(directoryData.scenarios, function (scenario) {
         var count = 0;
-        _.each(directory.items, function (journey) {
-            if (_.some(journey.scenarios, function (s) {
+        _.each(directoryData.items, function (journey) {
+            if (_.some(journey.directoryData, function (s) {
                     return s === scenario.name;
                 })) {
                 count++;

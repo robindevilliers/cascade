@@ -1,4 +1,4 @@
-var directory =
+var directoryData =
     {
         "scenarios": [
             {

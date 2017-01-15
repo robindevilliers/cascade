@@ -243,7 +243,7 @@ public class HtmlReporter implements Reporter {
     public void finish() {
         directoryJson.add("duration", System.currentTimeMillis() - startTime);
         directoryJson.add("items", directoryItemsJson.build());
-        writeVariableAsFile(dataDirectory, "directory", directoryJson.build());
+        writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
 
 //        //TODO - temporary
 //        try {

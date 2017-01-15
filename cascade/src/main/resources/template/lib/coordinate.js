@@ -1,18 +1,121 @@
 
-function findDimensions(state) {
-    var dimensions = {width: state.x + 1, height: state.y + 1};
+function CoordinateSystem(shape, stateTree, paths) {
+    this.cardinalDimensions = findDimensions(stateTree.getRootState());
+    this.shape = shape;
+    this.verticalChannelWidths = indexWidths(paths, this.cardinalDimensions);
+    this.horizontalChannelHeights = indexHeights(paths, this.cardinalDimensions);
 
-    _.each(state.next, function (s) {
-        var d = findDimensions(s);
-        if (dimensions.width < d.width) {
-            dimensions.width = d.width;
-        }
-        if (dimensions.height < d.height) {
-            dimensions.height = d.height;
-        }
-    });
-    return dimensions;
+    this.coordinateAtCardinalPoint = function (cardinalX, cardinalY) {
+        return new Coordinate(this.shape, this.verticalChannelWidths, this.horizontalChannelHeights, cardinalX, cardinalY);
+    };
+    this.getVerticalChannelWidths = function () {
+        return this.verticalChannelWidths;
+    };
+    this.getHorizontalChannelHeights = function () {
+        return this.horizontalChannelHeights;
+    };
+    this.getWidth = function () {
+        return _.sum(this.verticalChannelWidths) + this.cardinalDimensions.width * shape.width;
+    };
+    this.getHeight = function () {
+        return _.sum(this.horizontalChannelHeights) + this.cardinalDimensions.height * shape.height;
+    };
+    this.getShapeWidth = function(){
+        return this.shape.width;
+    };
+    this.getShapeHeight = function(){
+        return this.shape.height;
+    };
+
+    function findDimensions(state) {
+        var dimensions = {width: state.x + 1, height: state.y + 1};
+
+        _.each(state.next, function (s) {
+            var d = findDimensions(s);
+            if (dimensions.width < d.width) {
+                dimensions.width = d.width;
+            }
+            if (dimensions.height < d.height) {
+                dimensions.height = d.height;
+            }
+        });
+        return dimensions;
+    }
 }
+
+function Coordinate(shape, verticalChannelWidths, horizontalChannelHeights, cardinalX, cardinalY) {
+
+    this.shape = shape;
+    this.verticalChannelWidths = verticalChannelWidths;
+    this.horizontalChannelHeights = horizontalChannelHeights;
+
+    this.cardinalX = cardinalX;
+    this.cardinalY = cardinalY;
+    this.x = this.cardinalX * this.shape.width + sum(this.verticalChannelWidths, 0, this.cardinalX);
+    this.y = this.cardinalY * this.shape.height + sum(this.horizontalChannelHeights, 0, this.cardinalY);
+
+    this.resetCardinalX = function (cardinalX) {
+        this.cardinalX = cardinalX;
+        this.x = this.cardinalX * this.shape.width + sum(this.verticalChannelWidths, 0, this.cardinalX);
+        return this;
+    };
+    this.resetCardinalY = function (cardinalY) {
+        this.cardinalY = cardinalY;
+        this.y = this.cardinalY * this.shape.height + sum(this.horizontalChannelHeights, 0, this.cardinalY);
+        return this;
+    };
+
+    this.moveRightByOne = function () {
+        this.x++;
+        return this;
+    };
+    this.moveLeftByOne = function () {
+        this.x--;
+        return this;
+    };
+    this.moveUpByOne = function () {
+        this.y--;
+        return this;
+    };
+    this.moveDownByOne = function () {
+        this.y++;
+        return this;
+    };
+
+    this.moveRight = function (number) {
+        this.x += number;
+        return this;
+    };
+    this.moveLeft = function (number) {
+        this.x -= number;
+        return this;
+    };
+    this.moveDown = function (number) {
+        this.y += number;
+        return this;
+    };
+    this.moveUp = function (number) {
+        this.y -= number;
+        return this;
+    };
+
+    this.getX = function () {
+        return this.x;
+    };
+
+    this.getY = function () {
+        return this.y;
+    };
+
+    function sum(array, start, end) {
+        var s = 0;
+        for (var i = start; i < end; i++) {
+            s = s + array[i];
+        }
+        return s;
+    }
+}
+
 
 function indexWidths(paths, dimensions) {
     var widths = [];
@@ -281,107 +384,4 @@ function indexHeights(paths, dimensions) {
         });
     }
 
-}
-
-function CoordinateSystem(cardinalDimensions, shape, verticalChannelWidths, horizontalChannelHeights) {
-    this.cardinalDimensions = cardinalDimensions;
-    this.shape = shape;
-    this.verticalChannelWidths = verticalChannelWidths;
-    this.horizontalChannelHeights = horizontalChannelHeights;
-
-
-    this.coordinateAtCardinalPoint = function (cardinalX, cardinalY) {
-        return new Coordinate(this.shape, this.verticalChannelWidths, this.horizontalChannelHeights, cardinalX, cardinalY);
-    };
-    this.getVerticalChannelWidths = function () {
-        return this.verticalChannelWidths;
-    };
-    this.getHorizontalChannelHeights = function () {
-        return this.horizontalChannelHeights;
-    };
-    this.getWidth = function () {
-        return _.sum(this.verticalChannelWidths) + this.cardinalDimensions.width * shape.width;
-    };
-    this.getHeight = function () {
-        return _.sum(this.horizontalChannelHeights) + this.cardinalDimensions.height * shape.height;
-    };
-    this.getShapeWidth = function(){
-        return this.shape.width;
-    };
-    this.getShapeHeight = function(){
-        return this.shape.height;
-    };
-}
-
-function Coordinate(shape, verticalChannelWidths, horizontalChannelHeights, cardinalX, cardinalY) {
-
-    this.shape = shape;
-    this.verticalChannelWidths = verticalChannelWidths;
-    this.horizontalChannelHeights = horizontalChannelHeights;
-
-    this.cardinalX = cardinalX;
-    this.cardinalY = cardinalY;
-    this.x = this.cardinalX * this.shape.width + sum(this.verticalChannelWidths, 0, this.cardinalX);
-    this.y = this.cardinalY * this.shape.height + sum(this.horizontalChannelHeights, 0, this.cardinalY);
-
-    this.resetCardinalX = function (cardinalX) {
-        this.cardinalX = cardinalX;
-        this.x = this.cardinalX * this.shape.width + sum(this.verticalChannelWidths, 0, this.cardinalX);
-        return this;
-    };
-    this.resetCardinalY = function (cardinalY) {
-        this.cardinalY = cardinalY;
-        this.y = this.cardinalY * this.shape.height + sum(this.horizontalChannelHeights, 0, this.cardinalY);
-        return this;
-    };
-
-    this.moveRightByOne = function () {
-        this.x++;
-        return this;
-    };
-    this.moveLeftByOne = function () {
-        this.x--;
-        return this;
-    };
-    this.moveUpByOne = function () {
-        this.y--;
-        return this;
-    };
-    this.moveDownByOne = function () {
-        this.y++;
-        return this;
-    };
-
-    this.moveRight = function (number) {
-        this.x += number;
-        return this;
-    };
-    this.moveLeft = function (number) {
-        this.x -= number;
-        return this;
-    };
-    this.moveDown = function (number) {
-        this.y += number;
-        return this;
-    };
-    this.moveUp = function (number) {
-        this.y -= number;
-        return this;
-    };
-
-    this.getX = function () {
-        return this.x;
-    };
-
-    this.getY = function () {
-        return this.y;
-    };
-
-    function sum(array, start, end) {
-        var s = 0;
-        for (var i = start; i < end; i++) {
-            s = s + array[i];
-        }
-        return s;
-    }
 }
