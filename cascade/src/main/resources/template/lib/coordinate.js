@@ -203,7 +203,6 @@ function indexWidths(paths, dimensions) {
     return widths;
 }
 
-//TODO - problem here too  - inline horizontals can go through same path as inline verts
 function indexHeights(paths, dimensions) {
     var heights = [];
 
@@ -219,7 +218,6 @@ function indexHeights(paths, dimensions) {
 
             } else if (leg.isType(LegTypeEnum.ADJACENT_VERTICAL)) {
                 if (partial.length > 0) {
-
                     groups[y].push(partial);
                     partial = [];
                 }
@@ -229,7 +227,6 @@ function indexHeights(paths, dimensions) {
             }
         });
         if (partial.length > 0) {
-
             groups[y].push(partial);
         }
     });
@@ -333,8 +330,8 @@ function indexHeights(paths, dimensions) {
                 }
 
                 if (leg.isType(LegTypeEnum.INLINE_HORIZONTAL)) {
-                    minX = Math.min(minX, leg.sx * 2);
-                    maxX = Math.max(maxX, leg.tx * 2 + 1);
+                    minX = Math.min(minX, Math.min(leg.sx, leg.tx) * 2);
+                    maxX = Math.max(maxX, Math.max(leg.sx, leg.tx) * 2 + 1);
                 }
             });
 

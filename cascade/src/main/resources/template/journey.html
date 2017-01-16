@@ -90,7 +90,7 @@
         </text>
         <%}%>
         <%if (plot.type === 'path') { %>
-        <path d="<%=plot.getSpec().toString()%>" stroke="black" fill="none" style=" marker-start: url(#markerCircle); marker-end: url(#markerArrow); "/>
+        <path d="<%=plot.getSpec().toString()%>" stroke="black" fill="none" style=" marker-start: url(#markerCircle); marker-end: url(#markerArrow); " stroke-dasharray="5, 5"/>
         <%}%>
         <%});%>
 
