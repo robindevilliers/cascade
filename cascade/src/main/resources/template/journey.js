@@ -43,7 +43,7 @@ function renderFilterPanel() {
 
 
 function renderAnalysisPanel() {
-    var stateTree = new StateTree(directory).layoutHierarchically()//.squash();
+    var stateTree = new StateTree(directory).layoutHierarchically().squash();
 
     var paths = calculatePaths(stateTree.getRootState(), stateTree, directory);
 

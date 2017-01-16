@@ -221,7 +221,8 @@ function Plot(coordinateSystem) {
                                     .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
                             } else {
                                 plot.getSpec()
-                                    .drawHorizontalTo(coordinate.moveRightByOne());
+                                    .drawHorizontalTo(coordinate.moveRightByOne().moveRightByOne())
+                                    .drawArc(coordinate.moveLeftByOne().moveDownByOne(), 0);
                             }
 
                         } else if (leg.isType(LegTypeEnum.INLINE_BOTTOM_LEFT)) {
@@ -252,7 +253,8 @@ function Plot(coordinateSystem) {
                                     .drawVerticalTo(coordinate.resetCardinalY(leg.y + 1).moveUpByOne());
                             } else {
                                 plot.getSpec()
-                                    .drawHorizontalTo(coordinate.moveLeftByOne());
+                                    .drawHorizontalTo(coordinate.moveLeftByOne().moveLeftByOne())
+                                    .drawArc(coordinate.moveRightByOne().moveDownByOne(), 1);
                             }
                         }
 
