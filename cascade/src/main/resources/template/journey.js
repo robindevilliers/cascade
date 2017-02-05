@@ -7,7 +7,7 @@ $('#journey-id').html('- ' + journey.journeyId);
 renderTabs();
 renderSynopsisPanel();
 renderFilterPanel();
-renderAnalysisPanel();
+renderAnalysisPanel(journey);
 
 function findJourney() {
     var queryString = window.location.search;
@@ -42,14 +42,18 @@ function renderFilterPanel() {
 }
 
 
-function renderAnalysisPanel() {
+function renderAnalysisPanel(journey) {
     var stateTree = new StateTree(directory).layoutHierarchically().squash();
 
-    var paths = calculatePaths(stateTree.getRootState(), stateTree, directory);
+    var expandedJourneyScenarios = directory.expandJourneyScenarios(journey.scenarios);
+
+    var paths = calculatePaths(stateTree.getRootState(), stateTree, directory, expandedJourneyScenarios);
+
+
 
     var coordinateSystem = new CoordinateSystem({width: 9, height: 3}, stateTree, paths);
-    var plot = new Plot(coordinateSystem);
-    plot.plotStates(stateTree.getRootState());
+    var plot = new Plot(coordinateSystem, directory);
+    plot.plotStates(stateTree.getRootState(), expandedJourneyScenarios);
     plot.plotPaths(paths);
 
     var journeyAnalysisTemplate = _.template($("#journey-analysis-template").text());

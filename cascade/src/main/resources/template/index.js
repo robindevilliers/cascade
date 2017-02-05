@@ -63,7 +63,7 @@ function renderJourneyLists() {
 
 function renderCoverageReport() {
     var coverageTemplate = _.template($("#coverage-template").text());
-    console.log('coverage report');
+
 
     _.each(directoryData.items, function (journey) {
         journey.states = _.uniq(_.flatMap(journey.scenarios, function (journeyScenario) {

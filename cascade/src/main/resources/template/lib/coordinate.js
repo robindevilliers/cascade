@@ -111,21 +111,20 @@ function Coordinate(shape, verticalChannelWidths, horizontalChannelHeights, card
     }
 }
 
-//TODO - these calculations don't work  - some overlap in vertical channels occurs.
 function indexWidths(paths, dimensions) {
     var widths = [];
 
     var groups = [];
-    _.times(dimensions.width - 1, function () {
+    _.times(dimensions.width, function () {
         groups.push([]);
     });
 
     _.each(paths, function (path) {
-        _.each(path, function (leg, i) {
+        _.each(path.getLegs(), function (leg, i) {
             if (leg.isType(LegTypeEnum.ADJACENT_VERTICAL)) {
 
-                var previousLeg = path[i - 1];
-                var postLeg = path[i + 1];
+                var previousLeg = path.get(i - 1);
+                var postLeg = path.get(i + 1);
                 if (previousLeg.isType(LegTypeEnum.INLINE_TOP_RIGHT) && postLeg.isType(LegTypeEnum.INLINE_BOTTOM_RIGHT)) {
                     leg.score = 4;
                 } else if (previousLeg.isType(LegTypeEnum.INLINE_TOP_RIGHT) && postLeg.isType(LegTypeEnum.INLINE_BOTTOM_LEFT)) {
@@ -151,29 +150,29 @@ function indexWidths(paths, dimensions) {
             var placed = false;
             _.each(channel, function (vertical, i) {
                 var obstructed = false;
-                if (piece.ty > piece.sy) {
+                if (piece.ty > piece.sy) { // going down.
 
-                    _.times(piece.ty - piece.sy + 1, function (i) {
+                    _.times(piece.ty - piece.sy + 1 + 1, function (i) {
                         if (vertical[piece.ty - i]) {
                             obstructed = true;
                         }
                     });
                     if (!obstructed) {
-                        _.times(piece.ty - piece.sy + 1, function (i) {
+                        _.times(piece.ty - piece.sy + 1 + 1, function (i) {
                             vertical[piece.ty - i] = 'x';
                         });
                         placed = true;
                         piece.gridXIndex = i;
                         return false;
                     }
-                } else {
-                    _.times(piece.sy - piece.ty + 1, function (i) {
+                } else { // going up.
+                    _.times(piece.sy - piece.ty + 1 + 1, function (i) {
                         if (vertical[piece.sy - i]) {
                             obstructed = true;
                         }
                     });
                     if (!obstructed) {
-                        _.times(piece.sy - piece.ty + 1, function (i) {
+                        _.times(piece.sy - piece.ty + 1 + 1, function (i) {
                             vertical[piece.sy - i] = 'x';
                         });
                         placed = true;
@@ -184,12 +183,12 @@ function indexWidths(paths, dimensions) {
             });
             if (!placed) {
                 var vertical = new Array(dimensions.height);
-                if (piece.ty > piece.sy) {
-                    _.times(piece.ty - piece.sy + 1, function (i) {
+                if (piece.ty > piece.sy) { // going down.
+                    _.times(piece.ty - piece.sy + 1 + 1, function (i) {
                         vertical[piece.ty - i] = 'x';
                     });
                 } else {
-                    _.times(piece.sy - piece.ty + 1, function (i) {
+                    _.times(piece.sy - piece.ty + 1 + 1, function (i) {
                         vertical[piece.sy - i] = 'x';
                     });
                 }
@@ -213,7 +212,7 @@ function indexHeights(paths, dimensions) {
 
     _.each(paths, function (path) {
         var partial = [], y = 0;
-        _.each(path, function (leg) {
+        _.each(path.getLegs(), function (leg) {
             if (leg.isType(LegTypeEnum.INLINE_VERTICAL)) {
 
             } else if (leg.isType(LegTypeEnum.ADJACENT_VERTICAL)) {

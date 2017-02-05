@@ -1,5 +1,5 @@
 
-function calculatePaths(state, stateTree, directory) {
+function calculatePaths(state, stateTree, directory, journeyScenarios) {
     var paths = [];
     if (state.state) {
 
@@ -7,62 +7,72 @@ function calculatePaths(state, stateTree, directory) {
             return findStateByName(stateTree.getRootState(), name);
         });
         var connections = _.map(followingStates, function (s) {
-            return {sx: state.x, sy: state.y, tx: s.x, ty: s.y};
+            var realised = false;
+            for (var i = 0; i < journeyScenarios.length - 1; i++){
+                if (journeyScenarios[i].state === state.state && journeyScenarios[i + 1].state === s.state){
+                    realised = true;
+                    break;
+                }
+            }
+
+            return {sx: state.x, sy: state.y, tx: s.x, ty: s.y, realised: realised};
         });
 
+
+
         _.each(connections, function (connection) {
-            var path = [];
+            var path = new Path(connection.realised);
             if (connection.sx === connection.tx) { //inline connection
 
                 if (connection.ty - connection.sy === 1) { //target state is immediately below
-                    path.push(new InlineVerticalLeg(connection.sx, connection.sy));
+                    path.addLeg(new InlineVerticalLeg(connection.sx, connection.sy));
                 } else {
-                    path.push(new InlineTopRightLeg(connection.sx, connection.sy));
+                    path.addLeg(new InlineTopRightLeg(connection.sx, connection.sy));
 
                     if (connection.ty > connection.sy) {
-                        path.push(new AdjacentVerticalLeg(connection.sx, connection.sy + 1, connection.ty - 1, DirectionEnum.DOWN));
+                        path.addLeg(new AdjacentVerticalLeg(connection.sx, connection.sy + 1, connection.ty - 1, DirectionEnum.DOWN));
                     } else {
-                        path.push(new AdjacentVerticalLeg(connection.sx, connection.sy, connection.ty, DirectionEnum.UP));
+                        path.addLeg(new AdjacentVerticalLeg(connection.sx, connection.sy, connection.ty, DirectionEnum.UP));
                     }
-                    path.push(new InlineBottomRightLeg(connection.tx, connection.ty - 1));
+                    path.addLeg(new InlineBottomRightLeg(connection.tx, connection.ty - 1));
                 }
 
             } else if (connection.sx < connection.tx) { //connection goes to the right
 
-                path.push(new InlineTopRightLeg(connection.sx, connection.sy));
+                path.addLeg(new InlineTopRightLeg(connection.sx, connection.sy));
 
                 if (connection.ty > connection.sy + 1) { //going down by more than one level.
-                    path.push(new AdjacentVerticalLeg(connection.sx, connection.sy + 1, connection.ty - 1, DirectionEnum.DOWN));
+                    path.addLeg(new AdjacentVerticalLeg(connection.sx, connection.sy + 1, connection.ty - 1, DirectionEnum.DOWN));
                 } else if (connection.ty <= connection.sy) { //going up
-                    path.push(new AdjacentVerticalLeg(connection.sx, connection.sy, connection.ty, DirectionEnum.UP));
+                    path.addLeg(new AdjacentVerticalLeg(connection.sx, connection.sy, connection.ty, DirectionEnum.UP));
                 }
 
                 if (connection.tx - connection.sx > 1) {
-                    path.push(new InlineHorizontalLeg(connection.sx + 1, connection.tx - 1, connection.ty - 1, DirectionEnum.RIGHT));
+                    path.addLeg(new InlineHorizontalLeg(connection.sx + 1, connection.tx - 1, connection.ty - 1, DirectionEnum.RIGHT));
                 }
 
-                path.push(new InlineBottomLeftLeg(connection.tx, connection.ty - 1));
+                path.addLeg(new InlineBottomLeftLeg(connection.tx, connection.ty - 1));
 
             } else if (connection.sx > connection.tx) { //connection goes to the left
 
-                path.push(new InlineTopLeftLeg(connection.sx, connection.sy));
+                path.addLeg(new InlineTopLeftLeg(connection.sx, connection.sy));
 
                 if (connection.ty > connection.sy + 1) { //going down by more than one level.
-                    path.push(new AdjacentVerticalLeg(connection.sx - 1, connection.sy + 1, connection.ty - 1, DirectionEnum.DOWN));
+                    path.addLeg(new AdjacentVerticalLeg(connection.sx - 1, connection.sy + 1, connection.ty - 1, DirectionEnum.DOWN));
                 } else if (connection.ty <= connection.sy) { //going up
-                    path.push(new AdjacentVerticalLeg(connection.sx - 1, connection.sy, connection.ty, DirectionEnum.UP));
+                    path.addLeg(new AdjacentVerticalLeg(connection.sx - 1, connection.sy, connection.ty, DirectionEnum.UP));
                 }
 
                 if (connection.sx - connection.tx > 1) {
-                    path.push(new InlineHorizontalLeg(connection.sx - 1, connection.tx + 1, connection.ty - 1, DirectionEnum.LEFT));
+                    path.addLeg(new InlineHorizontalLeg(connection.sx - 1, connection.tx + 1, connection.ty - 1, DirectionEnum.LEFT));
                 }
-                path.push(new InlineBottomRightLeg(connection.tx, connection.ty - 1));
+                path.addLeg(new InlineBottomRightLeg(connection.tx, connection.ty - 1));
             }
             paths.push(path);
         });
     }
     _.each(state.next, function (s) {
-        paths = _.union(paths, calculatePaths(s, stateTree, directory));
+        paths = _.union(paths, calculatePaths(s, stateTree, directory, journeyScenarios));
     });
 
     return paths;
@@ -80,5 +90,29 @@ function calculatePaths(state, stateTree, directory) {
             }
             return undefined;
         }
+    }
+
+    function Path(realised) {
+        var legs = [];
+
+        this.addLeg = function(leg){
+            legs.push(leg);
+        };
+
+        this.get = function(i){
+            return legs[i];
+        };
+
+        this.size = function(){
+            return legs.length;
+        };
+
+        this.getLegs = function(){
+            return legs;
+        };
+
+        this.isRealised = function(){
+            return realised;
+        };
     }
 }

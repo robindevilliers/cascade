@@ -93,6 +93,11 @@ function StateTree(directory) {
             return findAvailableCoordinates(grid, gridHeight, gridWidth, state, y, x + 1);
 
             function isSpaceAvailable(grid, height, width, y, x, gridHeight, gridWidth) {
+                //don't ever let anything position in the zero y row;
+                if (y == 0){
+                    return false;
+                }
+
                 for (var row = 0; row < height; row++) {
                     for (var column = 0; column < width; column++) {
                         if (y < 0 || x < 0 || y + row >= gridHeight || x + column >= gridWidth) {

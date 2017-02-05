@@ -2,3 +2,7 @@
 .panel {
     margin: 15px;
 }
+
+.svg-panel {
+    overflow-x: scroll;
+}

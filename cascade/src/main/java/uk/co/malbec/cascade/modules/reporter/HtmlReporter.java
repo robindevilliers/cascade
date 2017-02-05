@@ -28,6 +28,7 @@ public class HtmlReporter implements Reporter {
     private JsonBuilderFactory builderFactory = Json.createBuilderFactory(emptyMap());
     private JsonWriterFactory writerFactory = Json.createWriterFactory(map(PRETTY_PRINTING, true));
 
+    private File reportsDirectory;
     private File dataDirectory;
 
     private JsonObjectBuilder directoryItemJson;
@@ -59,7 +60,7 @@ public class HtmlReporter implements Reporter {
             }
         }
 
-        File reportsDirectory = new File(testDirectory, "cascade");
+        reportsDirectory = new File(testDirectory, "cascade");
         if (reportsDirectory.exists()) {
 
             if (!deleteDir(reportsDirectory)) {
@@ -88,6 +89,25 @@ public class HtmlReporter implements Reporter {
         copyFileFromTemplate("journey.js", reportsDirectory);
         copyFileFromTemplate("journey.html", reportsDirectory);
         copyFileFromTemplate("style.css", reportsDirectory);
+
+        new File(reportsDirectory, "fonts").mkdir();
+
+        copyFileFromTemplate("fonts/glyphicons-halflings-regular.eot", reportsDirectory);
+        copyFileFromTemplate("fonts/glyphicons-halflings-regular.svg", reportsDirectory);
+        copyFileFromTemplate("fonts/glyphicons-halflings-regular.ttf", reportsDirectory);
+        copyFileFromTemplate("fonts/glyphicons-halflings-regular.woff", reportsDirectory);
+        copyFileFromTemplate("fonts/glyphicons-halflings-regular.woff2", reportsDirectory);
+
+        new File(reportsDirectory, "lib").mkdir();
+
+        copyFileFromTemplate("lib/coordinate.js", reportsDirectory);
+        copyFileFromTemplate("lib/directory.js", reportsDirectory);
+        copyFileFromTemplate("lib/enum.js", reportsDirectory);
+        copyFileFromTemplate("lib/leg.js", reportsDirectory);
+        copyFileFromTemplate("lib/path.js", reportsDirectory);
+        copyFileFromTemplate("lib/plot.js", reportsDirectory);
+        copyFileFromTemplate("lib/state.js", reportsDirectory);
+
     }
 
     private void writeStateMachineToJson(List<Scenario> scenarios) {
@@ -100,6 +120,8 @@ public class HtmlReporter implements Reporter {
             JsonObjectBuilder scenarioJson = builderFactory.createObjectBuilder();
             scenarioJson.add("name", scenario.getName());
             scenarioJson.add("state", scenario.getStateCls().getName());
+            scenarioJson.add("terminator", scenario.isTerminator());
+            scenarioJson.add("reEntrantTerminator", scenario.isReEntrantTerminator());
             scenariosJson.add(scenarioJson);
             if (!states.containsKey(scenario.getStateCls())) {
                 states.put(scenario.getStateCls(), scenario.getSteps());
@@ -180,7 +202,7 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void stepWhenInvocationException(Object step, Method whenMethod, InvocationTargetException e) {
-        handleInvocationException(e);
+        handleInvocationException(step, e);
     }
 
     @Override
@@ -205,7 +227,7 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void stepThenInvocationException(Object step, Method thenMethod, InvocationTargetException e) {
-        handleInvocationException(e);
+        handleInvocationException(step, e);
     }
 
     @Override
@@ -230,7 +252,7 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void handleUnknownException(RuntimeException e, Journey journey) {
-        handleException(e);
+        handleException(null, e);
     }
 
     @Override
@@ -245,31 +267,35 @@ public class HtmlReporter implements Reporter {
         directoryJson.add("items", directoryItemsJson.build());
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
 
-//        //TODO - temporary
-//        try {
-//            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        //TODO - temporary
+        try {
+            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void handleInvocationException(InvocationTargetException e) {
+    private void handleInvocationException(Object step, InvocationTargetException e) {
         if (e.getTargetException() instanceof AssertionFailedError) {
             AssertionFailedError assertionFailedError = (AssertionFailedError) e.getTargetException();
             testResult = TestResult.FAILED;
             directoryItemJson.add("assertionMessage", assertionFailedError.getMessage());
             directoryItemJson.add("stackTrace", extractStackTrace(assertionFailedError));
+            directoryItemJson.add("failingStep", step.getClass().getName());
         } else {
-            handleException(e.getCause());
+            handleException(step, e.getCause());
         }
     }
 
-    private void handleException(Throwable e) {
+    private void handleException(Object step, Throwable e) {
         testResult = TestResult.ERROR;
 
         String message = e.getMessage() != null ? e.getMessage() : "null";
         directoryItemJson.add("errorMessage", message);
         directoryItemJson.add("stackTrace", extractStackTrace(e));
+        if (step != null) {
+            directoryItemJson.add("failingStep", step.getClass().getName());
+        }
     }
 
     private String extractStackTrace(Throwable f) {

@@ -1,4 +1,4 @@
-function Plot(coordinateSystem) {
+function Plot(coordinateSystem, directory) {
     var plots = [];
 
     this.getPlots = function () {
@@ -8,22 +8,54 @@ function Plot(coordinateSystem) {
     this.plotStates = plotStates;
     this.plotPaths = plotPaths;
 
-    function plotStates(state) {
+    function plotStates(state, journeyScenarios) {
+
         if (state.state) {
-            var coordinate = coordinateSystem.coordinateAtCardinalPoint(state.x, state.y);
-            plots.push({
-                type: 'state',
-                name: simpleName(state.state),
-                gridX: coordinate.getX(),
-                gridY: coordinate.getY()
+
+            var indexes = [];
+            _.each(journeyScenarios, function(scenario, i){
+                if (scenario.state === state.state){
+                    indexes.push(i);
+                }
             });
+
+            if (indexes.length > 6) {
+                indexes.splice(6, indexes.length);
+            }
+
+            var coordinate = coordinateSystem.coordinateAtCardinalPoint(state.x, state.y);
+            if (_.isEmpty(indexes)) {
+                plots.push({
+                    type: 'state',
+                    name: simpleName(state.state),
+                    gridX: coordinate.getX(),
+                    gridY: coordinate.getY()
+                });
+            } else {
+
+                    var isError = journey.failingStep === journeyScenarios[indexes[0]].name;
+
+                    plots.push({
+                        type: 'scenario',
+                        id: state.state,
+                        name: simpleName(state.state),
+                        scenario: simpleName(journeyScenarios[indexes[0]].name),
+                        gridX: coordinate.getX(),
+                        gridY: coordinate.getY(),
+                        isStartingState: directory.isStartingState(state.state),
+                        isTerminatorScenario: journeyScenarios[indexes[0]].terminator,
+                        isReEntrantTerminatorScenario: journeyScenarios[indexes[0]].reEntrantTerminator,
+                        indexes: indexes,
+                        isError: isError
+                    });
+            }
         }
         _.each(state.next, function (s) {
-            plotStates(s);
+            plotStates(s, journeyScenarios);
         });
 
         function simpleName(string) {
-            var i = string.lastIndexOf(".");
+            var i = Math.max(string.lastIndexOf("."), string.lastIndexOf('$'));
             if (i >= 0) {
                 return string.substring(i + 1);
             } else {
@@ -35,20 +67,20 @@ function Plot(coordinateSystem) {
     function plotPaths(paths) {
 
         var topPartials = _.map(paths, function (p) {
-            return p[0];
+            return p.get(0);
         });
         var bottomPartials = _.map(paths, function (p) {
-            return p[p.length - 1];
+            return p.get(p.size() - 1);
         });
 
         _.each(paths, function (path) {
             var coordinate;
-            var plot = new PathPlot();
+            var plot = new PathPlot(path.isRealised());
             var previousLeg = null;
 
             var totalSharing, offset;
 
-            _.each(path, function (leg) {
+            _.each(path.getLegs(), function (leg) {
                 switch (leg.getType()) {
                     case LegTypeEnum.INLINE_VERTICAL:
                         coordinate = coordinateSystem
@@ -290,13 +322,18 @@ function Plot(coordinateSystem) {
 }
 
 
-function PathPlot() {
+function PathPlot(realised) {
     this.type = 'path';
+
     this.spec = new PathSpec();
 
     this.getSpec = function () {
         return this.spec;
     }
+
+    this.isRealised = function(){
+        return realised;
+    };
 }
 
 function PathSpec() {
@@ -309,7 +346,7 @@ function PathSpec() {
 
     this.moveTo = function (coordinate) {
         this.pointer = {x: coordinate.getX(), y: coordinate.getY()};
-        this.append(' M ' + (coordinate.getX() * 20 - 10) + ' ' + (coordinate.getY() * 20 + 10));
+        this.append(' M ' + (coordinate.getX() * 20 - 10 + 5) + ' ' + (coordinate.getY() * 20 + 10 + 5));
         return this;
     };
 
@@ -318,7 +355,7 @@ function PathSpec() {
             return this;
         }
         this.pointer = {x: coordinate.getX(), y: coordinate.getY()};
-        this.append(' A 20 20 0 0 ' + sweep + ' ' + (coordinate.getX() * 20 - 10) + ' ' + (coordinate.getY() * 20 + 10));
+        this.append(' A 20 20 0 0 ' + sweep + ' ' + (coordinate.getX() * 20 - 10 + 5) + ' ' + (coordinate.getY() * 20 + 10 + 5));
         return this;
     };
 
@@ -327,7 +364,7 @@ function PathSpec() {
             return this;
         }
         this.pointer.y = coordinate.getY();
-        this.append(' V ' + (coordinate.getY() * 20 + 10));
+        this.append(' V ' + (coordinate.getY() * 20 + 10 + 5));
         return this;
     };
 
@@ -336,7 +373,7 @@ function PathSpec() {
             return this;
         }
         this.pointer.x = coordinate.getX();
-        this.append(' H ' + (coordinate.getX() * 20 - 10));
+        this.append(' H ' + (coordinate.getX() * 20 - 10 + 5));
         return this;
     };
 
