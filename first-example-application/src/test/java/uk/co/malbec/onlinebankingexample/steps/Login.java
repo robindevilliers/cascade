@@ -7,6 +7,7 @@ import uk.co.malbec.cascade.annotations.Terminator;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step(OpenLandingPage.class)
 public interface Login {
     public class SuccessfulLogin implements Login {

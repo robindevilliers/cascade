@@ -2,10 +2,7 @@ package uk.co.malbec.onlinebankingexample.steps;
 
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.utils.Reference;
 import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
-
-import java.util.Map;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 

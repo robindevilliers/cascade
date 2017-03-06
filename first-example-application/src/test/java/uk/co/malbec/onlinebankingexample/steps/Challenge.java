@@ -7,6 +7,7 @@ import uk.co.malbec.cascade.annotations.Terminator;
 import static java.lang.Integer.parseInt;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step(Login.class)
 public interface Challenge {
     public class PassChallenge implements Challenge {

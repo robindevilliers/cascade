@@ -9,6 +9,7 @@ import java.util.List;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step(OpenPaymentsPage.class)
 @ReEntrantTerminator(1)
 public class CancelStandingOrder {
