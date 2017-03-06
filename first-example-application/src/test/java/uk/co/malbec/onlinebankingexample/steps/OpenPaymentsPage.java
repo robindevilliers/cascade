@@ -17,6 +17,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step({Portfolio.class, CancelStandingOrder.class})
 public class OpenPaymentsPage {
 

@@ -8,6 +8,7 @@ import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step(Portfolio.class)
 public class OpenPersonalPage {
 

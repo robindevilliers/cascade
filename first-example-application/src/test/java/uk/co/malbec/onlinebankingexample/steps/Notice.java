@@ -9,6 +9,7 @@ import java.util.List;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step(Challenge.class)
 public interface Notice {
 

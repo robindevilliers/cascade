@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.onlinebankingexample.Utilities.assertElementPresent;
 import static uk.co.malbec.onlinebankingexample.Utilities.waitForPage;
 
+@SuppressWarnings("all")
 @Step
 public class OpenLandingPage {
 

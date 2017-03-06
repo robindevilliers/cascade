@@ -8,10 +8,7 @@ import uk.co.malbec.cascade.conditions.Predicate;
 import uk.co.malbec.onlinebankingexample.domain.Account;
 import uk.co.malbec.onlinebankingexample.domain.Transaction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
@@ -19,6 +16,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.or;
 import static uk.co.malbec.cascade.conditions.Predicates.withStep;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
+@SuppressWarnings("all")
 @Step(Portfolio.class)
 @ReEntrantTerminator(1)
 public interface OpenAccountPage {

@@ -7,13 +7,12 @@ import uk.co.malbec.onlinebankingexample.AccountsStateRendering;
 import uk.co.malbec.onlinebankingexample.domain.Account;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.assertElementIsNotPresent;
 import static uk.co.malbec.onlinebankingexample.Utilities.assertTextEquals;
 
+@SuppressWarnings("all")
 @Step({Challenge.class, Notice.class, BackToPorfolio.class})
 public interface Portfolio {
 
