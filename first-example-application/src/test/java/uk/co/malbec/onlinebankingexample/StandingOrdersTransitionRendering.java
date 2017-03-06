@@ -78,9 +78,9 @@ public class StandingOrdersTransitionRendering implements TransitionRenderingStr
 
             for (Moved movedElement : moved) {
                 html.append("<li>").append("Index ")
-                        .append(movedElement.getLhs())
-                        .append(" has moved to ")
                         .append(movedElement.getRhs())
+                        .append(" has moved to ")
+                        .append(movedElement.getLhs())
                         .append("</li>");
             }
 

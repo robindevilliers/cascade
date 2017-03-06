@@ -4,6 +4,7 @@ package uk.co.malbec.onlinebankingexample.steps;
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.onlinebankingexample.AccountsStateRendering;
+import uk.co.malbec.onlinebankingexample.domain.Account;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,16 +23,11 @@ public interface Portfolio {
         private WebDriver webDriver;
 
         @Supplies(stateRenderer = AccountsStateRendering.class)
-        private List<Map> accounts = new ArrayList<>();
+        private List<Account> accounts = new ArrayList<>();
 
         @Given
         public void given() {
-            Map<String, Object> currentAccount = new HashMap<String, Object>();
-            currentAccount.put("name", "Premium Current Account");
-            currentAccount.put("type", "Current");
-            currentAccount.put("number", "1001");
-            currentAccount.put("balance", 40000);
-            accounts.add(currentAccount);
+            accounts.add(new Account("Premium Current Account", "Current", "1001", 40000));
         }
 
         @Then
@@ -47,23 +43,12 @@ public interface Portfolio {
         private WebDriver webDriver;
 
         @Supplies(stateRenderer = AccountsStateRendering.class)
-        private List<Map> accounts = new ArrayList<Map>();
+        private List<Account> accounts = new ArrayList<>();
 
         @Given
         public void given() {
-            Map<String, Object> currentAccount = new HashMap<String, Object>();
-            currentAccount.put("name", "Premium Current Account");
-            currentAccount.put("type", "Current");
-            currentAccount.put("number", "1001");
-            currentAccount.put("balance", 40000);
-            accounts.add(currentAccount);
-
-            Map<String, Object> saverAccount = new HashMap<String, Object>();
-            saverAccount.put("name", "Easy Saver Account");
-            saverAccount.put("type", "Saver");
-            saverAccount.put("number", "1002");
-            saverAccount.put("balance", 10000);
-            accounts.add(saverAccount);
+            accounts.add(new Account("Premium Current Account", "Current", "1001", 40000));
+            accounts.add(new Account("Easy Saver Account", "Saver", "1002", 10000));
         }
 
         @Then
@@ -81,30 +66,13 @@ public interface Portfolio {
         private WebDriver webDriver;
 
         @Supplies(stateRenderer = AccountsStateRendering.class)
-        private List<Map> accounts = new ArrayList<>();
+        private List<Account> accounts = new ArrayList<>();
 
         @Given
         public void given() {
-            Map<String, Object> currentAccount = new HashMap<String, Object>();
-            currentAccount.put("name", "Premium Current Account");
-            currentAccount.put("type", "Current");
-            currentAccount.put("number", "1001");
-            currentAccount.put("balance", 40000);
-            accounts.add(currentAccount);
-
-            Map<String, Object> saverAccount = new HashMap<String, Object>();
-            saverAccount.put("name", "Easy Saver Account");
-            saverAccount.put("type", "Saver");
-            saverAccount.put("number", "1002");
-            saverAccount.put("balance", 10000);
-            accounts.add(saverAccount);
-
-            Map<String, Object> mortgageAccount = new HashMap<String, Object>();
-            mortgageAccount.put("name", "Fancy Mortgage");
-            mortgageAccount.put("type", "Mortgage");
-            mortgageAccount.put("number", "1004");
-            mortgageAccount.put("balance", -15498700);
-            accounts.add(mortgageAccount);
+            accounts.add(new Account("Premium Current Account", "Current", "1001", 40000));
+            accounts.add(new Account("Easy Saver Account", "Saver", "1002", 10000));
+            accounts.add(new Account("Fancy Mortgage", "Mortgage", "1004", -15498700));
         }
 
         @Then
@@ -124,16 +92,11 @@ public interface Portfolio {
         private WebDriver webDriver;
 
         @Supplies(stateRenderer = AccountsStateRendering.class)
-        private List<Map> accounts = new ArrayList<>();
+        private List<Account> accounts = new ArrayList<>();
 
         @Given
         public void given() {
-            Map<String, Object> mortgageAccount = new HashMap<String, Object>();
-            mortgageAccount.put("name", "Fancy Mortgage");
-            mortgageAccount.put("type", "Mortgage");
-            mortgageAccount.put("number", "1004");
-            mortgageAccount.put("balance", -15498700);
-            accounts.add(mortgageAccount);
+            accounts.add(new Account("Fancy Mortgage", "Mortgage", "1004", -15498700));
         }
 
         @Then

@@ -5,6 +5,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.onlinebankingexample.domain.Account;
+import uk.co.malbec.onlinebankingexample.domain.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,58 +35,31 @@ public interface OpenAccountPage {
         private WebDriver webDriver;
 
         @Demands
-        private List<Map> accounts;
+        private List<Account> accounts;
 
-        private Map<String, Object> currentAccount;
+        private Account currentAccount;
 
         @Given
         public void given() {
 
-            for (Map account : accounts) {
-                if ("Premium Current Account".equals(account.get("name"))) {
+            for (Account account : accounts) {
+                if ("Premium Current Account".equals(account.getName())) {
                     currentAccount = account;
                     break;
                 }
             }
 
-            currentAccount.put("transactions", new ArrayList<Map>() {{
-                add(new HashMap<String, String>() {{
-                    put("date", "30 Aug 2014");
-                    put("description", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor");
-                    put("type", "DEBIT");
-                    put("amount", "4543");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "27 Aug 2014");
-                    put("description", "In enim justo, rhoncus ut,");
-                    put("type", "CREDIT");
-                    put("amount", "3432");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "14 Aug 2014");
-                    put("description", "Curabitur ullamcorper ultricies nisi.");
-                    put("type", "DEBIT");
-                    put("amount", "221");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "12 Aug 2014");
-                    put("description", "Sed consequat, leo eget bibend");
-                    put("type", "DEBIT");
-                    put("amount", "4342");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "10 Aug 2014");
-                    put("description", "Duis leo.");
-                    put("type", "CREDIT");
-                    put("amount", "5432");
-                }});
-            }});
+            currentAccount.getTransactions().add(new Transaction("30 Aug 2014", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor", "DEBIT", "4543"));
+            currentAccount.getTransactions().add(new Transaction("27 Aug 2014", "In enim justo, rhoncus ut,", "CREDIT", "3432"));
+            currentAccount.getTransactions().add(new Transaction("14 Aug 2014", "Curabitur ullamcorper ultricies nisi.", "DEBIT", "221"));
+            currentAccount.getTransactions().add(new Transaction("12 Aug 2014", "Sed consequat, leo eget bibend", "DEBIT", "4342"));
+            currentAccount.getTransactions().add(new Transaction("10 Aug 2014", "Duis leo.", "CREDIT", "5432"));
 
         }
 
         @When
         public void when() {
-            click(webDriver, String.format("[test-row-%s] [test-button-account-details]", currentAccount.get("number")));
+            click(webDriver, String.format("[test-row-%s] [test-button-account-details]", currentAccount.getNumber()));
             waitForPage(webDriver);
         }
 
@@ -112,57 +87,30 @@ public interface OpenAccountPage {
         private WebDriver webDriver;
 
         @Demands
-        private List<Map> accounts;
+        private List<Account> accounts;
 
-        private Map<String, Object> currentAccount;
+        private Account currentAccount;
 
         @Given
         public void given() {
 
-            for (Map account : accounts) {
-                if ("Easy Saver Account".equals(account.get("name"))) {
+            for (Account account : accounts) {
+                if ("Easy Saver Account".equals(account.getName())) {
                     currentAccount = account;
                     break;
                 }
             }
 
-            currentAccount.put("transactions", new ArrayList<Map>() {{
-                add(new HashMap<String, String>() {{
-                    put("date", "30 Aug 2014");
-                    put("description", "Nulla consequat massa quis enim");
-                    put("type", "DEBIT");
-                    put("amount", "1500");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "27 Aug 2014");
-                    put("description", "Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu");
-                    put("type", "CREDIT");
-                    put("amount", "1500");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "14 Aug 2014");
-                    put("description", "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo");
-                    put("type", "DEBIT");
-                    put("amount", "3000");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "12 Aug 2014");
-                    put("description", "Nullam dictum felis eu pede mollis pretium");
-                    put("type", "DEBIT");
-                    put("amount", "2000");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "10 Aug 2014");
-                    put("description", "Integer tincidunt");
-                    put("type", "CREDIT");
-                    put("amount", "1000");
-                }});
-            }});
+            currentAccount.getTransactions().add(new Transaction("30 Aug 2014", "Nulla consequat massa quis enim", "DEBIT", "1500"));
+            currentAccount.getTransactions().add(new Transaction("27 Aug 2014", "Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu", "CREDIT", "1500"));
+            currentAccount.getTransactions().add(new Transaction("14 Aug 2014", "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo", "DEBIT", "3000"));
+            currentAccount.getTransactions().add(new Transaction("12 Aug 2014", "Nullam dictum felis eu pede mollis pretium", "DEBIT", "2000"));
+            currentAccount.getTransactions().add(new Transaction("10 Aug 2014", "Integer tincidunt", "CREDIT", "1000"));
         }
 
         @When
         public void when() {
-            click(webDriver, format("[test-row-%s] [test-button-account-details]", currentAccount.get("number")));
+            click(webDriver, format("[test-row-%s] [test-button-account-details]", currentAccount.getNumber()));
             waitForPage(webDriver);
         }
 
@@ -190,57 +138,30 @@ public interface OpenAccountPage {
         private WebDriver webDriver;
 
         @Demands
-        private List<Map> accounts;
+        private List<Account> accounts;
 
-        private Map<String, Object> currentAccount;
+        private Account currentAccount;
 
         @Given
         public void given() {
 
-            for (Map account : accounts) {
-                if ("Fancy Mortgage".equals(account.get("name"))) {
+            for (Account account : accounts) {
+                if ("Fancy Mortgage".equals(account.getName())) {
                     currentAccount = account;
                     break;
                 }
             }
 
-            currentAccount.put("transactions", new ArrayList<Map>() {{
-                add(new HashMap<String, String>() {{
-                    put("date", "30 Aug 2014");
-                    put("description", "Nulla consequat massa quis enim");
-                    put("type", "DEBIT");
-                    put("amount", "1500");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "27 Aug 2014");
-                    put("description", "Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu");
-                    put("type", "CREDIT");
-                    put("amount", "1500");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "14 Aug 2014");
-                    put("description", "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo");
-                    put("type", "DEBIT");
-                    put("amount", "3000");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "12 Aug 2014");
-                    put("description", "Nullam dictum felis eu pede mollis pretium");
-                    put("type", "DEBIT");
-                    put("amount", "2000");
-                }});
-                add(new HashMap<String, String>() {{
-                    put("date", "10 Aug 2014");
-                    put("description", "Integer tincidunt");
-                    put("type", "CREDIT");
-                    put("amount", "1000");
-                }});
-            }});
+            currentAccount.getTransactions().add(new Transaction("30 Aug 2014", "Nulla consequat massa quis enim", "DEBIT", "1500"));
+            currentAccount.getTransactions().add(new Transaction("27 Aug 2014", "Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu", "CREDIT", "1500"));
+            currentAccount.getTransactions().add(new Transaction("14 Aug 2014", "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo", "DEBIT", "3000"));
+            currentAccount.getTransactions().add(new Transaction("12 Aug 2014", "Nullam dictum felis eu pede mollis pretium", "DEBIT", "2000"));
+            currentAccount.getTransactions().add(new Transaction("10 Aug 2014", "Integer tincidunt", "CREDIT", "1000"));
         }
 
         @When
         public void when() {
-            click(webDriver, format("[test-row-%s] [test-button-account-details]", currentAccount.get("number")));
+            click(webDriver, format("[test-row-%s] [test-button-account-details]", currentAccount.getNumber()));
             waitForPage(webDriver);
         }
 

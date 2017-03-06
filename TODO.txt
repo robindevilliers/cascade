@@ -1,0 +1,6 @@
+1. change link on html reports page so that if you click on the cell, it goes to a test.
+2. change default tab back to synopsis.
+3. allow click on link so that you can easily trace where the link is going.
+4. if a general exception happens have cascade reports display as much.
+5. add post report handler. This can load the report in chrome.
+6. Reflections utils doesn't like 1.8.  need to update to support lambdas
