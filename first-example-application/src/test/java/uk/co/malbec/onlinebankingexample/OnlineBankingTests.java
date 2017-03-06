@@ -10,7 +10,9 @@ import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
 import uk.co.malbec.cascade.modules.reporter.ListOfStringsStateRendering;
+import uk.co.malbec.onlinebankingexample.domain.Account;
 import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
+import uk.co.malbec.onlinebankingexample.domain.StandingOrder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -81,13 +83,13 @@ public class OnlineBankingTests {
     List<String> notices;
 
     @Demands
-    List<Map> accounts;
+    List<Account> accounts;
 
     @Demands
     PersonalDetails personalDetails;
 
     @Demands
-    List<Map> standingOrders;
+    List<StandingOrder> standingOrders;
 
     @Demands
     List<Map> recentPayments;
