@@ -116,7 +116,7 @@
             </text>
 
             <rect x="380" y="10" width="100" height="40" rx="10" ry="10" stroke="black" fill="white"
-                  />
+            />
             <text style="cursor:default;" x="500" y="35" text-anchor="left" font-family="Verdana" font-size="12"
                   fill="black">Step
             </text>
@@ -172,10 +172,10 @@
 
             <%_.each(plot.indexes, function(index, i) {%>
             <% var offset = plot.indexes.length - i - 1%>
-            <rect style="cursor:pointer;" onclick="alert('click! <%=index%>')"
+            <rect style="cursor:pointer;" onclick="$('#scope_<%=index%>').modal('show');"
                   x="<%=plot.gridX * 20 + 5 + 148 - (offset * 28)%>" y="<%=plot.gridY * 20 + 5 + 37%>" width="24"
                   height="20" rx="5" ry="5" stroke="black" fill="lightgray"/>
-            <text style="cursor:pointer;" onclick="alert('click! <%=index%>')"
+            <text style="cursor:pointer;" onclick="$('#scope_<%=index%>').modal('show');"
                   x="<%=plot.gridX * 20 + 5 + 160 - (offset * 28)%>" y="<%=plot.gridY * 20 + 5 + 52%>"
                   text-anchor="middle" font-family="Verdana" font-size="12" font-weight="bold" fill="black"><%=index%>
             </text>
@@ -193,10 +193,80 @@
             <%if (plot.type === 'path') { %>
             <path d="<%=plot.getSpec().toString()%>" stroke="black" fill="none"
                   style=" marker-start: url(#markerCircle); marker-end: url(#markerArrow); "
-            <% if (!plot.isRealised()){%>stroke-dasharray="5, 5"<%}%>/>
+                <% if (!plot.isRealised()){%>stroke-dasharray="5, 5"<%}%>
+            />
             <%}%>
             <%});%>
         </svg>
+    </div>
+</script>
+
+<script id="journey-step-modal" type="text/html">
+    <div id="scope_<%=index%>" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="modal-title">
+                        <h4><%=name%></h4>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p><b>Index: </b> <span><%=index%></span></p>
+
+                    <h4>Transition</h4>
+                    <% if (hasTransition) {%>
+                    <table class="table table-striped">
+                        <caption>The table below lists all changes in state that occurred during the execution of the current step.</caption>
+                        <tbody>
+                        <%
+                        _.forEach(scope, function(value, key) {
+                            if (value.transition){
+                        %>
+                        <tr>
+                            <th ><%=key%></th>
+                            <td><%=value.transition%></td>
+                        </tr>
+                        <%
+                            }
+                        });
+                        %>
+                        </tbody>
+                    </table>
+                    <%} else {%>
+                    This step doesn't alter state, so no transition data is available.
+                    <%}%>
+
+                    <h4>State</h4>
+                    <% if (hasState) {%>
+                    <table class="table table-striped">
+                        <caption>This table includes the values of the variables defined in the current journey immediately upon completion of the current step.</caption>
+                        <tbody>
+                        <%
+                        _.forEach(scope, function(value, key) {
+                            if (value.state) {
+                        %>
+                        <tr>
+                            <th ><%=key%></th>
+                            <td><%=value.state%></td>
+                        </tr>
+                        <%
+                            }
+                        });
+                        %>
+                        </tbody>
+                    </table>
+                    <%} else {%>
+                        This step doesn't assert state, so no state data is available.
+                    <%}%>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </script>
 

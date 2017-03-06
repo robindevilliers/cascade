@@ -1,8 +1,11 @@
 package uk.co.malbec.cascade.utils;
 
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.Demands;
 import uk.co.malbec.cascade.annotations.Supplies;
 import uk.co.malbec.cascade.exception.CascadeException;
+import uk.co.malbec.cascade.modules.reporter.StateRenderingStrategy;
+import uk.co.malbec.cascade.modules.reporter.TransitionRenderingStrategy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -52,20 +55,42 @@ public class ReflectionUtils {
     }
 
 
-    public static void collectSuppliedFields(Object subject, Map<String, Object> scope) {
+    public static void collectSuppliedFields(Object subject, Map<String, Scope> scope) {
         for (Field field : subject.getClass().getDeclaredFields()) {
+
             Supplies supplies = field.getAnnotation(Supplies.class);
             if (supplies != null) {
                 Object value = getFieldValue(field, subject);
 
                 if (value != null) {
-                    scope.put(field.getName(), value);
+
+                    StateRenderingStrategy stateRenderingStrategy = null;
+
+                    if (supplies.stateRenderer() != Object.class) {
+                        try {
+                            stateRenderingStrategy = (StateRenderingStrategy) newInstance(supplies.stateRenderer(), "stateRenderer");
+                        } catch (ClassCastException e) {
+                            throw new CascadeException("Class supplied as a StateRenderingStrategy is not of instance StateRenderingStrategy in " + subject.getClass());
+                        }
+                    }
+
+                    TransitionRenderingStrategy transitionRenderingStrategy = null;
+
+                    if (supplies.transitionRenderer() != Object.class) {
+                        try {
+                            transitionRenderingStrategy = (TransitionRenderingStrategy) newInstance(supplies.transitionRenderer(), "transitionRenderer");
+                        } catch (ClassCastException e) {
+                            throw new CascadeException("Class supplied as a TransitionRenderingStrategy is not of instance TransitionRenderingStrategy in " + subject.getClass());
+                        }
+                    }
+
+                    scope.put(field.getName(), new Scope(value, stateRenderingStrategy, transitionRenderingStrategy));
                 }
             }
         }
     }
 
-    public static void injectDemandedFields(Object subject, Map<String, Object> scope) {
+    public static void injectDemandedFields(Object subject, Map<String, Scope> scope) {
         for (Field field : subject.getClass().getDeclaredFields()) {
             Demands demands = field.getAnnotation(Demands.class);
             if (demands == null) {
@@ -73,11 +98,11 @@ public class ReflectionUtils {
             }
 
             String fieldName = field.getName();
-            setFieldValue(field, subject, scope.get(fieldName));
+            setFieldValue(field, subject, scope.get(fieldName) != null ? scope.get(fieldName).getValue() : null);
         }
     }
 
-    public static Object newInstance(Class clazz, String name)  {
+    public static Object newInstance(Class clazz, String name) {
         try {
             return clazz.newInstance();
         } catch (IllegalAccessException e) {
@@ -107,7 +132,7 @@ public class ReflectionUtils {
                 results.add((T) getFieldValue(field, subject));
             }
         }
-        return results.toArray((T[])Array.newInstance(expectedClass, 0));
+        return results.toArray((T[]) Array.newInstance(expectedClass, 0));
     }
 
     public static Object getFieldValue(Field field, Object instance) {
@@ -127,6 +152,9 @@ public class ReflectionUtils {
             field.set(instance, value);
         } catch (IllegalAccessException e) {
             //can't happen
+        } catch (IllegalArgumentException e) {
+            throw new CascadeException("Field (" + field.getName() + ") does not match type of value that is being injected in step: " + instance.getClass());
+
         }
     }
 }

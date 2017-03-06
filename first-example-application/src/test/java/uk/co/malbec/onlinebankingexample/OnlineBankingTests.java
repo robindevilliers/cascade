@@ -8,22 +8,27 @@ import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.modules.reporter.ListOfStringsStateRendering;
+import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static uk.co.malbec.cascade.conditions.Predicates.and;
+import static uk.co.malbec.cascade.conditions.Predicates.stepAt;
 
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
+@StateRenderingRule(ListOfStringsStateRendering.class)
 //@StepPostHandler(WaitASecond.class)
 public class OnlineBankingTests {
 
@@ -32,33 +37,36 @@ public class OnlineBankingTests {
         root.setLevel(Level.INFO);
     }
 
-  /*  @FilterTests
-    Predicate filter1 = and(
+    @FilterTests
+    Predicate filter = and(
             stepAt(0,uk.co.malbec.onlinebankingexample.steps.OpenLandingPage.class),
             stepAt(1,uk.co.malbec.onlinebankingexample.steps.Login.SuccessfulLogin.class),
             stepAt(2,uk.co.malbec.onlinebankingexample.steps.Challenge.PassChallenge.class),
             stepAt(3,uk.co.malbec.onlinebankingexample.steps.Notice.AcceptOneNotice.class),
-            stepAt(4,uk.co.malbec.onlinebankingexample.steps.Portfolio.MortgageAccountOnly.class),
-            stepAt(5,uk.co.malbec.onlinebankingexample.steps.OpenAccountPage.OpenMortgageAccount.class),
-            stepAt(6,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(7,uk.co.malbec.onlinebankingexample.steps.Portfolio.MortgageAccountOnly.class),
-            stepAt(8,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
-            stepAt(9,uk.co.malbec.onlinebankingexample.steps.OpenEditMobile.class),
-            stepAt(10,uk.co.malbec.onlinebankingexample.steps.EditMobile.class),
-            stepAt(11,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(12,uk.co.malbec.onlinebankingexample.steps.Portfolio.MortgageAccountOnly.class),
-            stepAt(13,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
-            stepAt(14,uk.co.malbec.onlinebankingexample.steps.OpenEditEmail.class),
-            stepAt(15,uk.co.malbec.onlinebankingexample.steps.EditEmail.class),
-            stepAt(16,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(17,uk.co.malbec.onlinebankingexample.steps.Portfolio.MortgageAccountOnly.class),
-            stepAt(18,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
-            stepAt(19,uk.co.malbec.onlinebankingexample.steps.OpenEditAddress.class),
-            stepAt(20,uk.co.malbec.onlinebankingexample.steps.EditAddress.class)
-    );*/
-
-//    @FilterTests
-//    Predicate filter = withStep(Login.FailedLogin.class);
+            stepAt(4,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
+            stepAt(5,uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage.class),
+            stepAt(6,uk.co.malbec.onlinebankingexample.steps.CancelStandingOrder.class),
+            stepAt(7,uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage.class),
+            stepAt(8,uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder.SetupStandingOrderForLater.class),
+            stepAt(9,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
+            stepAt(10,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
+            stepAt(11,uk.co.malbec.onlinebankingexample.steps.OpenAccountPage.OpenCurrentAccount.class),
+            stepAt(12,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
+            stepAt(13,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
+            stepAt(14,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
+            stepAt(15,uk.co.malbec.onlinebankingexample.steps.OpenEditMobile.class),
+            stepAt(16,uk.co.malbec.onlinebankingexample.steps.EditMobile.class),
+            stepAt(17,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
+            stepAt(18,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
+            stepAt(19,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
+            stepAt(20,uk.co.malbec.onlinebankingexample.steps.OpenEditAddress.class),
+            stepAt(21,uk.co.malbec.onlinebankingexample.steps.EditAddress.class),
+            stepAt(22,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
+            stepAt(23,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
+            stepAt(24,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
+            stepAt(25,uk.co.malbec.onlinebankingexample.steps.OpenEditEmail.class),
+            stepAt(26,uk.co.malbec.onlinebankingexample.steps.EditEmail.class)
+    );
 
     @Demands
     String username;
@@ -76,19 +84,13 @@ public class OnlineBankingTests {
     List<Map> accounts;
 
     @Demands
-    Map personalDetails;
+    PersonalDetails personalDetails;
 
     @Demands
     List<Map> standingOrders;
 
     @Demands
     List<Map> recentPayments;
-
-    @Supplies
-    List<String[]> expectedStandingOrders = new ArrayList<String[]>();
-
-    @Supplies
-    List<String[]> expectedRecentPayments = new ArrayList<String[]>();
 
     @Setup
     public void setup() {

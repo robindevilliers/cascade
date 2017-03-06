@@ -3,6 +3,7 @@ package uk.co.malbec.onlinebankingexample.steps;
 
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.onlinebankingexample.AccountsStateRendering;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +21,8 @@ public interface Portfolio {
         @Demands
         private WebDriver webDriver;
 
-        @Supplies
-        private List<Map> accounts = new ArrayList<Map>();
+        @Supplies(stateRenderer = AccountsStateRendering.class)
+        private List<Map> accounts = new ArrayList<>();
 
         @Given
         public void given() {
@@ -45,7 +46,7 @@ public interface Portfolio {
         @Demands
         private WebDriver webDriver;
 
-        @Supplies
+        @Supplies(stateRenderer = AccountsStateRendering.class)
         private List<Map> accounts = new ArrayList<Map>();
 
         @Given
@@ -79,8 +80,8 @@ public interface Portfolio {
         @Demands
         private WebDriver webDriver;
 
-        @Supplies
-        private List<Map> accounts = new ArrayList<Map>();
+        @Supplies(stateRenderer = AccountsStateRendering.class)
+        private List<Map> accounts = new ArrayList<>();
 
         @Given
         public void given() {
@@ -122,8 +123,8 @@ public interface Portfolio {
         @Demands
         private WebDriver webDriver;
 
-        @Supplies
-        private List<Map> accounts = new ArrayList<Map>();
+        @Supplies(stateRenderer = AccountsStateRendering.class)
+        private List<Map> accounts = new ArrayList<>();
 
         @Given
         public void given() {

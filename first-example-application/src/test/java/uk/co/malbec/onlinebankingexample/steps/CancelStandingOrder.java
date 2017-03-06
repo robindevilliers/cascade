@@ -3,6 +3,7 @@ package uk.co.malbec.onlinebankingexample.steps;
 
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.onlinebankingexample.domain.StandingOrder;
 
 import java.util.List;
 
@@ -16,22 +17,20 @@ public class CancelStandingOrder {
     private WebDriver webDriver;
 
     @Demands
-    List<String[]> expectedStandingOrders;
+    public List<StandingOrder> standingOrders;
 
     @When
     public void when() {
         click(webDriver, "[test-standing-order-row-0] [test-cancel-cta]");
         waitForPage(webDriver);
 
-        expectedStandingOrders.remove(0);
+        standingOrders.remove(0);
     }
 
     @Then
     public void then() {
-        int i = 0;
-        for (String[] expected: expectedStandingOrders){
-            assertStandingOrderRow(webDriver, "" + i, expected[0], expected[1] , expected[2],expected[3] ,expected[4] ,expected[5], expected[6]);
-            i++;
+        for (int row = 0; row < standingOrders.size(); row++) {
+            assertStandingOrderRow(webDriver, row, standingOrders.get(row));
         }
     }
 }

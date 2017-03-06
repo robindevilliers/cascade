@@ -7,12 +7,14 @@ import org.junit.runner.notification.RunNotifier
 import uk.co.malbec.cascade.annotations.*
 import uk.co.malbec.cascade.events.Handler
 import uk.co.malbec.cascade.model.Journey
+import uk.co.malbec.cascade.modules.Reporter
 import uk.co.malbec.cascade.modules.TestExecutor
 
 import static org.mockito.Mockito.*
 
 public class StandardTestExecutorTest {
 
+    Reporter reporterMock = mock(Reporter)
 
     static Integer counter
     static Integer whenCalled
@@ -56,7 +58,7 @@ public class StandardTestExecutorTest {
 
         when(journey.getName()).thenReturn("description")
 
-        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, reporter);
+        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, reporterMock);
 
         assert preHandlerCtrlCalled == 0
         assert preHandlerCalled == 1
@@ -71,27 +73,6 @@ public class StandardTestExecutorTest {
         verify(runNotifier).fireTestFinished(description)
     }
 
-    @Test
-    public void executeWithException(){
-        TestExecutor testExecutor = new StandardTestExecutor();
-
-        testExecutor.init(ControlClass);
-
-        RunNotifier runNotifier = mock(RunNotifier);
-
-        Description description = mock(Description);
-
-        thrownException = mock(Throwable)
-
-        Journey journey = mock(Journey)
-
-        when(journey.getName()).thenReturn("description")
-
-        testExecutor.executeTest(runNotifier, description, [new ExceptionStep()], journey, reporter);
-
-        assert thrownException == receivedException
-    }
-
     @Step
     @StepPreHandler(PreHandler)
     @StepHandler(Normalhandler)
@@ -104,7 +85,7 @@ public class StandardTestExecutorTest {
         }
 
         @Then
-        public void then(Throwable f){
+        public void then(){
             thenCalled = counter++;
         }
     }
@@ -119,7 +100,7 @@ public class StandardTestExecutorTest {
         }
 
         @Then
-        public void then(Throwable f){
+        public void then(){
             receivedException = f
 
         }

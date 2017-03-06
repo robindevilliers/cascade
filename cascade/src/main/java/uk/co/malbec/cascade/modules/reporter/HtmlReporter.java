@@ -2,6 +2,7 @@ package uk.co.malbec.cascade.modules.reporter;
 
 import junit.framework.AssertionFailedError;
 import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.Reporter;
@@ -12,10 +13,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.String.format;
 import static java.nio.file.Files.copy;
@@ -38,6 +36,15 @@ public class HtmlReporter implements Reporter {
 
     private long startTime;
     private JsonObjectBuilder directoryJson;
+    private Map<String, Scope> scope;
+    private List<JsonObjectBuilder> steps;
+
+    private int index;
+    private RenderingSystem renderingSystem;
+
+    public HtmlReporter(RenderingSystem renderingSystem) {
+        this.renderingSystem = renderingSystem;
+    }
 
     @Override
     public void init(Class<?> controlClass, List<Scenario> scenarios) {
@@ -151,17 +158,21 @@ public class HtmlReporter implements Reporter {
     }
 
     @Override
-    public void setupTest(Journey journey) {
+    public void setupTest(Journey journey, Map<String, Scope> scope) {
+        this.index = 0;
+        this.scope = scope;
         directoryItemJson = builderFactory.createObjectBuilder();
 
         directoryItemJson.add("journeyId", UUID.randomUUID().toString().replaceAll("-", ""));
         directoryItemJson.add("name", journey.getName());
 
-        JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
+
+        this.steps = new ArrayList<>();
         for (Scenario scenario : journey.getSteps()) {
-            scenariosJson.add(scenario.getName());
+            JsonObjectBuilder stepJson = builderFactory.createObjectBuilder();
+            stepJson.add("name", scenario.getName());
+            this.steps.add(stepJson);
         }
-        directoryItemJson.add("scenarios", scenariosJson);
 
         StringBuilder filter = new StringBuilder();
         filter.append("@FilterTests<br>").append("Predicate filter = and(");
@@ -197,7 +208,15 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void stepWhenBegin(Object step, Method whenMethod) {
+        for (String key : this.scope.keySet()) {
+            Scope scope = this.scope.get(key);
 
+            if (scope.getTransitionRenderingStrategy() != null){
+                scope.setCopy(scope.getTransitionRenderingStrategy().copy(scope.getValue()));
+            } else {
+                scope.setCopy(renderingSystem.copy(scope.getValue()));
+            }
+        }
     }
 
     @Override
@@ -208,6 +227,7 @@ public class HtmlReporter implements Reporter {
     @Override
     public void setWhenSuccess(Object step) {
 
+
     }
 
     @Override
@@ -217,7 +237,53 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void stepThenBegin(Object step, Method thenMethod) {
+        JsonObjectBuilder scopeJson = builderFactory.createObjectBuilder();
+        List<String> sortedKeys = new ArrayList<>(this.scope.keySet());
+        Collections.sort(sortedKeys);
 
+        boolean hasState = false;
+        boolean hasTransition = false;
+        for (String key : sortedKeys) {
+            Scope scope = this.scope.get(key);
+            JsonObjectBuilder memberJson = builderFactory.createObjectBuilder();
+
+            String transition = null;
+            if (scope.getValue() != null && !scope.getValue().equals(scope.getCopy())){
+
+                if (scope.getTransitionRenderingStrategy() != null){
+                    transition = scope.getTransitionRenderingStrategy().render(scope.getValue(), scope.getCopy());
+                } else {
+                    transition = renderingSystem.renderTransition(scope.getValue(), scope.getCopy());
+                }
+
+                if (transition != null){
+                    hasTransition = true;
+                    memberJson.add("transition", transition);
+                }
+            }
+
+            String state;
+            if (scope.getStateRenderingStrategy() != null){
+                state = scope.getStateRenderingStrategy().render(scope.getValue());
+            } else {
+                state = renderingSystem.renderState(scope.getValue());
+            }
+
+            if (state != null){
+                hasState = true;
+                memberJson.add("state", state);
+            }
+
+            if (state != null || transition != null){
+                scopeJson.add(key, memberJson);
+            }
+        }
+
+        JsonObjectBuilder stepJson = this.steps.get(this.index);
+
+        stepJson.add("hasState", hasState);
+        stepJson.add("hasTransition", hasTransition);
+        stepJson.add("scope", scopeJson);
     }
 
     @Override
@@ -237,7 +303,7 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void endStep(Object step) {
-
+        this.index++;
     }
 
     @Override
@@ -257,6 +323,21 @@ public class HtmlReporter implements Reporter {
 
     @Override
     public void finishTest(Journey journey) {
+        if (directoryItemJson == null){
+            return;
+        }
+
+        if (steps != null){
+            JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
+            if (steps != null){
+                for (JsonObjectBuilder step : steps) {
+                    scenariosJson.add(step);
+                }
+
+            }
+            directoryItemJson.add("scenarios", scenariosJson);
+        }
+
         directoryItemJson.add("result", testResult.toString());
         directoryItemsJson.add(directoryItemJson);
     }
@@ -267,12 +348,12 @@ public class HtmlReporter implements Reporter {
         directoryJson.add("items", directoryItemsJson.build());
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
 
-        //TODO - temporary
-        try {
-            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        //TODO - temporary
+//        try {
+//            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void handleInvocationException(Object step, InvocationTargetException e) {

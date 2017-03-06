@@ -2,6 +2,7 @@ package uk.co.malbec.cascade.modules.construction;
 
 
 import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.Clear;
 import uk.co.malbec.cascade.annotations.Given;
 import uk.co.malbec.cascade.annotations.Setup;
@@ -17,8 +18,8 @@ import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 public class StandardConstructionStrategy implements ConstructionStrategy {
 
     @Override
-    public void setup(Class<?> controlClass, Journey journey, Reference<Object> control, Reference<List<Object>> steps) {
-        Map<String, Object> scope = new HashMap<String, Object>();
+    public Map<String, Scope> setup(Class<?> controlClass, Journey journey, Reference<Object> control, Reference<List<Object>> steps) {
+        Map<String, Scope> scope = new HashMap<>();
 
         control.set(newInstance(controlClass, "control"));
 
@@ -63,6 +64,8 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
         for (Object step : steps.get()) {
             injectDemandedFields(step, scope);
         }
+
+        return scope;
     }
 
     @Override

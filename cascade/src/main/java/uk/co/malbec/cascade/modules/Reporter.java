@@ -1,12 +1,14 @@
 package uk.co.malbec.cascade.modules;
 
 import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 public interface Reporter {
 
@@ -44,7 +46,7 @@ public interface Reporter {
 
     void finish();
 
-    void setupTest(Journey journey);
+    void setupTest(Journey journey, Map<String, Scope> scope);
 
     void success(Journey journey);
 }

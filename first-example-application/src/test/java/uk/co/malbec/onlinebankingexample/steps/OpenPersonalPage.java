@@ -2,10 +2,9 @@ package uk.co.malbec.onlinebankingexample.steps;
 
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.utils.Reference;
-
-import java.util.HashMap;
-import java.util.Map;
+import uk.co.malbec.onlinebankingexample.PersonalDetailsRendering;
+import uk.co.malbec.onlinebankingexample.PersonalDetailsTransitionRendering;
+import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
@@ -15,28 +14,18 @@ public class OpenPersonalPage {
     @Demands
     public WebDriver webDriver;
 
-    @Supplies
-    public Map<String, String> personalDetails;
-
-    @Supplies
-    public Reference<Boolean> addressHasBeenEdited = new Reference<Boolean>(false);
-
-    @Supplies
-    public Reference<Boolean> emailHasBeenEdited = new Reference<Boolean>(false);
-
-    @Supplies
-    public Reference<Boolean> mobileHasBeenEdited = new Reference<Boolean>(false);
+    @Supplies(stateRenderer = PersonalDetailsRendering.class, transitionRenderer = PersonalDetailsTransitionRendering.class)
+    public PersonalDetails personalDetails;
 
     @Given
     public void given() {
-        personalDetails = new HashMap<String, String>() {{
-            put("name", "Robin de Villiers");
-            put("nationality", "British");
-            put("domicile", "UK");
-            put("address", "7 Special Way, FairBank, ImaginaryVille, WOW007");
-            put("mobile", "0788 1234 567");
-            put("email", "robin@imaginaryville.co.uk");
-        }};
+        personalDetails = new PersonalDetails()
+                .setName("Anne Other")
+                .setNationality("British")
+                .setDomicile("UK")
+                .setAddress("7 Special Way, FairBank, ImaginaryVille, WOW007")
+                .setMobile("0788 1234 567")
+                .setEmail("anne@imaginaryville.co.uk");
     }
 
     @When
@@ -47,27 +36,12 @@ public class OpenPersonalPage {
 
     @Then
     public void then() {
-        assertTextEquals(webDriver, "[test-field-name]", "Robin de Villiers");
-        assertTextEquals(webDriver, "[test-field-nationality]", "British");
-        assertTextEquals(webDriver, "[test-field-domicile]", "UK");
-        if (addressHasBeenEdited.get()) {
-            assertTextEquals(webDriver, "[test-field-address]", "15 Plane Road, RudeWay, ImaginaryVille, OPP002");
-        } else {
-            assertTextEquals(webDriver, "[test-field-address]", "7 Special Way, FairBank, ImaginaryVille, WOW007");
-        }
-
-        if (mobileHasBeenEdited.get()){
-            assertTextEquals(webDriver, "[test-field-mobile]", "0789 1234 7765");
-        } else {
-            assertTextEquals(webDriver, "[test-field-mobile]", "0788 1234 567");
-        }
-
-        if (emailHasBeenEdited.get()) {
-            assertTextEquals(webDriver, "[test-field-email]", "robin@theoreticalcity.co.uk");
-        } else {
-            assertTextEquals(webDriver, "[test-field-email]", "robin@imaginaryville.co.uk");
-        }
-
+        assertTextEquals(webDriver, "[test-field-name]", personalDetails.getName());
+        assertTextEquals(webDriver, "[test-field-nationality]", personalDetails.getNationality());
+        assertTextEquals(webDriver, "[test-field-domicile]", personalDetails.getDomicile());
+        assertTextEquals(webDriver, "[test-field-address]", personalDetails.getAddress());
+        assertTextEquals(webDriver, "[test-field-mobile]", personalDetails.getMobile());
+        assertTextEquals(webDriver, "[test-field-email]", personalDetails.getEmail());
     }
 
 }

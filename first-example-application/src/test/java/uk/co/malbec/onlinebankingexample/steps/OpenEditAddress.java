@@ -5,6 +5,7 @@ import uk.co.malbec.cascade.annotations.Demands;
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.annotations.Then;
 import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
@@ -14,6 +15,9 @@ public class OpenEditAddress {
     @Demands
     public WebDriver webDriver;
 
+    @Demands
+    public PersonalDetails personalDetails;
+
     @When
     public void when() {
         click(webDriver, "[test-edit-address-cta]");
@@ -22,6 +26,6 @@ public class OpenEditAddress {
 
     @Then
     public void then() {
-        assertTextEquals(webDriver, "[test-current-address-text]", "7 Special Way, FairBank, ImaginaryVille, WOW007");
+        assertTextEquals(webDriver, "[test-current-address-text]", personalDetails.getAddress());
     }
 }

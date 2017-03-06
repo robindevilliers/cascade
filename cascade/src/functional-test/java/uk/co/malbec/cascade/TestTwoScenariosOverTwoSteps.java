@@ -13,6 +13,9 @@ import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy;
 import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy;
 import uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator;
+import uk.co.malbec.cascade.modules.reporter.DisableReporter;
+import uk.co.malbec.cascade.modules.reporter.HtmlReporter;
+import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -78,7 +81,9 @@ public class TestTwoScenariosOverTwoSteps {
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()),
-                new StandardCompletenessStrategy());
+                new StandardCompletenessStrategy(),
+                new DisableReporter(),
+                new RenderingSystem());
 
         cascade.init(TestBasicMain.class);
 
@@ -133,7 +138,7 @@ public class TestTwoScenariosOverTwoSteps {
             }
 
             @Then
-            public void check(Throwable f) {
+            public void check() {
                 count++;
                 doThisCheckCalled.add(count);
             }
@@ -166,7 +171,7 @@ public class TestTwoScenariosOverTwoSteps {
             }
 
             @Then
-            public void check(Throwable f) {
+            public void check() {
                 count++;
                 doThatCheckCalled.add(count);
             }

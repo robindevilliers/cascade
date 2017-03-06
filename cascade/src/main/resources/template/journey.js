@@ -2,6 +2,9 @@
 var directory = new Directory(directoryData);
 
 var journey = findJourney();
+if (!journey){
+    window.location = "index.html"
+}
 $('#journey-id').html('- ' + journey.journeyId);
 
 renderTabs();
@@ -49,8 +52,6 @@ function renderAnalysisPanel(journey) {
 
     var paths = calculatePaths(stateTree.getRootState(), stateTree, directory, expandedJourneyScenarios);
 
-
-
     var coordinateSystem = new CoordinateSystem({width: 9, height: 3}, stateTree, paths);
     var plot = new Plot(coordinateSystem, directory);
     plot.plotStates(stateTree.getRootState(), expandedJourneyScenarios);
@@ -65,4 +66,16 @@ function renderAnalysisPanel(journey) {
         }
     };
     $("#analysis").find("#tab-body").append(journeyAnalysisTemplate(data));
+
+    _.each(journey.scenarios, function(scenario, idx){
+        var modalTemplate = _.template($("#journey-step-modal").text());
+        $("#analysis").find("#tab-body").append(modalTemplate({
+            index: idx,
+            name: scenario.name,
+            scope: scenario.scope,
+            hasState: scenario.hasState,
+            hasTransition: scenario.hasTransition
+        }));
+    })
+
 }

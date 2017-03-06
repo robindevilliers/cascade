@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.annotations.Terminator;
 
-import static junit.framework.TestCase.fail;
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
 @Step(OpenLandingPage.class)
@@ -58,7 +57,6 @@ public interface Login {
         public void then() {
             assertElementPresent(webDriver, "[test-form-login]");
             assertElementDisplayed(webDriver, "[test-dialog-authentication-failure]");
-            fail("rubbish failure");
         }
     }
 }

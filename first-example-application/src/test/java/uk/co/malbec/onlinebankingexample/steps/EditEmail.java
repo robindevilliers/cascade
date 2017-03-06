@@ -3,6 +3,9 @@ package uk.co.malbec.onlinebankingexample.steps;
 import org.openqa.selenium.WebDriver;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.utils.Reference;
+import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
+
+import java.util.Map;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
@@ -14,18 +17,19 @@ public class EditEmail {
     public WebDriver webDriver;
 
     @Demands
-    public Reference<Boolean> emailHasBeenEdited;
+    public PersonalDetails personalDetails;
 
     @When
     public void when() {
-        enterText(webDriver, "[test-input-email]", "robin@theoreticalcity.co.uk");
+        enterText(webDriver, "[test-input-email]", "anne@theoreticalcity.co.uk");
         click(webDriver, "[test-save-cta]");
         waitForPage(webDriver);
+
+        personalDetails.setEmail("anne@theoreticalcity.co.uk");
     }
 
     @Then
     public void then() {
-        assertTextEquals(webDriver, "[test-field-email]", "robin@theoreticalcity.co.uk");
-        emailHasBeenEdited.set(true);
+        assertTextEquals(webDriver, "[test-field-email]", personalDetails.getEmail());
     }
 }

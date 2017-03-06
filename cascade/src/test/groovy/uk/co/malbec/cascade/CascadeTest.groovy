@@ -9,6 +9,7 @@ import uk.co.malbec.cascade.annotations.Scan
 import uk.co.malbec.cascade.annotations.Step
 import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.modules.*
+import uk.co.malbec.cascade.modules.reporter.RenderingSystem
 import uk.co.malbec.cascade.utils.Reference
 
 import static org.mockito.Matchers.any
@@ -35,9 +36,13 @@ class CascadeTest {
 
     RunNotifier runNotifierMock = mock(RunNotifier)
 
+    Reporter reporterMock = mock(Reporter)
+
+    RenderingSystem renderingSystemMock = mock(RenderingSystem)
+
     @Before
     public void "initialisation"() {
-        cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock, completenessStrategy);
+        cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock, completenessStrategy, reporterMock, renderingSystemMock);
     }
 
     @After
@@ -106,10 +111,10 @@ class CascadeTest {
 
         //then
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0], reporter);
+        verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0], reporterMock);
 
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference));
-        verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1], reporter);
+        verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1], reporterMock);
 
         verify(constructionStrategyMock, times(2)).tearDown(any(Reference), any(Reference));
     }

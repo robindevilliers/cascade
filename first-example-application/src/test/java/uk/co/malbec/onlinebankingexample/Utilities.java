@@ -6,6 +6,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import uk.co.malbec.onlinebankingexample.domain.Payment;
+import uk.co.malbec.onlinebankingexample.domain.StandingOrder;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 import static junit.framework.TestCase.assertTrue;
@@ -64,31 +69,44 @@ public class Utilities {
         assertEquals(balance, webDriver.findElement(By.cssSelector(format("[test-row-%s] [test-field-balance]", row))).getText());
     }
 
-    public static void assertStandingOrderRow(WebDriver webDriver, String row, String description, String reference, String accountNumber, String sortCode, String lastDate, String period, String amount) {
-        assertEquals(description, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-description]", row))).getText());
-        assertEquals(reference, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-reference]", row))).getText());
-        assertEquals(accountNumber, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-account-number]", row))).getText());
-        assertEquals(sortCode, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-sort-code]", row))).getText());
+    public static void assertStandingOrderRow(WebDriver webDriver, int row, StandingOrder standingOrder) {
+        assertEquals(standingOrder.getDescription(), webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-description]", row))).getText());
+        assertEquals(standingOrder.getReference(), webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-reference]", row))).getText());
+        assertEquals(standingOrder.getAccountNumber(), webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-account-number]", row))).getText());
+        assertEquals(standingOrder.getSortCode(), webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-sort-code]", row))).getText());
 
-        //TODO -fix when we add time control to server
-        if (lastDate != null) {
-            assertEquals(lastDate, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-last-date]", row))).getText());
+        if (standingOrder.getDueDate() != null) {
+            assertEquals(standingOrder.getDueDate(), webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-last-date]", row))).getText());
         }
 
-        assertEquals(period, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-period]", row))).getText());
-        assertEquals(amount, webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-amount]", row))).getText());
+        assertEquals(standingOrder.getPeriod(), webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-period]", row))).getText());
+        assertEquals(standingOrder.getAmount(), parseAmount(webDriver.findElement(By.cssSelector(format("[test-standing-order-row-%s] [test-field-amount]", row))).getText()));
     }
 
-    public static void assertRecentPaymentRow(WebDriver webDriver, String row, String date, String description, String reference, String accountNumber, String sortCode, String cleared, String amount) {
-        if (date != null) {
-            assertEquals(date, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-date]", row))).getText());
+    public static void assertRecentPaymentRow(WebDriver webDriver, int row, Payment payment) {
+        //TODO - we don't assert the date if the expected date is null - this is because we don't have a time machine in the app at the moment.
+        if (payment.getDate() != null) {
+            assertEquals(payment.getDate(), webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-date]", row))).getText());
         }
-        assertEquals(description, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-description]", row))).getText());
-        assertEquals(reference, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-reference]", row))).getText());
-        assertEquals(accountNumber, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-account-number]", row))).getText());
-        assertEquals(sortCode, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-sort-code]", row))).getText());
-        assertEquals(cleared, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-cleared]", row))).getText());
-        assertEquals(amount, webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-amount]", row))).getText());
+        assertEquals(payment.getDescription(), webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-description]", row))).getText());
+        assertEquals(payment.getReference(), webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-reference]", row))).getText());
+        assertEquals(payment.getAccountNumber(), webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-account-number]", row))).getText());
+        assertEquals(payment.getSortCode(), webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-sort-code]", row))).getText());
+        assertEquals(payment.getCleared(), webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-cleared]", row))).getText());
+        assertEquals(payment.getAmount(), parseAmount(webDriver.findElement(By.cssSelector(format("[test-recent-payment-row-%s] [test-field-amount]", row))).getText()));
+    }
+
+    public static String parseAmount(String amountString) {
+        Pattern amountPattern = Pattern.compile("£\\s*(\\d*).(\\d*)");
+
+        Matcher matcher = amountPattern.matcher(amountString);
+        if (matcher.matches()) {
+            String pounds = matcher.group(1);
+            String pence = matcher.group(2);
+            return pounds + pence;
+        } else {
+            return "";
+        }
     }
 
     public static void sleep(int time) {

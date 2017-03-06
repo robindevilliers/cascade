@@ -5,10 +5,12 @@ import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.Scan;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.*;
+import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Cascade {
 
@@ -28,6 +30,8 @@ public class Cascade {
 
     private Reporter reporter;
 
+    private RenderingSystem renderingSystem;
+
     private Class<?> controlClass;
 
     private List<Journey> journeys = new ArrayList<Journey>();
@@ -39,7 +43,8 @@ public class Cascade {
                    TestExecutor testExecutor,
                    FilterStrategy filterStrategy,
                    CompletenessStrategy completenessStrategy,
-                   Reporter reporter) {
+                   Reporter reporter,
+                   RenderingSystem renderingSystem) {
         this.classpathScanner = classpathScanner;
         this.scenarioFinder = scenarioFinder;
         this.journeyGenerator = journeyGenerator;
@@ -48,6 +53,7 @@ public class Cascade {
         this.filterStrategy = filterStrategy;
         this.completenessStrategy = completenessStrategy;
         this.reporter = reporter;
+        this.renderingSystem = renderingSystem;
     }
 
     public void init(Class<?> controlClass) {
@@ -56,7 +62,7 @@ public class Cascade {
         filterStrategy.init(controlClass);
         testExecutor.init(controlClass);
         completenessStrategy.init(controlClass);
-
+        renderingSystem.init(controlClass);
 
         String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
         List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
@@ -83,9 +89,9 @@ public class Cascade {
                     Reference<Object> control = new Reference<Object>();
                     Reference<List<Object>> steps = new Reference<List<Object>>();
 
-                    reporter.setupTest(journey);
+                    Map<String, Scope> scope = constructionStrategy.setup(controlClass, journey, control, steps);
 
-                    constructionStrategy.setup(controlClass, journey, control, steps);
+                    reporter.setupTest(journey, scope);
 
                     reporter.startTest(journey, control, steps);
 
@@ -95,6 +101,8 @@ public class Cascade {
 
                     constructionStrategy.tearDown(control, steps);
                 } catch (RuntimeException e) {
+                    //TODO - look at this
+                    e.printStackTrace();
                     reporter.handleUnknownException(e, journey);
 
                 } finally {

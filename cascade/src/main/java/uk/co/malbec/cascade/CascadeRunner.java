@@ -10,6 +10,9 @@ import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy;
 import uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator;
 import uk.co.malbec.cascade.modules.reporter.HtmlReporter;
+import uk.co.malbec.cascade.modules.reporter.ListStateRendering;
+import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
+import uk.co.malbec.cascade.modules.reporter.StringStateRendering;
 import uk.co.malbec.cascade.modules.scanner.ReflectionsClasspathScanner;
 
 public class CascadeRunner extends Runner {
@@ -18,6 +21,11 @@ public class CascadeRunner extends Runner {
 
     public CascadeRunner(Class<?> testClass) {
 
+        RenderingSystem renderingSystem = new RenderingSystem();
+        renderingSystem.add(new StringStateRendering());
+        renderingSystem.add(new ListStateRendering());
+
+
         cascade = new Cascade(new ReflectionsClasspathScanner(),
                 new ScenarioFinder(),
                 new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
@@ -25,7 +33,8 @@ public class CascadeRunner extends Runner {
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()),
                 new StandardCompletenessStrategy(),
-                new HtmlReporter()
+                new HtmlReporter(renderingSystem),
+                renderingSystem
         );
         cascade.init(testClass);
     }

@@ -5,6 +5,7 @@ import uk.co.malbec.cascade.annotations.Demands;
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.annotations.Then;
 import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
 
 import static uk.co.malbec.onlinebankingexample.Utilities.*;
 
@@ -12,6 +13,9 @@ import static uk.co.malbec.onlinebankingexample.Utilities.*;
 public class OpenEditEmail {
     @Demands
     public WebDriver webDriver;
+
+    @Demands
+    public PersonalDetails personalDetails;
 
     @When
     public void when(){
@@ -21,6 +25,6 @@ public class OpenEditEmail {
 
     @Then
     public void then() {
-        assertTextEquals(webDriver, "[test-current-email-text]", "robin@imaginaryville.co.uk");
+        assertTextEquals(webDriver, "[test-current-email-text]", personalDetails.getEmail());
     }
 }

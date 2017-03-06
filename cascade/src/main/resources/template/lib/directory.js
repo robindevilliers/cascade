@@ -29,7 +29,7 @@ function Directory(directory) {
     this.expandJourneyScenarios = function(scenarios){
         return _.map(scenarios, function(scenario){
            return _.find(directory.scenarios, function(s){
-               return s.name === scenario;
+               return s.name === scenario.name;
            });
         });
     }
