@@ -348,12 +348,12 @@ public class HtmlReporter implements Reporter {
         directoryJson.add("items", directoryItemsJson.build());
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
 
-//        //TODO - temporary
-//        try {
-//            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        //TODO - temporary
+        try {
+            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleInvocationException(Object step, InvocationTargetException e) {

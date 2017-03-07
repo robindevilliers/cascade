@@ -7,6 +7,17 @@ if (!journey){
 }
 $('#journey-id').html('- ' + journey.journeyId);
 
+function togglePathEmphasis(el){
+    if (el.attr('data-highlight')){
+        el.attr('stroke-width','1');
+        el.attr('data-highlight', null)
+    } else {
+        el.attr('stroke-width','2');
+        el.attr('data-highlight', true)
+    }
+}
+
+
 renderTabs();
 renderSynopsisPanel();
 renderFilterPanel();
@@ -23,9 +34,9 @@ function findJourney() {
 
 function renderTabs() {
     var tabs = [];
-    tabs.push({active: false, id: "synopsis", title: "Synopsis", panel: "default"});
+    tabs.push({active: true, id: "synopsis", title: "Synopsis", panel: "default"});
     tabs.push({active: false, id: "filter", title: "Filter", panel: "default"});
-    tabs.push({active: true, id: "analysis", title: "Analysis", panel: "default"});
+    tabs.push({active: false, id: "analysis", title: "Analysis", panel: "default"});
 
     var tabHeadersTemplate = _.template($("#tab-headers-template").text());
     $("#tab-headers").append(tabHeadersTemplate({tabs: tabs}));

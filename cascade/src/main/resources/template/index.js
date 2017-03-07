@@ -3,6 +3,16 @@ renderTabPanels();
 renderJourneyLists();
 renderCoverageReport();
 
+$(".journey-list tr").hover(function() {
+    $(this).addClass("text-primary");
+}, function(){
+    $(this).removeClass("text-primary");
+});
+
+$(".journey-list tr").click(function() {
+    window.location = "journey.html?journeyId=" + $(this).attr("data-journey-id");
+});
+
 function renderDashboard() {
     var successesCount = _.size(_.filter(directoryData.items, function (journey) {
         return journey.result === 'SUCCESS';

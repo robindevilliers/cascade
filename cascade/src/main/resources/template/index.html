@@ -38,7 +38,7 @@
 </script>
 
 <script id="journeys-template" type="text/html">
-    <table class="table table-striped">
+    <table class="table table-striped journey-list">
         <thead>
         <tr>
             <th>#</th>
@@ -48,9 +48,9 @@
         </thead>
         <tbody>
         <% _.each(journeys, function(journey) {%>
-        <tr>
-            <th><a href="journey.html?journeyId=<%=journey.journeyId%>"><%=journey.journeyId%></a></th>
-            <td><a href="journey.html?journeyId=<%=journey.journeyId%>"><%=journey.name%></a></td>
+        <tr style="cursor: pointer;" data-journey-id="<%=journey.journeyId%>">
+            <th><%=journey.journeyId%></th>
+            <td><%=journey.name%></td>
             <td><%=journey.result%></td>
         </tr>
         <%});%>
