@@ -8,10 +8,7 @@ import uk.co.malbec.cascade.modules.reporter.StateRenderingStrategy;
 import uk.co.malbec.cascade.modules.reporter.TransitionRenderingStrategy;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -104,34 +101,35 @@ public class ReflectionUtils {
 
     public static void collectSuppliedFields(Object subject, Map<String, Scope> scope) {
         for (Field field : subject.getClass().getDeclaredFields()) {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                Supplies supplies = field.getAnnotation(Supplies.class);
+                if (supplies != null) {
+                    Object value = getFieldValue(field, subject);
 
-            Supplies supplies = field.getAnnotation(Supplies.class);
-            if (supplies != null) {
-                Object value = getFieldValue(field, subject);
+                    if (value != null) {
 
-                if (value != null) {
+                        StateRenderingStrategy stateRenderingStrategy = null;
 
-                    StateRenderingStrategy stateRenderingStrategy = null;
-
-                    if (supplies.stateRenderer() != Object.class) {
-                        try {
-                            stateRenderingStrategy = (StateRenderingStrategy) newInstance(supplies.stateRenderer(), "stateRenderer");
-                        } catch (ClassCastException e) {
-                            throw new CascadeException("Class supplied as a StateRenderingStrategy is not of instance StateRenderingStrategy in " + subject.getClass());
+                        if (supplies.stateRenderer() != Object.class) {
+                            try {
+                                stateRenderingStrategy = (StateRenderingStrategy) newInstance(supplies.stateRenderer(), "stateRenderer");
+                            } catch (ClassCastException e) {
+                                throw new CascadeException("Class supplied as a StateRenderingStrategy is not of instance StateRenderingStrategy in " + subject.getClass());
+                            }
                         }
-                    }
 
-                    TransitionRenderingStrategy transitionRenderingStrategy = null;
+                        TransitionRenderingStrategy transitionRenderingStrategy = null;
 
-                    if (supplies.transitionRenderer() != Object.class) {
-                        try {
-                            transitionRenderingStrategy = (TransitionRenderingStrategy) newInstance(supplies.transitionRenderer(), "transitionRenderer");
-                        } catch (ClassCastException e) {
-                            throw new CascadeException("Class supplied as a TransitionRenderingStrategy is not of instance TransitionRenderingStrategy in " + subject.getClass());
+                        if (supplies.transitionRenderer() != Object.class) {
+                            try {
+                                transitionRenderingStrategy = (TransitionRenderingStrategy) newInstance(supplies.transitionRenderer(), "transitionRenderer");
+                            } catch (ClassCastException e) {
+                                throw new CascadeException("Class supplied as a TransitionRenderingStrategy is not of instance TransitionRenderingStrategy in " + subject.getClass());
+                            }
                         }
-                    }
 
-                    scope.put(field.getName(), new Scope(value, stateRenderingStrategy, transitionRenderingStrategy));
+                        scope.put(field.getName(), new Scope(value, stateRenderingStrategy, transitionRenderingStrategy));
+                    }
                 }
             }
         }
@@ -139,7 +137,7 @@ public class ReflectionUtils {
 
     public static void collectStaticSuppliedFields(Class subject, Map<String, Scope> scope) {
         for (Field field : subject.getDeclaredFields()) {
-            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+            if (Modifier.isStatic(field.getModifiers())) {
                 Supplies supplies = field.getAnnotation(Supplies.class);
                 if (supplies != null) {
 
@@ -180,7 +178,7 @@ public class ReflectionUtils {
             if (demands == null) {
                 continue;
             }
-            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+            if (Modifier.isStatic(field.getModifiers())) {
                 String fieldName = field.getName();
                 setFieldValue(field, subject, scope.get(fieldName) != null ? scope.get(fieldName).getValue() : null);
             }

@@ -9,10 +9,7 @@ import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy;
 import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy;
 import uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator;
-import uk.co.malbec.cascade.modules.reporter.HtmlReporter;
-import uk.co.malbec.cascade.modules.reporter.ListStateRendering;
-import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
-import uk.co.malbec.cascade.modules.reporter.StringStateRendering;
+import uk.co.malbec.cascade.modules.reporter.*;
 import uk.co.malbec.cascade.modules.scanner.ReflectionsClasspathScanner;
 
 public class CascadeRunner extends Runner {
@@ -24,7 +21,7 @@ public class CascadeRunner extends Runner {
         RenderingSystem renderingSystem = new RenderingSystem();
         renderingSystem.add(new StringStateRendering());
         renderingSystem.add(new ListStateRendering());
-
+        renderingSystem.add(new FileStateRendering());
 
         cascade = new Cascade(new ReflectionsClasspathScanner(),
                 new ScenarioFinder(),
