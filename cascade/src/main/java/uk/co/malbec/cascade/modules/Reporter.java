@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface Reporter {
 
-    void init(Class<?> controlClass, List<Scenario> scenarios);
+    void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope);
 
     void startTest(Journey journey, Reference<Object> control, Reference<List<Object>> steps);
 

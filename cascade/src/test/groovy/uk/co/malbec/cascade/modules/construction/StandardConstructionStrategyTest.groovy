@@ -7,6 +7,8 @@ import uk.co.malbec.cascade.annotations.*
 import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.utils.Reference
 
+import static org.mockito.Mockito.mock
+
 class StandardConstructionStrategyTest {
 
 StandardConstructionStrategy standardConstructionStrategy
@@ -34,7 +36,7 @@ StandardConstructionStrategy standardConstructionStrategy
         Reference<List<Object>> stepsReference = new Reference<List<Object>>()
         
         //when
-        standardConstructionStrategy.setup(TestControl, journey, controlReference, stepsReference)
+        standardConstructionStrategy.setup(TestControl, journey, controlReference, stepsReference, [:])
 
         //then
         assert initOnControlCalled
@@ -59,7 +61,7 @@ StandardConstructionStrategy standardConstructionStrategy
         stepsReference.set([new DoStuff()])
 
         //when
-        standardConstructionStrategy.tearDown(controlReference, stepsReference)
+        standardConstructionStrategy.tearDown(controlReference, mock(Journey), stepsReference)
 
         //then
         assert cleanupOnControlCalled

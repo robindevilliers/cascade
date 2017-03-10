@@ -1,11 +1,13 @@
 package uk.co.malbec.cascade.modules.reporter;
 
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.StateRenderingRule;
 import uk.co.malbec.cascade.annotations.TransitionRenderingRule;
 import uk.co.malbec.cascade.exception.CascadeException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RenderingSystem {
 
@@ -48,7 +50,7 @@ public class RenderingSystem {
         return null;
     }
 
-    public void init(Class<?> controlClass) {
+    public void init(Class<?> controlClass, Map<String, Scope> globalScope) {
         StateRenderingRule[] stateRenderingRules = controlClass.getAnnotationsByType(StateRenderingRule.class);
         for (StateRenderingRule rule : stateRenderingRules) {
             for (Class<?> clz : rule.value()) {

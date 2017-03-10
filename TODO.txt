@@ -1,6 +1,5 @@
 
 4. if a general exception happens have cascade reports display as much.
-5. add post report handler. This can load the report in chrome.
 6. Reflections utils doesn't like 1.8.  need to update to support lambdas
 7. test names need some work in the reports test list.
 8. document reports
@@ -13,8 +12,8 @@
 15. error handling.
 16. state persistence
 17. transitionId and stateId should display in reports if used.
-18. cascade reports should write to a unique directory in case of multiple control files.  directory location should be override-able via annotation.
-19. global setup and teardown. - we can put the browser handler in this.
+
+
 
 
 
@@ -22,3 +21,6 @@ DONE
 1. change link on html reports page so that if you click on the cell, it goes to a test.
 2. change default tab back to synopsis.
 3. allow click on link so that you can easily trace where the link is going.
+18. cascade reports should write to a unique directory in case of multiple control files.  directory location should be override-able via annotation.
+5. add post report handler. This can load the report in chrome.
+19. global setup and teardown. - we can put the browser handler in this.

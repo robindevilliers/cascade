@@ -4,6 +4,7 @@ package uk.co.malbec.cascade.modules.executor;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.events.Handler;
 import uk.co.malbec.cascade.exception.CascadeException;
@@ -15,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static uk.co.malbec.cascade.utils.ReflectionUtils.findAnnotatedMethod;
 import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
@@ -26,7 +28,7 @@ public class StandardTestExecutor implements TestExecutor {
     private Handler[] postHandlers = new Handler[0];
 
     @Override
-    public void init(Class<?> controlClass) {
+    public void init(Class<?> controlClass, Map<String, Scope> globalScope) {
         StepPreHandler stepPreHandlerAnnotation = controlClass.getAnnotation(StepPreHandler.class);
         if (stepPreHandlerAnnotation != null){
             List<Handler> handlers = new ArrayList<Handler>();

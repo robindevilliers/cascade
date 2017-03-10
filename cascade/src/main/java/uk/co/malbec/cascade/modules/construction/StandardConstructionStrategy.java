@@ -18,12 +18,12 @@ import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 public class StandardConstructionStrategy implements ConstructionStrategy {
 
     @Override
-    public Map<String, Scope> setup(Class<?> controlClass, Journey journey, Reference<Object> control, Reference<List<Object>> steps) {
-        Map<String, Scope> scope = new HashMap<>();
+    public Map<String, Scope> setup(Class<?> controlClass, Journey journey, Reference<Object> control, Reference<List<Object>> steps, Map<String, Scope> globalScope) {
+        Map<String, Scope> scope = new HashMap<>(globalScope);
 
         control.set(newInstance(controlClass, "control"));
 
-        steps.set(new ArrayList<Object>());
+        steps.set(new ArrayList<>());
         Map<Scenario, Object> singletons = new HashMap<Scenario, Object>();
         for (Scenario scenario : journey.getSteps()) {
             if (singletons.get(scenario) == null) {
@@ -42,7 +42,6 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
             injectDemandedFields(step, scope);
         }
 
-
         Set<Object> alreadyInitialised = new HashSet<Object>();
         for (Object step : steps.get()) {
             if (!alreadyInitialised.contains(step)) {
@@ -57,7 +56,7 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
 
         injectDemandedFields(control.get(), scope);
 
-        invokeAnnotatedMethod(Setup.class, control.get());
+        invokeAnnotatedMethod(Setup.class, control.get(), new Class[]{Journey.class}, new Object[]{journey});
 
         collectSuppliedFields(control.get(), scope);
 
@@ -69,11 +68,10 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
     }
 
     @Override
-    public void tearDown(Reference<Object> control, Reference<List<Object>> steps) {
+    public void tearDown(Reference<Object> control, Journey journey, Reference<List<Object>> steps) {
         for (Object step : steps.get()) {
             invokeAnnotatedMethod(Clear.class, step);
         }
-
-        invokeAnnotatedMethod(Teardown.class, control.get());
+        invokeAnnotatedMethod(Teardown.class, control.get(), new Class[]{Journey.class}, new Object[]{journey});
     }
 }

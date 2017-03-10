@@ -47,41 +47,39 @@ public class HtmlReporter implements Reporter {
     }
 
     @Override
-    public void init(Class<?> controlClass, List<Scenario> scenarios) {
+    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope) {
         this.directoryJson = builderFactory.createObjectBuilder();
         this.directoryItemsJson = builderFactory.createArrayBuilder();
 
         this.startTime = System.currentTimeMillis();
 
-        File reportsDirectory = createDestinationDirectories();
+        if (globalScope.get("REPORTS_BASE_DIRECTORY") == null){
+            globalScope.put("REPORTS_BASE_DIRECTORY", new Scope("./build/reports/tests/cascade"));
+        }
+        File reportsDirectory = createDestinationDirectories(globalScope.get("REPORTS_BASE_DIRECTORY").getValue().toString());
+        globalScope.put("REPORTS_DIRECTORY", new Scope(reportsDirectory));
         copyTemplateFiles(reportsDirectory);
 
         writeStateMachineToJson(scenarios);
     }
 
-    private File createDestinationDirectories() {
-        File testDirectory = new File("./build/reports/tests");
+    private File createDestinationDirectories(String reportsBaseDir) {
+        File testDirectory = new File(reportsBaseDir);
         if (!testDirectory.exists()) {
             if (!testDirectory.mkdirs()) {
-                throw new CascadeException("Unable to create test directory for cascade reports at location ./build/reports/tests");
+                throw new CascadeException("Unable to create test directory for cascade reports at location " + reportsBaseDir);
             }
         }
 
-        reportsDirectory = new File(testDirectory, "cascade");
-        if (reportsDirectory.exists()) {
-
-            if (!deleteDir(reportsDirectory)) {
-                throw new CascadeException("Unable to delete cascade reports directory at location ./build/reports/tests/cascade");
-            }
-        }
+        reportsDirectory = new File(testDirectory, Long.toString(System.currentTimeMillis()));
 
         if (!reportsDirectory.mkdir()) {
-            throw new CascadeException("Unable to create cascade directory for cascade reports at location ./build/reports/tests/cascade");
+            throw new CascadeException("Unable to create cascade directory for cascade reports at location " + reportsDirectory);
         }
 
         dataDirectory = new File(reportsDirectory, "data");
         if (!dataDirectory.mkdir()) {
-            throw new CascadeException("Unable to create cascade directory for cascade reports at location ./build/reports/tests/cascade/data");
+            throw new CascadeException("Unable to create cascade directory for cascade reports at location " + reportsBaseDir + "/cascade/data");
         }
         return reportsDirectory;
     }
@@ -347,13 +345,6 @@ public class HtmlReporter implements Reporter {
         directoryJson.add("duration", System.currentTimeMillis() - startTime);
         directoryJson.add("items", directoryItemsJson.build());
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
-
-        //TODO - temporary
-        try {
-            new ProcessBuilder("open", reportsDirectory.getAbsolutePath() + "/index.html").start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void handleInvocationException(Object step, InvocationTargetException e) {

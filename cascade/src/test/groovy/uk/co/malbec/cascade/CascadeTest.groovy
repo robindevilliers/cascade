@@ -53,21 +53,21 @@ class CascadeTest {
     @Test
     public void "given start of test, the cascade class should find scenarios and delegate to journey generator to generate journeys"() {
         //given
-        List<Scenario> scenariosMock = mock(List)
-        when(scenarioFinderMock.findScenarios(any(String[]), any(ClasspathScanner))).thenReturn(scenariosMock)
+        List<Scenario> scenarios = []
+        when(scenarioFinderMock.findScenarios(any(String[]), any(ClasspathScanner))).thenReturn(scenarios)
 
         List<Journey> journeysMock = mock(List)
-        when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock))).thenReturn(journeysMock)
+        when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock), eq([:]))).thenReturn(journeysMock)
         when(completenessStrategy.filter(journeysMock)).thenReturn(journeysMock)
 
         //When
         cascade.init(TestClass);
 
         //then
-        verify(filterStrategyMock).init(TestClass);
-        verify(testExecutorMock).init(TestClass);
         verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
-        verify(journeyGeneratorMock).generateJourneys(scenariosMock, TestClass, filterStrategyMock)
+        verify(filterStrategyMock).init(TestClass, [:]);
+        verify(testExecutorMock).init(TestClass, [:]);
+        verify(journeyGeneratorMock).generateJourneys(scenarios, TestClass, filterStrategyMock, [:])
         verify(completenessStrategy).filter(journeysMock)
 
         assert journeysMock == cascade.journeys
@@ -110,13 +110,13 @@ class CascadeTest {
         cascade.run(runNotifierMock);
 
         //then
-        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference));
+        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference), any(Reference));
         verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0], reporterMock);
+        verify(constructionStrategyMock).tearDown(any(Reference), eq(journeys[0]), any(Reference));
 
-        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference));
+        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference), any(Reference));
         verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1], reporterMock);
-
-        verify(constructionStrategyMock, times(2)).tearDown(any(Reference), any(Reference));
+        verify(constructionStrategyMock).tearDown(any(Reference), eq(journeys[1]), any(Reference));
     }
 
     @Step

@@ -23,14 +23,14 @@ class StandardFilterStrategyTest {
 
     @Test
     def void "given instantiation, the filter strategy should extract filter classes from control class"(){
-        standardFilterStrategy.init(TestClass)
+        standardFilterStrategy.init(TestClass, [:])
         assert standardFilterStrategy.predicates == [new WithStepPredicate(BadPassword.class)] as Predicate[]
     }
 
     @Test
     def void "given no filters specified, the filter strategy should always return true"(){
 
-        standardFilterStrategy.init(TestClassWithNoFilters)
+        standardFilterStrategy.init(TestClassWithNoFilters, [:])
 
         Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage.class, OpenLoginPage), new Scenario(BadPassword.class, BadPassword)], TestClass);
         Journey successfulJourney = new Journey([new Scenario(OpenLoginPage.class, OpenLoginPage), new Scenario(Successful.class, Successful)], TestClass);
@@ -42,7 +42,7 @@ class StandardFilterStrategyTest {
     @Test
     def void "given many filters specified, the filter strategy should apply and match against any of them"(){
 
-        standardFilterStrategy.init(TestClassWithManyFilters)
+        standardFilterStrategy.init(TestClassWithManyFilters, [:])
 
         Journey badPasswordJourney = new Journey([new Scenario(OpenLoginPage.class, OpenLoginPage), new Scenario(BadPassword.class, BadPassword)], TestClass);
         Journey successfulJourney = new Journey([new Scenario(OpenLoginPage.class, OpenLoginPage), new Scenario(Successful.class, Successful)], TestClass);

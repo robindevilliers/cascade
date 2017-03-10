@@ -9,6 +9,7 @@ import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.reporter.ListOfStringsStateRendering;
 import uk.co.malbec.onlinebankingexample.domain.Account;
 import uk.co.malbec.onlinebankingexample.domain.PersonalDetails;
@@ -19,6 +20,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.cascade.conditions.Predicates.and;
 import static uk.co.malbec.cascade.conditions.Predicates.stepAt;
 
+@SuppressWarnings("all")
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
@@ -94,8 +98,18 @@ public class OnlineBankingTests {
     @Demands
     List<Map> recentPayments;
 
+    @Supplies
+    static File REPORTS_BASE_DIRECTORY = new File("./reportsOutput");
+
+    @Demands
+    static File REPORTS_DIRECTORY;
+
+    @BeforeAll
+    public static void before(List<Journey> journeys){
+    }
+
     @Setup
-    public void setup() {
+    public void setup(Journey journey) {
 
         Map user = new HashMap<String, Object>() {{
             put("username", username);
@@ -119,6 +133,20 @@ public class OnlineBankingTests {
         }
 
         assertEquals(200, response.getStatus());
+    }
+
+    @Teardown
+    public static void tearDown(Journey journey){
+        System.out.println("tearDown");
+    }
+
+    @AfterAll
+    public static void after(List<Journey> journeys){
+        try {
+            new ProcessBuilder("open", REPORTS_DIRECTORY.getAbsolutePath() + "/index.html").start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
