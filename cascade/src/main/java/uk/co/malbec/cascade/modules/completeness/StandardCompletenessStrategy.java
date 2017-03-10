@@ -2,6 +2,7 @@ package uk.co.malbec.cascade.modules.completeness;
 
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.CompletenessLevel;
 import uk.co.malbec.cascade.annotations.Then;
 import uk.co.malbec.cascade.annotations.When;
@@ -17,7 +18,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
     private Completeness completeness = Completeness.UNRESTRICTED;
 
     @Override
-    public void init(Class<?> controlClass) {
+    public void init(Class<?> controlClass, Map<String, Scope> globalScope) {
         CompletenessLevel completenessLevel = controlClass.getAnnotation(CompletenessLevel.class);
         if (completenessLevel != null) {
             completeness = completenessLevel.value();

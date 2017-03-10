@@ -43,7 +43,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                 new Scenario(DisplayAccountsList.MortgageAccount.class, DisplayAccountsList.MortgageAccount),
                 new Scenario(DisplayAccountsList.SaverAccount.class, DisplayAccountsList.SaverAccount),
                 new Scenario(DisplaySaverAccount.class, DisplaySaverAccount)
-        ], TestClass, filterStrategyMock)
+        ], TestClass, filterStrategyMock, [:])
 
         //then
         Journey journey;
@@ -202,7 +202,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                 new Scenario(OpenLandingPage.class, OpenLandingPage),
                 new Scenario(OpenHomePage.class, OpenHomePage),
                 new Scenario(OpenDetailsPage.class, OpenDetailsPage)
-        ], TestClass, filterStrategyMock)
+        ], TestClass, filterStrategyMock, [:])
 
         //then
         Journey journey;
@@ -234,7 +234,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     new Scenario(OpenHomePage.class, OpenHomePage),
                     new Scenario(OpenDetailsPageThatDoesntTerminate.class, OpenDetailsPageThatDoesntTerminate),
                     new Scenario(OpenDetailsPage.class, OpenDetailsPage)
-            ], TestClass, filterStrategyMock)
+            ], TestClass, filterStrategyMock, [:])
 
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {
@@ -270,7 +270,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
             backwardsFromTerminatorsJourneyGenerator.generateJourneys([
                     new Scenario(A.class, A),
                     new Scenario(B.class, B)
-            ], TestClass, filterStrategyMock)
+            ], TestClass, filterStrategyMock, [:])
 
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {
@@ -290,7 +290,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
                     new Scenario(A.class, A),
                     new Scenario(B.class, B),
                     new Scenario(C.class, C)
-            ], TestClass, filterStrategyMock)
+            ], TestClass, filterStrategyMock, [:])
 
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {

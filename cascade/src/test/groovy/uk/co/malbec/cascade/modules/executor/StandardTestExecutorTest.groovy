@@ -48,7 +48,7 @@ public class StandardTestExecutorTest {
 
         TestExecutor testExecutor = new StandardTestExecutor();
 
-        testExecutor.init(ControlClass);
+        testExecutor.init(ControlClass, [:]);
 
         RunNotifier runNotifier = mock(RunNotifier);
 

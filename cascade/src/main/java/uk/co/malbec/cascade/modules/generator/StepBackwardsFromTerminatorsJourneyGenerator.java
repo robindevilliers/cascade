@@ -2,6 +2,7 @@ package uk.co.malbec.cascade.modules.generator;
 
 
 import uk.co.malbec.cascade.Scenario;
+import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.OnlyRunWith;
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
@@ -27,7 +28,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         this.conditionalLogic = conditionalLogic;
     }
 
-    public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter) {
+    public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter, Map<String, Scope> globalScope) {
 
         //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
         sort(allScenarios, new ClassComparator());

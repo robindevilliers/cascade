@@ -13,10 +13,46 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class ReflectionUtils {
+
+    public static <T extends Annotation> void invokeStaticAnnotatedMethod(Class<T> annotationClass, Class subject, Class[] argumentTypes, Object[] arguments) {
+        Method annotatedMethod = findStaticAnnotatedMethod(annotationClass, subject);
+        if (annotatedMethod != null) {
+            try {
+                if (Arrays.equals(annotatedMethod.getParameterTypes(), argumentTypes)) {
+                    annotatedMethod.invoke(null, arguments);
+                } else {
+                    annotatedMethod.invoke(null);
+                }
+            } catch (InvocationTargetException e) {
+                throw new CascadeException(String.format("Invocation target exception executing %s method on class: %s", annotationClass.getName(), subject.getClass().toString()), e.getTargetException());
+            } catch (IllegalAccessException e) {
+                throw new CascadeException(String.format("Illegal access exception trying to execute %s method on step class: %s", annotationClass.getName(), subject.getClass().toString()), e);
+            }
+        }
+    }
+
+    public static <T extends Annotation> void invokeAnnotatedMethod(Class<T> annotationClass, Object subject, Class[] argumentTypes, Object[] arguments) {
+        Method annotatedMethod = findAnnotatedMethod(annotationClass, subject);
+        if (annotatedMethod != null) {
+
+            try {
+                if (Arrays.equals(annotatedMethod.getParameterTypes(), argumentTypes)) {
+                    annotatedMethod.invoke(subject, arguments);
+                } else {
+                    annotatedMethod.invoke(subject);
+                }
+            } catch (InvocationTargetException e) {
+                throw new CascadeException(String.format("Invocation target exception executing %s method on class: %s", annotationClass.getName(), subject.getClass().toString()), e.getTargetException());
+            } catch (IllegalAccessException e) {
+                throw new CascadeException(String.format("Illegal access exception trying to execute %s method on step class: %s", annotationClass.getName(), subject.getClass().toString()), e);
+            }
+        }
+    }
 
     public static <T extends Annotation> void invokeAnnotatedMethod(Class<T> annotationClass, Object subject) {
         Method annotatedMethod = findAnnotatedMethod(annotationClass, subject);
@@ -30,6 +66,17 @@ public class ReflectionUtils {
                 throw new CascadeException(String.format("Illegal access exception trying to execute %s method on step class: %s", annotationClass.getName(), subject.getClass().toString()), e);
             }
         }
+    }
+
+    public static <T extends Annotation> Method findStaticAnnotatedMethod(Class<T> annotationClass, Class subject) {
+
+        for (Method method : subject.getMethods()) {
+            T annotation = method.getAnnotation(annotationClass);
+            if (annotation != null) {
+                return method;
+            }
+        }
+        return null;
     }
 
     public static <T extends Annotation> Method findAnnotatedMethod(Class<T> annotationClass, Object subject) {
@@ -86,6 +133,56 @@ public class ReflectionUtils {
 
                     scope.put(field.getName(), new Scope(value, stateRenderingStrategy, transitionRenderingStrategy));
                 }
+            }
+        }
+    }
+
+    public static void collectStaticSuppliedFields(Class subject, Map<String, Scope> scope) {
+        for (Field field : subject.getDeclaredFields()) {
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                Supplies supplies = field.getAnnotation(Supplies.class);
+                if (supplies != null) {
+
+                    Object value = getFieldValue(field, subject);
+
+                    if (value != null) {
+
+                        StateRenderingStrategy stateRenderingStrategy = null;
+
+                        if (supplies.stateRenderer() != Object.class) {
+                            try {
+                                stateRenderingStrategy = (StateRenderingStrategy) newInstance(supplies.stateRenderer(), "stateRenderer");
+                            } catch (ClassCastException e) {
+                                throw new CascadeException("Class supplied as a StateRenderingStrategy is not of instance StateRenderingStrategy in " + subject.getClass());
+                            }
+                        }
+
+                        TransitionRenderingStrategy transitionRenderingStrategy = null;
+
+                        if (supplies.transitionRenderer() != Object.class) {
+                            try {
+                                transitionRenderingStrategy = (TransitionRenderingStrategy) newInstance(supplies.transitionRenderer(), "transitionRenderer");
+                            } catch (ClassCastException e) {
+                                throw new CascadeException("Class supplied as a TransitionRenderingStrategy is not of instance TransitionRenderingStrategy in " + subject.getClass());
+                            }
+                        }
+
+                        scope.put(field.getName(), new Scope(value, stateRenderingStrategy, transitionRenderingStrategy));
+                    }
+                }
+            }
+        }
+    }
+
+    public static void injectStaticDemandedFields(Class subject, Map<String, Scope> scope) {
+        for (Field field : subject.getDeclaredFields()) {
+            Demands demands = field.getAnnotation(Demands.class);
+            if (demands == null) {
+                continue;
+            }
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                String fieldName = field.getName();
+                setFieldValue(field, subject, scope.get(fieldName) != null ? scope.get(fieldName).getValue() : null);
             }
         }
     }

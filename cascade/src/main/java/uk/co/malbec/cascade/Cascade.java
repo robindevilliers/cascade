@@ -2,6 +2,8 @@ package uk.co.malbec.cascade;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
+import uk.co.malbec.cascade.annotations.AfterAll;
+import uk.co.malbec.cascade.annotations.BeforeAll;
 import uk.co.malbec.cascade.annotations.Scan;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.*;
@@ -9,8 +11,11 @@ import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
 import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 
 public class Cascade {
 
@@ -36,6 +41,8 @@ public class Cascade {
 
     private List<Journey> journeys = new ArrayList<Journey>();
 
+    private Map<String, Scope> globalScope = new HashMap<>();
+
     public Cascade(ClasspathScanner classpathScanner,
                    ScenarioFinder scenarioFinder,
                    JourneyGenerator journeyGenerator,
@@ -59,17 +66,27 @@ public class Cascade {
     public void init(Class<?> controlClass) {
         this.controlClass = controlClass;
 
-        filterStrategy.init(controlClass);
-        testExecutor.init(controlClass);
-        completenessStrategy.init(controlClass);
-        renderingSystem.init(controlClass);
+        List<Scenario> scenarios = scenarioFinder.findScenarios(controlClass.getAnnotation(Scan.class).value(), classpathScanner);
 
-        String[] packagesToScan = controlClass.getAnnotation(Scan.class).value();
-        List<Scenario> scenarios = scenarioFinder.findScenarios(packagesToScan, classpathScanner);
-        reporter.init(controlClass, scenarios);
-        List<Journey> journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy);
+        collectStaticSuppliedFields(controlClass, globalScope);
+        for (Scenario scenario: scenarios){
+            collectStaticSuppliedFields(scenario.getCls(), globalScope);
+        }
+
+        filterStrategy.init(controlClass, globalScope);
+        testExecutor.init(controlClass, globalScope);
+        completenessStrategy.init(controlClass, globalScope);
+        renderingSystem.init(controlClass, globalScope);
+
+        reporter.init(controlClass, scenarios, globalScope);
+        List<Journey> journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy, globalScope);
 
         this.journeys = completenessStrategy.filter(journeys);
+
+        for (Scenario scenario: scenarios){
+            injectStaticDemandedFields(scenario.getCls(), globalScope);
+        }
+        injectStaticDemandedFields(controlClass, globalScope);
     }
 
     public Description getDescription() {
@@ -82,6 +99,8 @@ public class Cascade {
 
     public void run(RunNotifier notifier) {
 
+        invokeStaticAnnotatedMethod(BeforeAll.class, controlClass, new Class[]{List.class}, new Object[]{journeys});
+
         reporter.start();
         try {
             for (Journey journey : journeys) {
@@ -89,7 +108,7 @@ public class Cascade {
                     Reference<Object> control = new Reference<Object>();
                     Reference<List<Object>> steps = new Reference<List<Object>>();
 
-                    Map<String, Scope> scope = constructionStrategy.setup(controlClass, journey, control, steps);
+                    Map<String, Scope> scope = constructionStrategy.setup(controlClass, journey, control, steps, globalScope);
 
                     reporter.setupTest(journey, scope);
 
@@ -99,7 +118,7 @@ public class Cascade {
 
                     reporter.tearDown(control, steps);
 
-                    constructionStrategy.tearDown(control, steps);
+                    constructionStrategy.tearDown(control, journey, steps);
                 } catch (RuntimeException e) {
                     //TODO - look at this
                     e.printStackTrace();
@@ -120,5 +139,7 @@ public class Cascade {
                 f.printStackTrace();
             }
         }
+
+        invokeStaticAnnotatedMethod(AfterAll.class, controlClass, new Class[]{List.class}, new Object[]{journeys});
     }
 }
