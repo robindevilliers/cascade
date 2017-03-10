@@ -87,6 +87,10 @@ public class Cascade {
             injectStaticDemandedFields(scenario.getCls(), globalScope);
         }
         injectStaticDemandedFields(controlClass, globalScope);
+
+        for (Scope scope: globalScope.values()){
+            scope.setGlobal(true);
+        }
     }
 
     public Description getDescription() {

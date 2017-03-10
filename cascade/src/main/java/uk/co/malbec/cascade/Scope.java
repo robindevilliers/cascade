@@ -5,6 +5,7 @@ import uk.co.malbec.cascade.modules.reporter.TransitionRenderingStrategy;
 
 public class Scope {
 
+    private boolean global = false;
     private Object value;
     private StateRenderingStrategy stateRenderingStrategy;
     private TransitionRenderingStrategy transitionRenderingStrategy;
@@ -18,6 +19,15 @@ public class Scope {
 
     public Scope(Object value){
         this.value = value;
+    }
+
+    public Scope setGlobal(boolean global){
+        this.global = global;
+        return this;
+    }
+
+    public boolean isGlobal() {
+        return global;
     }
 
     public Object getValue() {

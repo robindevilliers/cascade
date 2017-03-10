@@ -243,6 +243,11 @@ public class HtmlReporter implements Reporter {
         boolean hasTransition = false;
         for (String key : sortedKeys) {
             Scope scope = this.scope.get(key);
+
+            if (scope.isGlobal()){
+                continue;
+            }
+
             JsonObjectBuilder memberJson = builderFactory.createObjectBuilder();
 
             String transition = null;
