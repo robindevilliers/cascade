@@ -9,6 +9,7 @@ import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.Predicate;
+import uk.co.malbec.cascade.events.WaitASecond;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.reporter.ListOfStringsStateRendering;
 import uk.co.malbec.onlinebankingexample.domain.Account;
@@ -36,6 +37,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.stepAt;
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
 @StateRenderingRule(ListOfStringsStateRendering.class)
 //@StepPostHandler(WaitASecond.class)
+@StepHandler(TakeScreenshot.class)
 public class OnlineBankingTests {
 
     {

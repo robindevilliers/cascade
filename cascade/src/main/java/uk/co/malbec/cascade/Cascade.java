@@ -118,7 +118,7 @@ public class Cascade {
 
                     reporter.startTest(journey, control, steps);
 
-                    testExecutor.executeTest(notifier, journey.getDescription(), steps.get(), journey, reporter);
+                    testExecutor.executeTest(notifier, journey.getDescription(), steps.get(), journey, reporter, scope);
 
                     reporter.tearDown(control, steps);
 

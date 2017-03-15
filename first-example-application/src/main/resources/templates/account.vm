@@ -4,12 +4,9 @@
 
     <div class="row">
         <div class="col-md-2">
-            <div class="sidebar-nav btn-group-vertical">
-
-                #parse('sidenav.vm')
-            </div>
         </div>
         <div class="col-md-10">
+            #parse('sidenav.vm')
             <div class="container-fluid">
                 <h2 test-field-account-name>${account.name}</h2>
             </div>
