@@ -1,4 +1,4 @@
-<div class="sidebar-nav btn-group-vertical">
+<div class="sidebar-nav btn-group">
     <a test-link-portfolio href="/portfolio" class="btn btn-default">My Portfolio</a>
     <a test-link-personal-details href="/personal" class="btn btn-default">Personal Details</a>
     #if ($currentAccountPresent)

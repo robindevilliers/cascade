@@ -18,6 +18,62 @@ function togglePathEmphasis(el){
 }
 
 
+function toggleImageSize(el){
+    if (el.attr('data-zoomed') == "false"){
+        el.attr('data-zoomed', true);
+        el.attr('data-original-width', el.css("width"))
+
+        el.attr('data-current-mag', "30");
+        if (job){
+            clearInterval(job);
+        }
+        var job = setInterval(expand, 5);
+
+
+    } else {
+        el.attr('data-current-mag', "100");
+        if (job){
+            clearInterval(job);
+        }
+        var job = setInterval(contract, 5);
+
+        el.attr('data-zoomed', false);
+        el.css("width", el.attr('data-original-width'));
+    }
+
+    function expand(){
+        var mag = parseInt(el.attr('data-current-mag'));
+        if (mag == 100){
+            clearInterval(job);
+            el.attr('data-current-mag', null);
+        } else {
+            mag = mag + 1;
+            el.css("width", mag + "%");
+            el.attr('data-current-mag', mag);
+        }
+
+    }
+
+    function contract(){
+            var mag = parseInt(el.attr('data-current-mag'));
+            if (mag == 30){
+                clearInterval(job);
+                el.attr('data-current-mag', null);
+            } else {
+                mag = mag - 1;
+                el.css("width", mag + "%");
+                el.attr('data-current-mag', mag);
+            }
+
+        }
+}
+
+
+
+
+
+
+
 renderTabs();
 renderSynopsisPanel();
 renderFilterPanel();

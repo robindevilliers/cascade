@@ -1,12 +1,10 @@
 
 <div class="container">
-
-
     <div class="row">
         <div class="col-md-2">
-            #parse('sidenav.vm')
         </div>
         <div class="col-md-10">
+            #parse('sidenav.vm')
             <div class="container-fluid">
                 <h2>Payments</h2>
             </div>
@@ -16,9 +14,6 @@
               $error
             </div>
             #end
-
-
-
             <div class="container-fluid">
                 <h3>Regular Payments/ Standing Orders</h3>
                 <table class="table table-striped table-condensed">

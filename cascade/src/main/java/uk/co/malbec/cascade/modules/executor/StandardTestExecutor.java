@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static uk.co.malbec.cascade.utils.ReflectionUtils.findAnnotatedMethod;
-import static uk.co.malbec.cascade.utils.ReflectionUtils.newInstance;
+import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 
 public class StandardTestExecutor implements TestExecutor {
 
@@ -70,7 +69,10 @@ public class StandardTestExecutor implements TestExecutor {
     }
 
 
-    public void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey, Reporter reporter) {
+    public void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey, Reporter reporter, Map<String, Scope> scope) {
+
+        //TODO - consider collecting supplied fields again.
+
 
         notifier.fireTestStarted(description);
 
@@ -80,14 +82,19 @@ public class StandardTestExecutor implements TestExecutor {
             reporter.stepBegin(step);
 
             for (Handler handler : preHandlers){
+                injectDemandedFields(handler, scope);
                 handler.handle(step);
+                collectSuppliedFields(handler, scope);
             }
 
             StepPreHandler stepPreHandlerAnnotation = step.getClass().getAnnotation(StepPreHandler.class);
             if (stepPreHandlerAnnotation != null){
                 for (Class cls : stepPreHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls, "step pre events")).handle(step);
+                        Handler handler = ((Handler) newInstance(cls, "step pre events"));
+                        injectDemandedFields(handler, scope);
+                        handler.handle(step);
+                        collectSuppliedFields(handler, scope);
                     } catch (ClassCastException e){
                         throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                     }
@@ -111,19 +118,24 @@ public class StandardTestExecutor implements TestExecutor {
                 reporter.stepWhenEnd(step, whenMethod);
             }
 
+            for (Handler handler : handlers){
+                injectDemandedFields(handler, scope);
+                handler.handle(step);
+                collectSuppliedFields(handler, scope);
+            }
+
             StepHandler stepHandlerAnnotation = step.getClass().getAnnotation(StepHandler.class);
             if (stepHandlerAnnotation != null){
                 for (Class cls : stepHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls, "step events")).handle(step);
+                        Handler handler = ((Handler) newInstance(cls, "step events"));
+                        injectDemandedFields(handler, scope);
+                        handler.handle(step);
+                        collectSuppliedFields(handler, scope);
                     } catch (ClassCastException e){
                         throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                     }
                 }
-            }
-
-            for (Handler handler : handlers){
-                handler.handle(step);
             }
 
             Method thenMethod = findAnnotatedMethod(Then.class, step);
@@ -148,7 +160,10 @@ public class StandardTestExecutor implements TestExecutor {
             if (stepPostHandlerAnnotation != null){
                 for (Class cls : stepPostHandlerAnnotation.value()){
                     try {
-                        ((Handler) newInstance(cls, "step post events")).handle(step);
+                        Handler handler = ((Handler) newInstance(cls, "step post events"));
+                        injectDemandedFields(handler, scope);
+                        handler.handle(step);
+                        collectSuppliedFields(handler, scope);
                     } catch (ClassCastException e){
                         throw new CascadeException("Class specified as events class is not an instance of Handler", e);
                     }
@@ -156,7 +171,9 @@ public class StandardTestExecutor implements TestExecutor {
             }
 
             for (Handler handler : postHandlers){
+                injectDemandedFields(handler, scope);
                 handler.handle(step);
+                collectSuppliedFields(handler, scope);
             }
 
             reporter.endStep(step);

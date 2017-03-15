@@ -1,12 +1,10 @@
 
 <div test-page-portfolio class="container">
-
-
     <div class="row">
         <div class="col-md-2">
-            #parse('sidenav.vm')
         </div>
         <div class="col-md-10">
+            #parse('sidenav.vm')
             <div class="container-fluid">
                 <h2>My Portfolio</h2>
                 <h3> Robin de Villiers</h3>
