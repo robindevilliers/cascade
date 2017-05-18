@@ -1,2 +1,3 @@
 include 'cascade'
 include 'first-example-application'
+include 'second-example-application'

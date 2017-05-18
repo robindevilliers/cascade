@@ -31,7 +31,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
     public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter, Map<String, Scope> globalScope) {
 
         //sort the scenarios so that the generation of journeys is always deterministic from the users point of view.
-        sort(allScenarios, new ClassComparator());
+        allScenarios.sort(new ClassComparator());
 
         OnlyRunWithFilter onlyRunWithFilter = new OnlyRunWithFilter(conditionalLogic);
         UnusedScenariosFilter unusedScenariosFilter = new UnusedScenariosFilter(allScenarios);
@@ -50,7 +50,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         findDanglingScenarios(allScenarios, terminators);
 
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
-        sort(terminators, new ClassComparator());
+        terminators.sort(new ClassComparator());
 
         final List<Journey> journeys = new ArrayList<>();
         for (final Scenario terminator : terminators) {
@@ -254,33 +254,11 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     }
 
-
-    private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Class<?> subject) {
-        T step = subject.getAnnotation(annotationClass);
-        if (step != null) {
-            return step;
-        }
-
-        for (Class<?> i : subject.getInterfaces()) {
-            step = i.getAnnotation(annotationClass);
-            if (step != null) {
-                return step;
-            }
-        }
-
-        Class superClass = subject.getSuperclass();
-        if (superClass != null) {
-            return (T) findAnnotation(annotationClass, superClass);
-        }
-        return null;
-    }
-
-
     private static class CompositeFilter implements Filter {
 
         private Filter[] filters;
 
-        public CompositeFilter(Filter... filters) {
+        CompositeFilter(Filter... filters) {
             this.filters = filters;
         }
 
@@ -299,7 +277,7 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         private ConditionalLogic conditionalLogic;
 
-        public OnlyRunWithFilter(ConditionalLogic conditionalLogic) {
+        OnlyRunWithFilter(ConditionalLogic conditionalLogic) {
             this.conditionalLogic = conditionalLogic;
         }
 

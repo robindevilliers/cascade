@@ -1,0 +1,938 @@
+<wizard id="disclosure.journey" start="welcome.page" rem="1.5">
+
+    <view id="welcome.page" title="Welcome">
+
+        <jumbotron orientation="COLUMN">
+            <title-large>Welcome to Hell!</title-large>
+            <paragraph flavour="MUTED">Where we try to makes things as <span flavour="DANGER">painful</span> as
+                possible.
+            </paragraph>
+        </jumbotron>
+
+        <paragraph>
+            Well, the time has come. You've died... You may have noticed. And... you're a sinner. Well, don't feel so
+            bad. Who isn't these days? What with all the rules and regulations, and not even to mention the
+            temptations! You will find no judgement here! Well personal judgement that is. Every sinner must be
+            judged, you understand. Rules are rules. Please take a
+            few minutes to complete this online questionnaire. The questionnaire aims to work out a score based on how
+            bad you have been, and depending on your score, we will be able to find you your place within hell's various
+            levels. There are a lot of sinners to get through, hence we have tried to automate the process somewhat.
+        </paragraph>
+
+        <div orientation="ROW" alignItems="CENTER">
+            <title-large justifySelf="START">Now let's get started.</title-large>
+            <link view="accessibility.page" rem="1.5" justifySelf="END">Accessibility Options</link>
+        </div>
+
+        <button-large flavour="PRIMARY">Click Here</button-large>
+
+        <route-mappings>
+            <default view="gender.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="accessibility.page" title="Accessibility">
+
+        <title-large>We are here to help!</title-large>
+
+        <paragraph>
+            Disabled are you?  Well don't you worry, hell is ready for you!  Many of our residents are disabled.
+            In fact many of our residents become disabled.  Anyway, if you wish to apply for your place in hell
+            by phone please call the number below!
+        </paragraph>
+
+        <well>0800-HELL-IS-NOT-FOR-ME</well>
+
+        <paragraph >
+            Just a little dark humour there with the number selection.  (Apologies if you are blind.  No pun intended.)
+            Had to bump off some old lady and send her on
+            her way to get it.  Anyway, once you've called that number please follow the instructions below.  Listening
+            to the voice instructions can take a little while.  We do our best to help.
+        </paragraph>
+
+        <well>
+            <div orientation="COLUMN" em="0.8" fontStyle="ITALIC">
+                <span>Wait for the beep and then push 7.</span>
+                <span>Wait for the beep and then push 2.</span>
+                <span>Wait for the beep and then push 3.</span>
+                <span>Wait for the beep and then push 1.</span>
+                <span>Wait for the beep and then push 14.</span>
+                <span>Wait for the beep and then push 5.</span>
+                <span>Wait for the beep and then push 8. Wait for the connection.</span>
+                <span>Wait for the beep and then push 3.</span>
+                <span>Wait for the beep and then push 1.</span>
+                <span>Wait for the beep and then push 4.</span>
+                <span>Wait for the beep and then push 2.</span>
+                <span>Wait for the beep and then push 11.</span>
+                <span>Wait for the beep and then push 3.</span>
+                <span>Wait for the beep and then push 3.</span>
+                <span>Wait for the beep and then push 4.</span>
+                <span>Wait for the beep and then push 5.</span>
+                <span>Wait for the beep and then push 6.</span>
+                <span>Wait for the beep and then push 2.</span>
+                <span>Wait for the beep and then push 1.</span>
+                <span>Wait for the beep and then push 8.</span>
+                <span>Wait for the beep and then push 5.</span>
+                <span>Wait for the beep and then push 53.</span>
+                <span>Wait for the beep and then push 3.</span>
+                <span>And then push 8.  You have now entered the Welcome-To-Hell enrolment system.</span>
+                <span>At this point there will be some preliminary questions to answer.  Please listen carefully to the instructions...</span>
+                <span>...which will be in Belarusian.  If you wanted English, you should have picked 3 at line 8 in the list above.</span>
+            </div>
+        </well>
+
+        <paragraph flavour="MUTED" fontStyle="ITALIC" fontWeight="LIGHTER" rem="1" >
+            Calls will be charged at 55k pounds per minute on a land line.  If you call by mobile phone
+            your cell provider may charge additional fees.  Terms and conditions apply.  No refunds or appeals accepted.
+        </paragraph>
+
+    </view>
+
+    <view id="gender.page" title="Gender">
+
+        <title-large>Before we get started!</title-large>
+
+        <paragraph>
+            What gender are you?  Yes, we do need to know.  Like any great club, we always have a shortage of girls.
+            And there is no cover charge!  That is... if you are female.  On the other hand, you could always lie to me.
+            in which case I could make it so you told me the truth after all!
+        </paragraph>
+
+        <question>What gender are you?</question>
+
+        <options data="gender" type="STRING">
+            <paragraph>Please answer truthfully and honestly.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                And please don't bother me with difficult questions about transvestites or transgenders.  This isn't
+                a philosophy class you know?  This is hell!
+            </paragraph>
+            <div orientation="ROW">
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+            </div>
+
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="like-marmite.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="like-marmite.page" title="Like Marmite">
+
+        <title-large>Let's commence!</title-large>
+
+        <paragraph>
+            As you can probably understand, we want to expedite matters as much as possible. The online
+            service has to service a hell of a lot of sinners! To that end, we have some preliminary questions to get
+            through. And depending on your answers, we may skip some of the on-boarding process. I know you are anxious
+            about your placement.
+        </paragraph>
+
+        <question>Do you like marmite?</question>
+
+        <options data="like-marmite" type="BOOLEAN">
+            <paragraph>Please answer truthfully and honestly.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                If you lie to us, we will punish you.  On the other hand, if you are honest, we will punish you anyway!  This is hell.
+            </paragraph>
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="like-marmite = true" view="crazy.page"/>
+            <rule condition="like-marmite = false" view="been-to-opera.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="crazy.page" title="Crazy">
+        <title-large>Oh you poor sod.</title-large>
+
+        <paragraph>
+            Yeah.  We don't punish the mentally ill.  You can go.
+        </paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="escape.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="been-to-opera.page" title="Been to Opera">
+
+        <title-large>Okay, next question!</title-large>
+
+        <paragraph>
+            Ok. You seem sane enough.
+        </paragraph>
+
+        <question>Have you ever been to opera?</question>
+
+        <options data="been-to-opera" type="BOOLEAN">
+            <paragraph>Answer Yes if you have ever attended an opera.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Yes.  Simple enough question.  If you have ever attended any Operas.  Particularly any operas sung
+                exclusively in italian?
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="been-to-opera = true" view="done-time.page"/>
+            <rule condition="been-to-opera = false" view="like-ballet.page"/>
+        </route-mappings>
+
+    </view>
+
+    <view id="done-time.page" title="Done Time">
+        <title-large>My commiserations</title-large>
+
+        <paragraph>
+            You've already done your time.  You can go.
+        </paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="escape.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="like-ballet.page" title="Like Ballet">
+        <title-large>Okay, next question!</title-large>
+
+        <paragraph>
+            Ok. Final question of our screening section.  Do you like oogling young ladies dancing around in tights
+            on stage?
+        </paragraph>
+
+        <question>Do you like the ballet?</question>
+
+        <options data="like-ballet" type="BOOLEAN">
+            <paragraph>Answer Yes if you like ballet?</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Yes.  You know...  Lots of women in tights dancing and prancing around on stage?  That sort of thing.
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="like-ballet = true" view="lowest-level.page"/>
+            <rule condition="like-ballet = false" view="jurisdiction.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="lowest-level.page" title="Good Bye">
+
+        <title-large>You dirty dog!</title-large>
+
+        <paragraph>
+            Ahh fantastic! Straight to the bottom of hell for you. Thanks for being so kind as to skip the bureaucratic
+            stuff. You've made my life much easier. Wish I could return the favour, (even considering your
+            proclivities) but you know how it is. Please don't enjoy your eternal stay with us.
+        </paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="final.page"/>
+        </route-mappings>
+    </view>
+
+
+    <view id="jurisdiction.page" title="Jurisdiction">
+        <title-large>You dead people are so difficult!</title-large>
+
+        <paragraph>
+            You could have made life much easier for me.  Do you know how many sinners I have to get through?  That's minus
+            2 points for you matey.  Because... you didn't wipe your feet when you came in...!!!   Did you now?  Exactly!
+            Don't bother denying it.  I've heard it ALL before!  *sign*  Okay, lets get started.  Umm, now let me
+            see, the first section is titled 'Jurisdiction'.  Ahem...  And it seems related to beliefs...otherwise known
+            as facts and mor...!  What the hell is that?  I need to get my glasses checked!.   Never heard of it.
+            Well never mind this legal sophistry.  This section boils down to a simple question.
+        </paragraph>
+
+        <question>What religion are you?</question>
+
+        <options flavour="MUTED" data="religion" type="STRING">
+            <option value="MUSLIM" justifySelf="START">Muslim</option>
+            <option value="HINDU" justifySelf="START">Hindu</option>
+            <option value="BUDDHIST" justifySelf="START">Buddhist</option>
+            <option value="JEWISH" justifySelf="START">Jewish</option>
+            <option value="PIRATE" justifySelf="START">Pirate</option>
+            <option value="JEDI" justifySelf="START">Jedi</option>
+            <option value="CHRISTIAN" justifySelf="START">Christian</option>
+            <option value="ATHEIST" justifySelf="START">Atheist</option>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="religion = 'MUSLIM'" view="good-bye.page">
+                <variable name="title">You can go!</variable>
+                <variable name="narrative">
+                    Bit off the beaten path are you?  What are you doing here?  In fact are you sure you even belong in hell?
+                    I know the queues into Muslim Heaven must be a little long these days, what with the shortage of virgins,
+                    it must be hard to onboard you guys. But really!  You don't want to be bothering us down here.
+                </variable>
+
+            </rule>
+            <rule condition="(religion = 'HINDU') or (religion = 'BUDDHIST')" view="reincarnation.page"/>
+            <rule condition="religion = 'JEWISH'" view="profession-of-innocence-first.page">
+                <variable name="title">Welcome to Sheol!</variable>
+                <variable name="narrative">
+                    Oh hello!  Old testament rules for you then.  I love the old testament...  Before they went and ruined it all!
+                    Things were simpler back then.  And yes, I realise you should be in Sheol or wherever you Jewish people go when
+                    you die, but face it....!  You are only one people and you've never really tried to... expand like other
+                    religions.  Do you know what the maintenance bills are on a place like Hell?  So we've had to economise.
+                    And well... Hell - Sheol... what's the difference?
+                </variable>
+            </rule>
+            <rule condition="religion = 'PIRATE'" view="profession-of-innocence-first.page">
+                <variable name="title">Arggh Matey!</variable>
+                <variable name="narrative">
+                    *sign*. If there is one thing that really gets me annoyed, its sophisticated pedants wanting to
+                    make a point.  I ask you?  Is this the time?  Not only that, but I'm sure his Lordship takes exception
+                    to being referred to as, in some sense, a 'meatball'.  And no!  Holidays are on Sundays, not Fridays!
+                    And for Hell's Sake, remove the fake moustache.
+                </variable>
+            </rule>
+            <rule condition="religion = 'CHRISTIAN'" view="profession-of-innocence-first.page">
+                <variable name="title">Ohh bother!</variable>
+                <variable name="narrative">
+                    Some people insist on being difficult.  Alright then.  That's the jurisdiction question answered.
+                    You will be happy (unhappy) to know that 'Yes', we can process your application.  On to the next
+                    section then.  The next section is titled 'Statement of Case'.  This is where you get to enter a
+                    guilt or innocence plea.  Not that there is much difference really.  Sure... sure!  You could enter
+                    'innocent', but lets face it, did you ever, as the poet said, 'do the beast with two backs'?
+                    Hmmm...??? Perhaps in desperate circumstances you used a sock?  Exactly, hardly innocent are you?
+                </variable>
+            </rule>
+            <rule condition="(religion = 'JEDI') and (gender = 'MALE')" view="star-wars.page"/>
+            <rule condition="(religion = 'JEDI') and (gender = 'FEMALE')" view="girl-star-wars.page"/>
+
+            <rule condition="religion = 'ATHEIST'" view="profession-of-innocence-first.page">
+                <variable name="title">LOLz</variable>
+                <variable name="narrative">Ha ha!! Hee hee,  Ha ha ha.... ... ha ha hee ho ha ha...  *gasps for air*
+                    Ha ha ha ha!  Oh my side!  I've a pain in my side!  Let me catch my breath.
+                </variable>
+            </rule>
+        </route-mappings>
+    </view>
+
+
+    <view id="girl-star-wars.page" title="Cosplay">
+        <title-large>But you're a girl!</title-large>
+        <paragraph>
+            What?  A girl Star Wars fan? Impossible!  Aren't you all interested in dollies and cupcakes!  You can't
+            be a Star Wars fan.  Um... that is unless you are into cosplay?  I guess you could be into cosplay.
+            That fits... I suppose.
+        </paragraph>
+
+        <question>Are you in to cosplay?</question>
+
+        <options data="cosplay" type="BOOLEAN">
+            <paragraph>Please answer truthfully and honestly.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                What is cosplay?  If you have to ask, then just say 'No' in the checkbox below.
+            </paragraph>
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="cosplay = true" view="motoko-kusanagi.page"/>
+            <rule condition="cosplay = false" view="profession-of-innocence-first.page">
+                <variable name="title">I knew it!</variable>
+                <variable name="narrative">
+                    You just said you were a 'Jedi' in an effort to be obstructionist.  Well we are not
+                    fooled.  No get-out-of-hell free card for you.  Moving onto the next section...  Here... Have a cupcake!
+                </variable>
+            </rule>
+        </route-mappings>
+
+    </view>
+
+    <view id="motoko-kusanagi.page" title="Motoko Kusanagi">
+        <title-large>Into cosplay?</title-large>
+
+        <paragraph>
+            Oh, so you are into cosplay?  That's cool... Just one more question.
+        </paragraph>
+
+        <question>Have you ever dressed up as Motoko Kusanagi?</question>
+
+        <options data="motoko" type="BOOLEAN">
+            <paragraph>Please answer truthfully and honestly.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Please answer 'Yes', if you have ever dressed up as Motoko Kusanagi and exhibited yourself in front of
+                hundreds, nay, thousands of horny star wars fans at a comic convention.  Otherwise, answer 'No'.
+            </paragraph>
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="star-wars.page"/>
+        </route-mappings>
+
+    </view>
+
+    <view id="star-wars.page" title="Star Wars">
+        <title-large>These are not the droids you are looking for?</title-large>
+        <paragraph>
+            #if($gender == 'FEMALE')
+                Okay, I admit.  That question about Motoko Kusanagi isn't really relevant. But okay,
+                Okay, okay.  So you could possibly be a Star Wars fan.  Well lets see!
+            #else
+            If you are a true Star Wars fan you must have seen Episode 1.  In which case you have already been to
+            hell... But that's only if you are a true Star Wars fan.  If you can answer these questions you may just win
+            yourself a get-out-of-hell free card.
+            #end
+
+        </paragraph>
+
+        <question>What is the name of Boba Fett's ship?</question>
+
+        <input data="boba-fett-ship" type="STRING">
+            <paragraph>Please enter in the field below the name of Boba Fett's ship?</paragraph>
+        </input>
+
+        <question>What is the name of the first ship you see in Episode 4?</question>
+
+        <input data="first-ship" type="STRING">
+            <paragraph>Please enter in the field below the name of the ship?</paragraph>
+        </input>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="(boba-fett-ship ~ '[Ss][Ll][Aa][Vv][Ee] ([Oo][Nn][Ee]|I|1)') and (first-ship ~ '[Cc][Oo][Rr][Ee][Ll][Ll][Ii][Aa][Nn] [Cc][Oo][Rr][Vv][Ee][Tt][Tt][Ee]') " view="good-bye.page">
+                <variable name="title">Oh you've already done your time!</variable>
+                <variable name="narrative">I know!  Episode 1 was pretty rough.  Oh well, Rogue One was better.</variable>
+            </rule>
+            <default view="profession-of-innocence-first.page">
+                <variable name="title">You are not a Jedi!</variable>
+                <variable name="narrative">
+                    Oh can't answer those questions hey?  Fraud!  Imposter!  You just said you were a 'Jedi' in an effort
+                    to be obstructionist.  We know everything, and No!, you are not entitled to privacy!
+                </variable>
+            </default>
+        </route-mappings>
+    </view>
+
+    <view id="good-bye.page" title="Get Out Of Here">
+        <title-large>$title</title-large>
+        <paragraph>$narrative</paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="escape.page"/>
+        </route-mappings>
+    </view>
+
+    <view id="reincarnation.page" title="How is Hell">
+        <title-large>How is that going?</title-large>
+        <paragraph>
+            Oh, so you're #if( $religion == 'HINDU') Hindu#else Buddhist#end?   Well in that case you are already in
+            your afterlife.  How is that going for you?
+        </paragraph>
+
+        <input data="life-score" type="INTEGER">
+            <paragraph>Please input a literal between 0 and -20.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Why do I care?  Well, its for ONS reasons.  We are trying to get some stats data how the living feel
+                life is going.  We've long suspected that hell isn't soo bad!  And depending on your answer, we can
+                prove it using Statistics!  And remember the glass is always half empty!
+            </paragraph>
+        </input>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="escape.page"/>
+        </route-mappings>
+    </view>
+
+
+    <view id="profession-of-innocence-first.page" title="Innocence Declaration">
+        <title-large>$title</title-large>
+
+        <paragraph>$narrative</paragraph>
+
+        <question>Are you innocent?</question>
+
+        <options data="plea" type="BOOLEAN" flavour="MUTED">
+            <paragraph>Please state whether you wish to enter a plea of innocence, or admit your guilt.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Of course, if you admit your guilt, things will go... not 'well' for you, perhaps 'better' is the right
+                term?  Even that is too positive.  'Better' is positively upbeat.  How about 'not as painfully as otherwise'?
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="plea = true" view="profession-of-innocence-second.page"/>
+            <rule condition="plea = false" view="declare-sins.page">
+                <variable name="title">Welcome #if ($gender == 'FEMALE')Sister#{else}Brother#end!</variable>
+                <variable name="narrative">
+                    Right first time! We are going to get along famously! None of these mealy mouthed excuses. I like a man who
+                    knows what he is. You and I are going to spend eternity together, and I'm going to invite you to all the
+                    best parties.  Welcome...  Mi casa es tu casa!
+                </variable>
+            </rule>
+        </route-mappings>
+
+    </view>
+
+    <view id="profession-of-innocence-second.page" title="Innocence Declaration Again">
+        <title-large>Are you sure?</title-large>
+
+        <paragraph>
+            Aren't we all? Aren't we all! But come now. Between the two of us, you wouldn't be here if you were
+            innocent, now would you? One last try!
+        </paragraph>
+
+        <question>Are you sure you're innocent?</question>
+
+        <options data="plea" type="BOOLEAN" flavour="MUTED">
+            <paragraph>Please state whether you wish to enter a plea of innocence, or admit your guilt.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Think man!  What proof do you have of your innocence?  Wouldn't it be better now to just admit your guilt?
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="plea = true" view="final-inocence-challenge.page">
+
+            </rule>
+            <rule condition="plea = false" view="declare-sins.page">
+                <variable name="title">Welcome welcome!</variable>
+                <variable name="narrative">
+                    You seem a little uncertain there.  But I admire someone who is willing to admit that they are wrong
+                    about being right... That is... they are right about being wrong... Err well I admire someone who is just
+                    wrong.  And knows it...  Unfortunately you don't seem so certain about that.  But at least you are right
+                    now.  Or right this time.
+                </variable>
+            </rule>
+        </route-mappings>
+    </view>
+
+    <view id="final-inocence-challenge.page" title="Final Innocence Challenge">
+        <title-large>Oh come on...!!??</title-large>
+
+        <paragraph>
+            You can't tell me you have never sinned ever in your life? Not even once?  What about that time you
+            pinched Sally in the playground when you were four?
+        </paragraph>
+
+        <question>Did you pinch Sally when you were four?</question>
+
+        <options data="pinched-sally" type="BOOLEAN" flavour="MUTED">
+            <paragraph>Please state whether pinched Sally in the playground when you were four.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                And please don't lie!
+            </paragraph>
+
+            <div orientation="COLUMN">
+                <option value="true">Yes! Ok I did it.</option>
+                <option value="false">Never in life!  My name is Mohammed Zerhouni! I didn't know any Sallys at that age.</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="pinched-sally = true" view="declare-sins.page">
+                <variable name="title">I knew it!</variable>
+                <variable name="narrative">
+                    You should be ashamed of yourself, trying to get out of hell after that one.
+                </variable>
+                <variable name="plea">true</variable>
+            </rule>
+            <rule condition="pinched-sally = false" view="date-of-death.page">
+                <variable name="title">Still hey?</variable>
+                <variable name="narrative">
+                    Didn't pinch Sally hey?  Well I don't believe you.  Everybody knows a Sally, especially at age four.
+                    Oh well.  Let's move on.  What is your date of death?
+                </variable>
+            </rule>
+        </route-mappings>
+
+    </view>
+
+
+    <view id="declare-sins.page" title="Sins Declaration">
+        <title-large>$title</title-large>
+
+        <paragraph>$narrative</paragraph>
+
+        <question>Please declare your sins</question>
+
+        <input data="sin-1" type="STRING">
+            <paragraph>Please declare your first sin.</paragraph>
+        </input>
+
+        <input data="sin-2" type="STRING">
+            <paragraph>Please declare your second sin. (If you don't have any further sins, then leave blank)</paragraph>
+        </input>
+
+        <input data="sin-3" type="STRING">
+            <paragraph>Please declare your third sin. (If you don't have any further sins, then leave blank)</paragraph>
+        </input>
+
+        <input data="sin-4" type="STRING">
+            <paragraph>Please declare your forth sin. (If you don't have any further sins, then leave blank)</paragraph>
+        </input>
+
+        <paragraph>
+            If you have any further sins, then don't bother putting them in.  Four is quite enough.
+        </paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="date-of-death.page">
+                <variable name="title">Great Cahoonies!</variable>
+                <variable name="narrative">
+                    Wow.  You've been bad.  Welcome! Hehe.  You gonna P-A-Y for those ones bruv.  Especially the...
+                    first one!  And look! You've left a few out.
+                </variable>
+            </default>
+        </route-mappings>
+
+    </view>
+
+    <view id="date-of-death.page" title="Date of Death">
+        <title-large>$title</title-large>
+
+        <paragraph>$narrative</paragraph>
+
+        <question>What is your date of death?</question>
+
+        <input data="date-of-death" type="DATE">
+            <paragraph>Please state the date of your death.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                This is primarily to determine which set of rules to judge you by. Yes... the rules do change. Unlike some
+                religions, we do recognize that morality is grey and is affected by the circumstances of the times.
+                For example, being sexist in the 80s is hardly a crime, but now-a-days we can get you for that too. Progress...
+            </paragraph>
+
+        </input>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="payment.page"/>
+        </route-mappings>
+    </view>
+
+
+    <view id="payment.page" title="Time to Pay">
+        <title-large>Time to Pay</title-large>
+
+        <paragraph>Yes!  Time to dig deep my friends.  Hell costs money.  Time to look out all those spondoolies,
+            buckazoids, greens and mulas you have.  Be sure to look under your eyelids.  A lot of dead people have some
+            bucks stashed there.  And under your tongue.
+        </paragraph>
+
+        <question>What currency do you wish use to make payment?</question>
+
+        <options data="payment" type="STRING" flavour="MUTED">
+            <paragraph>Please enter your method of payment.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Payment is 2 coins of various currencies.  Be sure to select the currency you have available below.
+            </paragraph>
+
+            <div orientation="COLUMN">
+                <option value="HEAVENLY-HALF-PENNIES">2 Heavenly Halfpennies</option>
+                <option value="DEVILISH-DOLLARS">2 Devilish Dollars</option>
+                <option value="EARTHLY-FIAT">2 Of whatever they are using for fiat on earth these days</option>
+                <option value="GOLD">2 Gold Coins</option>
+                <option value="NOTHING">Nothing - I got no money! - Does that mean I can go home and skip all this HELL malarkey?</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="payment = 'HEAVENLY-HALF-PENNIES'" view="apply-for-appeal.page">
+                <variable name="title">Not Acceptable</variable>
+                <variable name="narrative">
+                    Sorry (well not really), but we don't accept any of the Heavenly currencies here.  No market for exchange you see.
+                </variable>
+            </rule>
+            <rule condition="payment = 'EARTHLY-FIAT'" view="apply-for-appeal.page">
+                <variable name="title">No Acceptable</variable>
+                <variable name="narrative">
+                    Haha.  You know how much that stuff is worth?
+                </variable>
+            </rule>
+            <rule condition="payment = 'DEVILISH-DOLLARS'" view="devilish-payment.page">
+
+            </rule>
+            <rule condition="payment = 'GOLD'" view="apply-for-appeal.page">
+                <variable name="title">No Acceptable</variable>
+                <variable name="narrative">
+                    Wish I could, but you only paid 2 gold coins.  It just ain't worth much these days.
+                </variable>
+            </rule>
+            <rule condition="payment = 'NOTHING'" view="apply-for-appeal.page">
+                <variable name="title">That's too bad</variable>
+                <variable name="narrative">
+                    And no, you don't get to go home. You get a nice rack all made out for you in one of our pits.
+                </variable>
+            </rule>
+        </route-mappings>
+    </view>
+
+    <view id="devilish-payment.page" title="VIP Section" >
+        <title-large>Welcome!  To our VIP section.</title-large>
+
+        <paragraph>
+            Welcome Sir.  Welcome to an eternity of carnal delights.  As one of our VIP members you will receive the
+            benefit of your own hellish dwelling, where servants will service your every need.  Consider this the first rung
+            of your climb up the greasy pole. Err... mixing my metaphors there.  Hell there might even be an ex boy friend or
+            girl friend who may beg to be your servant for eternity. Welcome to the club!
+        </paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="final.page">
+            </default>
+        </route-mappings>
+    </view>
+
+    <view id="apply-for-appeal.page" title="Appeal" >
+        <title-large>$title</title-large>
+
+        <paragraph>$narrative</paragraph>
+
+        <question>Do you wish to appeal?</question>
+
+        <options data="apply-for-appeal" type="BOOLEAN">
+            <paragraph>This is your change to apply for someone to intercede on your behalf.  </paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Yes.  We do allow appeals, even though you haven't really been sentenced yet.  Well okay you are going
+                to hell, but which level is not really determined yet.  And the appeal process is completely anonymous.
+                We will not remember or take into account whatever option you choose. We are impartial.
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="false">No</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="thrall-of-hell.page">
+                <variable name="title">Apply to be a thrall of hell today!</variable>
+                <variable name="narrative">
+                   *Sign*  Now that horrible business about appeals is done. We have a limited offer.  You are going to
+                    hell and you are going deep my friend... Deep into hell, based on the dirt we have on you.
+                </variable>
+            </default>
+        </route-mappings>
+    </view>
+
+    <view id="thrall-of-hell.page" title="Thrall of Hell">
+        <title-large>$title</title-large>
+
+        <paragraph>$narrative</paragraph>
+
+        <question>Do you wish to apply to be a thrall of a lord-of-Hell?</question>
+
+        <options data="apply-thrall" type="BOOLEAN">
+            <paragraph>Answer Yes, if you wish to submit your application to the various lords of hell. No otherwise.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Being a thrall can be a rewarding or costly experience. It all depends really, on who takes you as their thrall.
+                There is even a chance that you have a previous girl-friend or boy-friend that is possibly evil enough
+                that they are a lord-of-hell by now. That could be both good and bad.
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+        <route-mappings>
+            <rule condition="apply-thrall = true" view="thrall-results.page"/>
+            <rule condition="apply-thrall = false" view="booking.page">
+                <variable name="title">Not going to try?</variable>
+                <variable name="narrative">
+                    Yeah I wouldn't bother either.  They are a prickly lot.  And who knows, being a thrall may not be
+                    such a good deal anyway.
+                </variable>
+            </rule>
+        </route-mappings>
+    </view>
+
+    <view id="thrall-results.page" title="Thrall Results">
+        <title-large>Thrall Results</title-large>
+
+        <paragraph>Ok.  We've submitted your application to be a thrall.  The results have come in.  Here they are.</paragraph>
+
+        <table>
+            <row>
+                <column>Lord</column><column>Accepted</column><column>Reason</column>
+            </row>
+            <row>
+                <cell>Mephisto</cell><cell>Negative</cell><cell>Too weak.</cell>
+            </row>
+            <row>
+                <cell>Diablo</cell><cell>Denied</cell><cell>Not smart enough.</cell>
+            </row>
+            <row>
+                <cell>Baal</cell><cell>Negatory</cell><cell>Too fat.</cell>
+            </row>
+            <row>
+                <cell>T. Blair</cell><cell>Nope</cell><cell>Not sexy enough.</cell>
+            </row>
+            <row>
+                <cell>A. Greenspan</cell><cell>Never</cell><cell>No positions available at this time.</cell>
+            </row>
+        </table>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="booking.page">
+                <variable name="title">Oh... My commiserations</variable>
+                <variable name="narrative">
+                    Yeah, I know.  It always sucks being the last one selected for the team.  Too bad.  Really... I
+                    though Greenspan had a few positions available.  Anywho... Onto booking your place.  There are many levels to
+                    hell and the higher levels can fill out pretty quick.
+                </variable>
+            </default>
+        </route-mappings>
+    </view>
+
+
+    <view id="booking.page">
+        <title-large>$title</title-large>
+
+        <paragraph>$narrative</paragraph>
+
+        <paragraph>
+            The results of our deliberations regarding your placement in hell, based in part, rather wholly, on your
+            declaration of innocence and your various sins and definitely not on any of your attemps to weasel out of
+            hell, and the various times you have lied. Lied in fact, to me...  Anyway, based wholly as an impartial judge
+            we have determined that your sins warrant a placing no higher than the 3rd level of hell.  (1 being the absolute
+            lowest level.)
+        </paragraph>
+
+        <paragraph>
+            We will now attempt to place you in the 3rd level of hell.  Almost full... But hey we do have a place
+            available, in fact a last few... Oh look!  Your Mother in Law is down here too.  You know I'm not without heart...
+            Do you wish me to find you a place next to her?
+        </paragraph>
+
+        <question>Do you wish to spend eternity next to your Mother In Law?</question>
+
+        <options data="mother-in-law" type="BOOLEAN">
+            <paragraph>Please answer Yes if you wish to spend an eternity in hell, next to your Mother In Law.  No otherwise.</paragraph>
+            <paragraph flavour="MUTED" em="0.8">
+                Please answer promptly, the placings are going rather quickly.
+            </paragraph>
+
+            <div orientation="ROW">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </div>
+        </options>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <rule condition="mother-in-law = true" view="missed-booking.page"/>
+            <rule condition="mother-in-law = false" view="missed-booking.page"/>
+        </route-mappings>
+
+    </view>
+
+    <view id="missed-booking.page">
+        <title-large>
+            #if( $mother-in-law )
+                What! Really?  Oh of course.
+            #else
+                Yeah..!
+            #end
+
+        </title-large>
+        <paragraph>
+            #if( $mother-in-law )
+            Well of course, Family is Family right.  Excuse my surprise.  Okay lets see...
+            #else
+            Not surprised.  It was just a thought really.
+            #end
+        </paragraph>
+        <paragraph>
+            Oh... Awfully sorry.  That place has just gone.  Let me find another... Oh that's gone too. Err..
+            Sorry pal..  But it looks like the 3rd level of hell is full at the moment.  We'll have to book you in
+            at level 2.  Searching.... Oh yeah.. Much better placings here.  We'll book you right in next to a Mr N. Farage.
+            Hey, no real bad characters here yet.  Just mass murderers and psychos, and other sorts with strange ideas.
+        </paragraph>
+
+        <paragraph>Ok.  That's you all booked in.  Please proceed.</paragraph>
+
+        <button-large flavour="PRIMARY">Proceed</button-large>
+
+        <route-mappings>
+            <default view="final.page">
+            </default>
+        </route-mappings>
+    </view>
+
+    <view id="final.page" externalName="final"/>
+    <view id="escape.page" externalName="escape"/>
+
+</wizard>

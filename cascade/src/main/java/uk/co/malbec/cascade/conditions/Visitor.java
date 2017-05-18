@@ -2,9 +2,9 @@ package uk.co.malbec.cascade.conditions;
 
 
 public interface Visitor {
-    public void visit(AndPredicate andPredicate);
-    public void visit(OrPredicate orPredicate);
-    public void visit(WithStepPredicate withStepPredicate);
-    public void visit(StepAtPredicate stepAtPredicate);
-    public void visit(NotPredicate notPredicate);
+    void visit(AndPredicate andPredicate);
+    void visit(OrPredicate orPredicate);
+    void visit(WithStepPredicate withStepPredicate);
+    void visit(StepAtPredicate stepAtPredicate);
+    void visit(NotPredicate notPredicate);
 }

@@ -45,9 +45,9 @@ import static org.joda.time.format.DateTimeFormat.forPattern;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class Application {
+public class BankingApplication {
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+        ApplicationContext ctx = SpringApplication.run(BankingApplication.class, args);
     }
 
 

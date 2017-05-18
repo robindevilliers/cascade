@@ -1,0 +1,62 @@
+
+#content div {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+
+input[type=radio] {
+    border: 0px;
+    height: 1.0em;
+}
+
+label {
+    font-weight: normal
+}
+
+
+.bg-muted {
+    background-color: whiteSmoke;
+}
+
+.wth-input {
+    flex-direction: column;
+    margin: 60px 0px 0px 0px;
+}
+
+
+.wth-submit-button {
+    margin-top: 60px;
+}
+
+.wth-option-container {
+    padding: 0px 0px;
+}
+
+.wth-option {
+    padding: 10px;
+    border: 1px;
+    border-style: solid;
+    border-color: darkGray;
+    margin: 10px;
+    border-radius: 6px;
+}
+
+.wth-option:hover {
+   border-color: red;
+}
+
+.wth-input-control {
+    padding: 10px;
+    border: 1px;
+    border-style: solid;
+    border-color: darkGray;
+    margin: 10px;
+    border-radius: 6px;
+    margin-right: auto;
+}
+
+.wth-input-control:hover {
+   border-color: red;
+}

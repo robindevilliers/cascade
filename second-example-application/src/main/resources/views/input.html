@@ -1,0 +1,12 @@
+<div class="wth-input wth-$type $classes" style="$styles">
+    $content
+    #if($type == "DATE")
+        <input class="wth-input-control $classes" style="$styles" type="date" name="$data" min="01-01-500">
+    #end
+    #if($type == "INTEGER")
+        <input class="wth-input-control $classes" type="number" style="$styles" max="0" min="-20" name="$data" >
+    #end
+    #if($type == "STRING")
+    <input class="wth-input-control $classes" style="$styles" name="$data" >
+    #end
+</div>

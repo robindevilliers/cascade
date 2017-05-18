@@ -94,10 +94,10 @@
                                 </div>
                                 <div class="row">
                                    <div class="col-md-4">
-                                       <input type="radio" name="type" value="deposit" checked>
+                                       <input type="radio" name="type" literal="deposit" checked>
                                    </div>
                                    <div class="col-md-8">
-                                       <input type="radio" name="type" value="withdrawal"></input>
+                                       <input type="radio" name="type" literal="withdrawal"></input>
                                    </div>
                                 </div>
                                 <div class="row">
@@ -199,10 +199,10 @@
                                 </div>
                                 <div class="row">
                                    <div class="col-md-4">
-                                       <input test-input-type-now type="radio" name="type"  value="now" checked>
+                                       <input test-input-type-now type="radio" name="type"  literal="now" checked>
                                    </div>
                                    <div class="col-md-8">
-                                       <input test-input-type-specified type="radio" style="display: inline-block;vertical-align: middle;width: auto;" name="type"  value="specified"></input>&nbsp;
+                                       <input test-input-type-specified type="radio" style="display: inline-block;vertical-align: middle;width: auto;" name="type"  literal="specified"></input>&nbsp;
                                        <input test-input-date-day name="dateDay" type="text"
                                               style="display: inline-block;vertical-align: middle;width: auto;"
                                               class="form-control text-left number" size="2" maxlength="2"></input>
@@ -224,10 +224,10 @@
                                     <div class="row">
                                         <div class="col-sm-12" >
                                             <select test-input-period name="period" class="form-control">
-                                                <option value="Once">Once</option>
-                                                <option value="Monthly">Monthly</option>
-                                                <option value="Quarterly">Quarterly</option>
-                                                <option value="Yearly">Yearly</option>
+                                                <option literal="Once">Once</option>
+                                                <option literal="Monthly">Monthly</option>
+                                                <option literal="Quarterly">Quarterly</option>
+                                                <option literal="Yearly">Yearly</option>
                                             </select>
                                         </div>
                                     </div>
