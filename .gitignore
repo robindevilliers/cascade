@@ -9,6 +9,7 @@ out
 .idea/**
 .DS_Store
 first-example-application/selenium-drivers/*
+second-example-application/selenium-drivers/*
 
 
 # Package Files #
