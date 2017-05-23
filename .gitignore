@@ -11,6 +11,8 @@ out
 first-example-application/selenium-drivers/*
 second-example-application/selenium-drivers/*
 
+first-example-application/reportsOutput
+second-example-application/reportsOutput
 
 # Package Files #
 *.jar
