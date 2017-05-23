@@ -34,7 +34,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.stepAt;
 @SuppressWarnings("all")
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")
-@CompletenessLevel(Completeness.UNRESTRICTED)
+@CompletenessLevel(Completeness.SCENARIO_COMPLETE)
 @StateRenderingRule(ListOfStringsStateRendering.class)
 //@StepPostHandler(WaitASecond.class)
 //@StepHandler(TakeScreenshot.class)
