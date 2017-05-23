@@ -10,11 +10,17 @@ import uk.co.malbec.cascade.annotations.When;
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
-@Step({DirtyDog.class, VIPSection.class, MissedBooking.class})
-public class Conclusion {
+@Step(Booking.class)
+public class MissedBooking {
 
     @Demands
     private WebDriver webDriver;
+
+    @When
+    public void when() {
+        webDriver.findElement(By.cssSelector("button[type=submit]")).click();
+        waitForPage(webDriver);
+    }
 
     @Then
     public void then() {

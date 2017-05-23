@@ -21,7 +21,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.*;
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.welcometohell.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
-//@StepHandler(TakeScreenshot.class)
+@StepHandler(TakeScreenshot.class)
 public class WelcomeToHellTests {
 
     {
@@ -29,12 +29,6 @@ public class WelcomeToHellTests {
         root.setLevel(Level.INFO);
     }
 
-    @FilterTests
-    Predicate filter = and(
-            withStep(Jurisdiction.Pirate.class),
-            withStep(DeclareSins.class)
-            //withStep(BalletQuestion.LikesBallet.class)
-    );
 
     @Supplies
     static File REPORTS_BASE_DIRECTORY = new File("./reportsOutput");

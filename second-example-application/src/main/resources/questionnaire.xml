@@ -292,11 +292,9 @@
             <rule condition="religion = 'MUSLIM'" view="good-bye.page">
                 <variable name="title">You can go!</variable>
                 <variable name="narrative">
-                    Bit off the beaten path are you?  What are you doing here?  In fact are you sure you even belong in hell?
-                    I know the queues into Muslim Heaven must be a little long these days, what with the shortage of virgins,
-                    it must be hard to onboard you guys. But really!  You don't want to be bothering us down here.
+                    Sorry, we can't admit you at the moment.  The requirement for all Muslims to spend eternity in hell
+                    with 70 mother-in-laws is causing some logistic difficulties.
                 </variable>
-
             </rule>
             <rule condition="(religion = 'HINDU') or (religion = 'BUDDHIST')" view="reincarnation.page"/>
             <rule condition="religion = 'JEWISH'" view="profession-of-innocence-first.page">
@@ -857,7 +855,7 @@
     </view>
 
 
-    <view id="booking.page">
+    <view id="booking.page" title="Booking">
         <title-large>$title</title-large>
 
         <paragraph>$narrative</paragraph>
@@ -899,7 +897,7 @@
 
     </view>
 
-    <view id="missed-booking.page">
+    <view id="missed-booking.page" title="Missed Booking">
         <title-large>
             #if( $mother-in-law )
                 What! Really?  Oh of course.

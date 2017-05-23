@@ -10,14 +10,20 @@ import uk.co.malbec.cascade.annotations.When;
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
-@Step({DirtyDog.class, VIPSection.class, MissedBooking.class})
-public class Conclusion {
+@Step(ThrallQuestion.YesToThrall.class)
+public class ThrallResults {
 
     @Demands
     private WebDriver webDriver;
 
+    @When
+    public void when() {
+        webDriver.findElement(By.cssSelector("button[type=submit]")).click();
+        waitForPage(webDriver);
+    }
+
     @Then
     public void then() {
-        assertEquals("Welcome to Hell | Conclusion", webDriver.getTitle());
+        assertEquals("Welcome to Hell | Booking", webDriver.getTitle());
     }
 }

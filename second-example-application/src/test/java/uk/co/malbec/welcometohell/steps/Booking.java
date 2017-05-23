@@ -11,9 +11,10 @@ import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
-@Step(AppealQuestion.class)
-public interface ThrallQuestion {
-    class YesToThrall implements ThrallQuestion {
+@Step({ThrallResults.class, ThrallQuestion.NoToThrall.class})
+public interface Booking {
+    class YesToMotherInLaw implements Booking {
+
         @Demands
         private WebDriver webDriver;
 
@@ -27,11 +28,12 @@ public interface ThrallQuestion {
 
         @Then
         public void then() {
-            assertEquals("Welcome to Hell | Thrall Results", webDriver.getTitle());
+            assertEquals("Welcome to Hell | Missed Booking", webDriver.getTitle());
         }
     }
 
-    class NoToThrall implements ThrallQuestion {
+    class NoToMotherInLaw implements Booking {
+
         @Demands
         private WebDriver webDriver;
 
@@ -45,7 +47,8 @@ public interface ThrallQuestion {
 
         @Then
         public void then() {
-            assertEquals("Welcome to Hell | Booking", webDriver.getTitle());
+            assertEquals("Welcome to Hell | Missed Booking", webDriver.getTitle());
         }
     }
+
 }
