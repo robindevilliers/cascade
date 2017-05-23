@@ -4,6 +4,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.Description
 import org.junit.runner.notification.RunNotifier
+import uk.co.malbec.cascade.Scope
 import uk.co.malbec.cascade.annotations.*
 import uk.co.malbec.cascade.events.Handler
 import uk.co.malbec.cascade.model.Journey
@@ -46,6 +47,8 @@ public class StandardTestExecutorTest {
     @Test
     public void basicTest() {
 
+        Map<String, Scope> scope = [:]
+
         TestExecutor testExecutor = new StandardTestExecutor();
 
         testExecutor.init(ControlClass, [:]);
@@ -63,8 +66,8 @@ public class StandardTestExecutorTest {
         assert preHandlerCtrlCalled == 0
         assert preHandlerCalled == 1
         assert whenCalled == 2
-        assert handlerCalled == 3
-        assert handlerCtrlCalled == 4
+        assert handlerCalled == 4
+        assert handlerCtrlCalled == 3
         assert thenCalled == 5
         assert postHandlerCalled == 6
         assert postHandlerCtrlCalled == 7

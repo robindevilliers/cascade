@@ -98,6 +98,7 @@ class CascadeTest {
     @Test
     public void "given a request to run, the cascade class should setup, execute and then teardown all journeys "() {
         //given
+        Map<String, Scope> scope = [:]
         List<Journey> journeys = [new Journey([new Scenario(Her.class, Her), new Scenario(Him.class, Him)], TestClass), new Journey([new Scenario(Him.class, Him), new Scenario(Her.class, Her)], TestClass)]
         cascade.journeys = journeys
         int i = 1;
@@ -110,11 +111,11 @@ class CascadeTest {
         cascade.run(runNotifierMock);
 
         //then
-        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference), any(Reference));
+        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference), any(Map));
         verify(testExecutorMock).executeTest(runNotifierMock, journeys[0].getDescription(), null, journeys[0], reporterMock, scope);
         verify(constructionStrategyMock).tearDown(any(Reference), eq(journeys[0]), any(Reference));
 
-        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference), any(Reference));
+        verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference), any(Map));
         verify(testExecutorMock).executeTest(runNotifierMock, journeys[1].getDescription(), null, journeys[1], reporterMock, scope);
         verify(constructionStrategyMock).tearDown(any(Reference), eq(journeys[1]), any(Reference));
     }
