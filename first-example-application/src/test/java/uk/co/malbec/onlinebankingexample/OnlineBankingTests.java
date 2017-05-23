@@ -34,47 +34,16 @@ import static uk.co.malbec.cascade.conditions.Predicates.stepAt;
 @SuppressWarnings("all")
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.onlinebankingexample.steps")
-@CompletenessLevel(Completeness.SCENARIO_COMPLETE)
+@CompletenessLevel(Completeness.UNRESTRICTED)
 @StateRenderingRule(ListOfStringsStateRendering.class)
 //@StepPostHandler(WaitASecond.class)
-@StepHandler(TakeScreenshot.class)
+//@StepHandler(TakeScreenshot.class)
 public class OnlineBankingTests {
 
     {
         Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.INFO);
     }
-
-    @FilterTests
-    Predicate filter = and(
-            stepAt(0,uk.co.malbec.onlinebankingexample.steps.OpenLandingPage.class),
-            stepAt(1,uk.co.malbec.onlinebankingexample.steps.Login.SuccessfulLogin.class),
-            stepAt(2,uk.co.malbec.onlinebankingexample.steps.Challenge.PassChallenge.class),
-            stepAt(3,uk.co.malbec.onlinebankingexample.steps.Notice.AcceptOneNotice.class),
-            stepAt(4,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
-            stepAt(5,uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage.class),
-            stepAt(6,uk.co.malbec.onlinebankingexample.steps.CancelStandingOrder.class),
-            stepAt(7,uk.co.malbec.onlinebankingexample.steps.OpenPaymentsPage.class),
-            stepAt(8,uk.co.malbec.onlinebankingexample.steps.SetupStandingOrder.SetupStandingOrderForLater.class),
-            stepAt(9,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(10,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
-            stepAt(11,uk.co.malbec.onlinebankingexample.steps.OpenAccountPage.OpenCurrentAccount.class),
-            stepAt(12,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(13,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
-            stepAt(14,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
-            stepAt(15,uk.co.malbec.onlinebankingexample.steps.OpenEditMobile.class),
-            stepAt(16,uk.co.malbec.onlinebankingexample.steps.EditMobile.class),
-            stepAt(17,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(18,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
-            stepAt(19,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
-            stepAt(20,uk.co.malbec.onlinebankingexample.steps.OpenEditAddress.class),
-            stepAt(21,uk.co.malbec.onlinebankingexample.steps.EditAddress.class),
-            stepAt(22,uk.co.malbec.onlinebankingexample.steps.BackToPorfolio.class),
-            stepAt(23,uk.co.malbec.onlinebankingexample.steps.Portfolio.AllAccounts.class),
-            stepAt(24,uk.co.malbec.onlinebankingexample.steps.OpenPersonalPage.class),
-            stepAt(25,uk.co.malbec.onlinebankingexample.steps.OpenEditEmail.class),
-            stepAt(26,uk.co.malbec.onlinebankingexample.steps.EditEmail.class)
-    );
 
     @Demands
     String username;
