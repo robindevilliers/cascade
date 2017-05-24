@@ -32,6 +32,6 @@ public class RowRenderer implements Renderer<Row> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("tr.html").merge(context, output);
+        velocityEngine.getTemplate("views/tr.html").merge(context, output);
     }
 }

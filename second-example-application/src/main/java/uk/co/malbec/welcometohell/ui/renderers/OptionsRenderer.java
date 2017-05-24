@@ -41,6 +41,6 @@ public class OptionsRenderer implements Renderer<Options> {
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
 
-        velocityEngine.getTemplate("options.html").merge(context, content);
+        velocityEngine.getTemplate("views/options.html").merge(context, content);
     }
 }

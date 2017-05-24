@@ -32,6 +32,6 @@ public class ColumnRenderer implements Renderer<Column> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("th.html").merge(context, output);
+        velocityEngine.getTemplate("views/th.html").merge(context, output);
     }
 }

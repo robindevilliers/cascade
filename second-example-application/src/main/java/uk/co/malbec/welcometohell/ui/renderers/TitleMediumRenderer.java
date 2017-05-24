@@ -33,7 +33,7 @@ public class TitleMediumRenderer implements Renderer<TitleMedium> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("title-medium.html").merge(context, content);
+        velocityEngine.getTemplate("views/title-medium.html").merge(context, content);
     }
 
     private void generateStyles(TitleMedium element, VelocityContext context) {

@@ -34,6 +34,6 @@ public class SpanRenderer implements Renderer<Span> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("span.html").merge(context, content);
+        velocityEngine.getTemplate("views/span.html").merge(context, content);
     }
 }

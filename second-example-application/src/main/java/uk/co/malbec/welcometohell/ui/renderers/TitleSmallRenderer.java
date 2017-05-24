@@ -33,7 +33,7 @@ public class TitleSmallRenderer  implements Renderer<TitleSmall> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("title-small.html").merge(context, content);
+        velocityEngine.getTemplate("views/title-small.html").merge(context, content);
     }
 
     private void generateStyles(TitleSmall element, VelocityContext context) {

@@ -35,6 +35,6 @@ public class ParagraphRenderer implements Renderer<Paragraph> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("paragraph.html").merge(context, content);
+        velocityEngine.getTemplate("views/paragraph.html").merge(context, content);
     }
 }

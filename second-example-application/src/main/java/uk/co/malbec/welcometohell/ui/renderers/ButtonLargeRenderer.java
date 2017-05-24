@@ -26,6 +26,6 @@ public class ButtonLargeRenderer implements Renderer<ButtonLarge> {
         generateStyles(element, context);
         generateContent(velocityEngine, element, data, context);
 
-        velocityEngine.getTemplate("button-large.html").merge(context, content);
+        velocityEngine.getTemplate("views/button-large.html").merge(context, content);
     }
 }

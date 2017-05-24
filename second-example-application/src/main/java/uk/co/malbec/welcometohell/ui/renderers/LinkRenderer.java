@@ -31,6 +31,6 @@ public class LinkRenderer implements Renderer<Link> {
         context.put("pageId", pageId);
         context.put("viewId", element.getView());
 
-        velocityEngine.getTemplate("link.html").merge(context, content);
+        velocityEngine.getTemplate("views/link.html").merge(context, content);
     }
 }

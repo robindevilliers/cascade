@@ -32,6 +32,6 @@ public class TableRenderer implements Renderer<Table> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("table.html").merge(context, output);
+        velocityEngine.getTemplate("views/table.html").merge(context, output);
     }
 }

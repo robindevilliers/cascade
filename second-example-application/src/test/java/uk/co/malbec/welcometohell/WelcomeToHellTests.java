@@ -29,7 +29,6 @@ public class WelcomeToHellTests {
         root.setLevel(Level.INFO);
     }
 
-
     @Supplies
     static File REPORTS_BASE_DIRECTORY = new File("./reportsOutput");
 

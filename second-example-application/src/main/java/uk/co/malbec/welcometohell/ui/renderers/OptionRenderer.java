@@ -36,6 +36,6 @@ public class OptionRenderer implements Renderer<Option> {
 
         context.put("id", UUID.randomUUID().toString());
 
-        velocityEngine.getTemplate("option.html").merge(context, content);
+        velocityEngine.getTemplate("views/option.html").merge(context, content);
     }
 }

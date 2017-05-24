@@ -71,9 +71,6 @@ public class StandardTestExecutor implements TestExecutor {
 
     public void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey, Reporter reporter, Map<String, Scope> scope) {
 
-        //TODO - consider collecting supplied fields again.
-
-
         notifier.fireTestStarted(description);
 
         boolean testPassed = true;

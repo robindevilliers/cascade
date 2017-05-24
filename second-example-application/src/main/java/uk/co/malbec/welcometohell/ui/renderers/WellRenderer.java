@@ -35,7 +35,7 @@ public class WellRenderer  implements Renderer<Well> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("well.html").merge(context, content);
+        velocityEngine.getTemplate("views/well.html").merge(context, content);
     }
 
 }

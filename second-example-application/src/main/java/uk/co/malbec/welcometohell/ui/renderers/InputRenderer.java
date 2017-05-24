@@ -37,6 +37,6 @@ public class InputRenderer implements Renderer<Input> {
         context.put("type", element.getType());
         context.put("data", element.getData());
 
-        velocityEngine.getTemplate("input.html").merge(context, content);
+        velocityEngine.getTemplate("views/input.html").merge(context, content);
     }
 }

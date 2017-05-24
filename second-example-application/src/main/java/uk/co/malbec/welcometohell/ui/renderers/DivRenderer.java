@@ -35,6 +35,6 @@ public class DivRenderer implements Renderer<Div> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("div.html").merge(context, output);
+        velocityEngine.getTemplate("views/div.html").merge(context, output);
     }
 }

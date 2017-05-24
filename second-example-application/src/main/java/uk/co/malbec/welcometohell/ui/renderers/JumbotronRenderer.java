@@ -35,6 +35,6 @@ public class JumbotronRenderer implements Renderer<Jumbotron> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("jumbotron.html").merge(context, content);
+        velocityEngine.getTemplate("views/jumbotron.html").merge(context, content);
     }
 }

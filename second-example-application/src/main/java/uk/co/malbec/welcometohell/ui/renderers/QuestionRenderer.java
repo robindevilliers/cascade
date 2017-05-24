@@ -28,7 +28,7 @@ public class QuestionRenderer  implements Renderer<Question> {
         generateStyles(element, context);
         generateContent(velocityEngine, element, data, context);
 
-        velocityEngine.getTemplate("question.html").merge(context, content);
+        velocityEngine.getTemplate("views/question.html").merge(context, content);
     }
 
 }

@@ -35,6 +35,6 @@ public class CellRenderer implements Renderer<Cell> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("td.html").merge(context, output);
+        velocityEngine.getTemplate("views/td.html").merge(context, output);
     }
 }

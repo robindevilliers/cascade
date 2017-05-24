@@ -33,7 +33,7 @@ public class TitleLargeRenderer implements Renderer<TitleLarge> {
         generateStyles(element, context);
         generateContent(wizardSessionId, pageId, renderingEngine, element, data, context);
 
-        velocityEngine.getTemplate("title-large.html").merge(context, output);
+        velocityEngine.getTemplate("views/title-large.html").merge(context, output);
     }
 
     private void generateStyles(TitleLarge element, VelocityContext context) {

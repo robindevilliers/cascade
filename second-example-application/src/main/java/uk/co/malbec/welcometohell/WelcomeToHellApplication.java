@@ -2,6 +2,8 @@ package uk.co.malbec.welcometohell;
 
 
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -37,15 +39,9 @@ public class WelcomeToHellApplication {
     public VelocityEngine templateEngine(){
 
         VelocityEngine velocityEngine = new VelocityEngine();
-
-        Properties props = new Properties();
-        String path = System.getProperty("user.dir") + "/src/main/resources/views/";
-
-        props.put("file.resource.loader.path", path);
-
-        //TODO - get alternative configuration that loads from classpath.
-
-        velocityEngine.init(props);
+        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        velocityEngine.init();
 
         return velocityEngine;
     }
