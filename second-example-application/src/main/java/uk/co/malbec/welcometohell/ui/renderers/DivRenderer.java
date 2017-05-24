@@ -12,9 +12,7 @@ import uk.co.malbec.welcometohell.wizard.domain.Div;
 import java.io.StringWriter;
 import java.util.Map;
 
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateClasses;
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateContent;
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateStyles;
+import static uk.co.malbec.welcometohell.ui.RendererUtilities.*;
 
 @Component
 public class DivRenderer implements Renderer<Div> {

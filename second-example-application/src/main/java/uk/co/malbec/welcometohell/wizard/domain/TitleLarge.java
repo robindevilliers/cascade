@@ -2,7 +2,6 @@ package uk.co.malbec.welcometohell.wizard.domain;
 
 import uk.co.malbec.welcometohell.FontWeight;
 import uk.co.malbec.welcometohell.wizard.*;
-import uk.co.malbec.welcometohell.wizard.domain.types.FlexContainerSupport;
 import uk.co.malbec.welcometohell.wizard.domain.types.FlexItemSupport;
 import uk.co.malbec.welcometohell.wizard.domain.types.PresentationClassesSupport;
 import uk.co.malbec.welcometohell.wizard.domain.types.TextStyleSupport;

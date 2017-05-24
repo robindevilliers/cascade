@@ -5,9 +5,6 @@ import uk.co.malbec.welcometohell.wizard.*;
 import uk.co.malbec.welcometohell.wizard.domain.types.*;
 import uk.co.malbec.welcometohell.wizard.type.Type;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Options extends ElementComposer implements DataElement,
         PresentationClassesSupport,
         TextStyleSupport,

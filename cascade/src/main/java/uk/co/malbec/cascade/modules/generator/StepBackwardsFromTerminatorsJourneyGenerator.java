@@ -11,7 +11,6 @@ import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.JourneyGenerator;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 
 import static java.lang.String.format;

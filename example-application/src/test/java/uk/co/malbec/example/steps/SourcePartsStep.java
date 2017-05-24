@@ -1,7 +1,6 @@
 package uk.co.malbec.example.steps;
 
 import junit.framework.Assert;
-import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.example.CarCompany;
 import uk.co.malbec.example.Requisitioner;
 import uk.co.malbec.example.Stores;

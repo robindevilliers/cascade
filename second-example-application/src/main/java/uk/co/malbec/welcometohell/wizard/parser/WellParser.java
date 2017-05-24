@@ -3,7 +3,6 @@ package uk.co.malbec.welcometohell.wizard.parser;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
 import uk.co.malbec.welcometohell.wizard.ElementParser;
-import uk.co.malbec.welcometohell.wizard.domain.Question;
 import uk.co.malbec.welcometohell.wizard.domain.Well;
 
 import java.util.Stack;

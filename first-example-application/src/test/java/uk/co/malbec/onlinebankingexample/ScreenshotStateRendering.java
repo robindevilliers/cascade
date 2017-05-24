@@ -2,7 +2,6 @@ package uk.co.malbec.onlinebankingexample;
 
 import uk.co.malbec.cascade.modules.reporter.StateRenderingStrategy;
 
-
 import java.util.UUID;
 
 

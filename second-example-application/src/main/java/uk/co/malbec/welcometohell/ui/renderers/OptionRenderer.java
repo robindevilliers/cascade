@@ -10,9 +10,7 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.UUID;
 
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateClasses;
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateContent;
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateStyles;
+import static uk.co.malbec.welcometohell.ui.RendererUtilities.*;
 import static uk.co.malbec.welcometohell.wizard.type.Serialization.serialize;
 
 @Component

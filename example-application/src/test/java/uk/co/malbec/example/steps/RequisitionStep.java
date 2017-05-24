@@ -1,10 +1,10 @@
 package uk.co.malbec.example.steps;
 
 
-import static org.junit.Assert.*;
-import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.example.CarCompany;
 import uk.co.malbec.example.Order;
+
+import static org.junit.Assert.*;
 
 @Step
 public interface RequisitionStep  {

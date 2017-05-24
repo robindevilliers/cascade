@@ -6,15 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.co.malbec.welcometohell.ui.Renderer;
 import uk.co.malbec.welcometohell.ui.RenderingEngine;
-import uk.co.malbec.welcometohell.wizard.domain.Question;
 import uk.co.malbec.welcometohell.wizard.domain.Well;
 
 import java.io.StringWriter;
 import java.util.Map;
 
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateClasses;
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateContent;
-import static uk.co.malbec.welcometohell.ui.RendererUtilities.generateStyles;
+import static uk.co.malbec.welcometohell.ui.RendererUtilities.*;
 
 @Component
 public class WellRenderer  implements Renderer<Well> {

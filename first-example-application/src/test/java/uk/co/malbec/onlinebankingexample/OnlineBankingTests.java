@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.conditions.Predicate;
-import uk.co.malbec.cascade.events.WaitASecond;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.reporter.ListOfStringsStateRendering;
 import uk.co.malbec.onlinebankingexample.domain.Account;
@@ -28,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static uk.co.malbec.cascade.conditions.Predicates.and;
-import static uk.co.malbec.cascade.conditions.Predicates.stepAt;
 
 @SuppressWarnings("all")
 @RunWith(CascadeRunner.class)

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import uk.co.malbec.welcometohell.wizard.domain.types.Element;
 import uk.co.malbec.welcometohell.wizard.ElementComposer;
+import uk.co.malbec.welcometohell.wizard.domain.types.Element;
 
 import java.io.StringWriter;
 import java.util.ArrayList;

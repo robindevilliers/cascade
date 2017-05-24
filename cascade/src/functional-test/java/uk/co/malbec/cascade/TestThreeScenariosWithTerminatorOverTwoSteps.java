@@ -15,7 +15,6 @@ import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
 import uk.co.malbec.cascade.modules.filtering.StandardFilterStrategy;
 import uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator;
 import uk.co.malbec.cascade.modules.reporter.DisableReporter;
-import uk.co.malbec.cascade.modules.reporter.HtmlReporter;
 import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
 
 import java.util.ArrayList;

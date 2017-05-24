@@ -1,8 +1,8 @@
 package uk.co.malbec.welcometohell.wizard.parser;
 
 import org.springframework.stereotype.Component;
-import uk.co.malbec.welcometohell.wizard.TextParser;
 import uk.co.malbec.welcometohell.wizard.TextElement;
+import uk.co.malbec.welcometohell.wizard.TextParser;
 
 @Component
 public class TextElementParser implements TextParser {

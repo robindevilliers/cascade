@@ -5,7 +5,6 @@ import uk.co.malbec.onlinebankingexample.domain.Account;
 import uk.co.malbec.onlinebankingexample.domain.Transaction;
 
 import java.util.List;
-import java.util.Map;
 
 
 public class AccountsStateRendering implements StateRenderingStrategy {

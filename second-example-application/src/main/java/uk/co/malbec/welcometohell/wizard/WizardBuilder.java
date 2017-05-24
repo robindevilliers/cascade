@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import uk.co.malbec.welcometohell.wizard.domain.*;
+import uk.co.malbec.welcometohell.wizard.domain.Wizard;
 
 import java.util.ArrayList;
 import java.util.List;

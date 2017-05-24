@@ -2,7 +2,6 @@ package uk.co.malbec.welcometohell.wizard.expression.function;
 
 import uk.co.malbec.welcometohell.wizard.expression.Function;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 public class MatchesFunction implements Function<Boolean> {

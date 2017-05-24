@@ -3,7 +3,6 @@ package uk.co.malbec.cascade.conditions;
 import uk.co.malbec.cascade.Scenario;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EvaluatingVisitor implements Visitor {

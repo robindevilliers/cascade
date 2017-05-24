@@ -1,6 +1,5 @@
 package uk.co.malbec.welcometohell.wizard;
 
-import org.apache.commons.collections.map.HashedMap;
 import uk.co.malbec.welcometohell.wizard.domain.View;
 import uk.co.malbec.welcometohell.wizard.domain.Wizard;
 

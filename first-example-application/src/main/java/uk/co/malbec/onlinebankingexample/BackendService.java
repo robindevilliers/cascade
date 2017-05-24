@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.stereotype.Service;
-import uk.co.malbec.onlinebankingexample.model.RecentPayment;
 import uk.co.malbec.onlinebankingexample.model.User;
 
 import java.io.IOException;

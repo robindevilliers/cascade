@@ -7,15 +7,11 @@ import org.slf4j.LoggerFactory;
 import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
-import uk.co.malbec.cascade.conditions.Predicate;
 import uk.co.malbec.cascade.model.Journey;
-import uk.co.malbec.welcometohell.steps.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import static uk.co.malbec.cascade.conditions.Predicates.*;
 
 @SuppressWarnings("all")
 @RunWith(CascadeRunner.class)

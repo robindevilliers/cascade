@@ -3,7 +3,6 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import uk.co.malbec.cascade.annotations.Demands;
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.annotations.Then;

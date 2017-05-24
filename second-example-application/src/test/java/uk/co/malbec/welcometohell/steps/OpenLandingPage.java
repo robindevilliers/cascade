@@ -5,7 +5,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
-import static uk.co.malbec.welcometohell.Utilities.assertElementPresent;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @SuppressWarnings("all")

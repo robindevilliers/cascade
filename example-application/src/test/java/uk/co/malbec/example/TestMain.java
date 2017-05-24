@@ -2,8 +2,6 @@ package uk.co.malbec.example;
 
 
 import org.junit.runner.RunWith;
-import uk.co.malbec.cascade.*;
-import uk.co.malbec.cascade.annotations.*;
 
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.example.steps")

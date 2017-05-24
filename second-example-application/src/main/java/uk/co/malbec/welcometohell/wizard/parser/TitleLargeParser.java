@@ -2,12 +2,11 @@ package uk.co.malbec.welcometohell.wizard.parser;
 
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
-import uk.co.malbec.welcometohell.wizard.*;
+import uk.co.malbec.welcometohell.wizard.ElementParser;
 import uk.co.malbec.welcometohell.wizard.domain.TitleLarge;
 
 import java.util.Stack;
 
-import static java.util.Optional.ofNullable;
 import static uk.co.malbec.welcometohell.wizard.ParserUtilities.assignAttributes;
 
 @Component

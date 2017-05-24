@@ -1,6 +1,5 @@
 package uk.co.malbec.welcometohell.wizard.expression.function;
 
-import org.omg.CORBA.OBJECT_NOT_EXIST;
 import uk.co.malbec.welcometohell.wizard.expression.Function;
 
 import java.util.List;
