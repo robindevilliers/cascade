@@ -2,17 +2,16 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(DateOfDeathQuestion.class)
+@Narrative("Payment question.")
 public interface SelectPayment {
+    @Narrative("Enter devilish dollars as payment and go to the vip section page.")
     class DevilishDollars implements SelectPayment {
         @Demands
         private WebDriver webDriver;
@@ -31,6 +30,7 @@ public interface SelectPayment {
         }
     }
 
+    @Narrative("Enter heavenly half pennies as payment and go to the appeal page.")
     class HeavenlyHalfPennies implements SelectPayment {
         @Demands
         private WebDriver webDriver;
@@ -49,6 +49,7 @@ public interface SelectPayment {
         }
     }
 
+    @Narrative("Enter earthly fiat as payment and go to the appeal page.")
     class EarthlyFiat implements SelectPayment {
         @Demands
         private WebDriver webDriver;
@@ -67,6 +68,7 @@ public interface SelectPayment {
         }
     }
 
+    @Narrative("Enter gold as payment and go to the appeal page.")
     class Gold implements SelectPayment {
         @Demands
         private WebDriver webDriver;
@@ -85,6 +87,7 @@ public interface SelectPayment {
         }
     }
 
+    @Narrative("Enter nothing as payment and go to the appeal page.")
     class Nothing implements SelectPayment {
         @Demands
         private WebDriver webDriver;

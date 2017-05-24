@@ -118,7 +118,7 @@ public class TestTwoScenarios {
     @Step
     public interface Do {
 
-        @Description("Do This")
+        @Narrative("Do This")
         class DoThis implements Do {
 
             @Given
@@ -146,7 +146,7 @@ public class TestTwoScenarios {
             }
         }
 
-        @Description("Do That")
+        @Narrative("Do That")
         class DoThat implements Do {
 
             @Given

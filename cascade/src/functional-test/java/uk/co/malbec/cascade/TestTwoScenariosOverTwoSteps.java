@@ -121,7 +121,7 @@ public class TestTwoScenariosOverTwoSteps {
     @Step
     public interface DoOne {
 
-        @uk.co.malbec.cascade.annotations.Description("Do This")
+        @Narrative("Do This")
         class DoThis implements DoOne {
 
             @Given
@@ -154,7 +154,7 @@ public class TestTwoScenariosOverTwoSteps {
     public interface DoTwo {
 
 
-        @uk.co.malbec.cascade.annotations.Description("Do That")
+        @Narrative("Do That")
         class DoThat implements DoTwo {
 
             @Given

@@ -2,16 +2,14 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.enterText;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step({SallyQuestion.NoToPinchingSally.class, DeclareSins.class})
+@Narrative("Enter date of death and go to the payment page.")
 public class DateOfDeathQuestion {
 
     @Demands

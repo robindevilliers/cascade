@@ -2,18 +2,17 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(EnterPlea.Innocent.class)
+@Narrative("Plea confirmation question.")
 public interface EnterPleaAgain {
 
+    @Narrative("Enter yes again as the plea and go to the sally page.")
     class InnocentAgain implements EnterPleaAgain {
         @Demands
         private WebDriver webDriver;
@@ -32,6 +31,7 @@ public interface EnterPleaAgain {
         }
     }
 
+    @Narrative("Enter no again as the plea and go to the sins declaration page.")
     class GuiltyFinally implements EnterPleaAgain {
         @Demands
         private WebDriver webDriver;

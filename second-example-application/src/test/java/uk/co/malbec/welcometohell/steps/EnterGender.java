@@ -9,8 +9,10 @@ import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(OpenGenderPage.class)
+@Narrative("Gender question.")
 public interface EnterGender {
 
+    @Narrative("Enter male gender and go to marmite page.")
     class EnterMaleGender implements EnterGender {
         @Demands
         private WebDriver webDriver;
@@ -32,6 +34,7 @@ public interface EnterGender {
         }
     }
 
+    @Narrative("Enter female gender and go to marmite page.")
     class EnterFemaleGender implements EnterGender {
         @Demands
         private WebDriver webDriver;

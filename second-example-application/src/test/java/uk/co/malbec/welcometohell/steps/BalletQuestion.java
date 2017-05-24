@@ -3,17 +3,16 @@ package uk.co.malbec.welcometohell.steps;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(OperaQuestion.HaveNotBeenToTheOpera.class)
+@Narrative("Ballet question.")
 public interface BalletQuestion {
 
+    @Narrative("Enter likes ballet and go to the dirty dog page.")
     class LikesBallet implements BalletQuestion {
         @Demands
         private WebDriver webDriver;
@@ -36,6 +35,7 @@ public interface BalletQuestion {
         }
     }
 
+    @Narrative("Enter hates ballet and go to the jurisdiction page.")
     class HatesBallet implements BalletQuestion {
         @Demands
         private WebDriver webDriver;

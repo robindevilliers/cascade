@@ -38,10 +38,13 @@ class CascadeTest {
 
     Reporter reporterMock = mock(Reporter)
 
+    TestReport testReport = mock(TestReport)
+
     RenderingSystem renderingSystemMock = mock(RenderingSystem)
 
     @Before
     public void "initialisation"() {
+        when(reporterMock.createTestReport()).thenReturn(testReport)
         cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock, completenessStrategy, reporterMock, renderingSystemMock);
     }
 
@@ -112,11 +115,11 @@ class CascadeTest {
 
         //then
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[0]), any(Reference), any(Reference), any(Map));
-        verify(testExecutorMock).executeTest(eq(runNotifierMock), eq(journeys[0].getDescription()), eq(null), eq(journeys[0]), eq(reporterMock), any(Map));
+        verify(testExecutorMock).executeTest(eq(runNotifierMock), eq(journeys[0].getDescription()), eq(null), eq(journeys[0]), eq(testReport), any(Map));
         verify(constructionStrategyMock).tearDown(any(Reference), eq(journeys[0]), any(Reference));
 
         verify(constructionStrategyMock).setup(eq(TestClass), eq(journeys[1]), any(Reference), any(Reference), any(Map));
-        verify(testExecutorMock).executeTest(eq(runNotifierMock), eq(journeys[1].getDescription()), eq(null), eq(journeys[1]), eq(reporterMock), any(Map));
+        verify(testExecutorMock).executeTest(eq(runNotifierMock), eq(journeys[1].getDescription()), eq(null), eq(journeys[1]), eq(testReport), any(Map));
         verify(constructionStrategyMock).tearDown(any(Reference), eq(journeys[1]), any(Reference));
     }
 

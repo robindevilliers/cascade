@@ -2,7 +2,7 @@ package uk.co.malbec.cascade.model
 
 import org.junit.Test
 import uk.co.malbec.cascade.Scenario
-import uk.co.malbec.cascade.annotations.Description
+import uk.co.malbec.cascade.annotations.Narrative
 import uk.co.malbec.cascade.annotations.Scan
 import uk.co.malbec.cascade.annotations.Step
 
@@ -18,14 +18,6 @@ class JourneyTest {
         assert journey.description.displayName == 'Test[1]  JourneyTest$GoToLoginPage  JourneyTest$EnterPassword (uk.co.malbec.cascade.model.JourneyTest$TestClass)'
     }
 
-    @Test
-    def void "given a Journey with descriptions, the journey could contain a nice description"(){
-
-        Journey journey = new Journey([new Scenario(GoToForgotPasswordPage.class, GoToForgotPasswordPage), new Scenario(EnterEmailAddress.class, EnterEmailAddress)], TestClass)
-        journey.init(1)
-        assert journey.name == 'Test[1] User goes to the \'forgot password\' page and he enters his email address'
-    }
-
     @Step
     public static class GoToLoginPage {
 
@@ -37,13 +29,13 @@ class JourneyTest {
     }
 
     @Step
-    @Description("User goes to the 'forgot password' page ")
+    @Narrative("User goes to the 'forgot password' page ")
     public static class GoToForgotPasswordPage {
 
     }
 
     @Step
-    @Description("and he enters his email address")
+    @Narrative("and he enters his email address")
     public static class EnterEmailAddress {
 
     }

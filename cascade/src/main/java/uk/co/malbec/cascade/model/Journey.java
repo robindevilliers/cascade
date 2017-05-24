@@ -14,6 +14,8 @@ public class Journey {
 
     private Description description;
 
+    private String id;
+
     private String name;
 
     public Journey(List<Scenario> steps, Class<?> controlClass) {
@@ -22,20 +24,13 @@ public class Journey {
     }
 
     public void init(int index) {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("Test[").append(index).append("] ");
+        id = "Test[" + index + "]";
+        StringBuilder nameBuffer = new StringBuilder();
+        nameBuffer.append(id).append(" ");
         for (Scenario scenario : steps) {
-            uk.co.malbec.cascade.annotations.Description description = scenario.getCls().getAnnotation(uk.co.malbec.cascade.annotations.Description.class);
-            if (description != null) {
-                buffer.append(description.value());
-            } else {
-                buffer.append(" ");
-                String[] parts = scenario.getCls().toString().split("[.]");
-                buffer.append(parts[parts.length - 1]);
-                buffer.append(" ");
-            }
+            nameBuffer.append(" ").append(scenario.getSimpleName()).append(" ");
         }
-        name = buffer.toString();
+        name = nameBuffer.toString();
         description = Description.createTestDescription(controlClass, name);
     }
 
@@ -49,5 +44,9 @@ public class Journey {
 
     public String getName() {
         return name;
+    }
+
+    public String getId() {
+        return id;
     }
 }

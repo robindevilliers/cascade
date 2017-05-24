@@ -2,17 +2,17 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(AppealQuestion.class)
+@Narrative("Thrall question.")
 public interface ThrallQuestion {
+
+    @Narrative("Enter yes to apply to be a thrall and go to the thrall results page.")
     class YesToThrall implements ThrallQuestion {
         @Demands
         private WebDriver webDriver;
@@ -31,6 +31,7 @@ public interface ThrallQuestion {
         }
     }
 
+    @Narrative("Enter no to apply to be a thrall and go to the booking page.")
     class NoToThrall implements ThrallQuestion {
         @Demands
         private WebDriver webDriver;

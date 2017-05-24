@@ -10,12 +10,14 @@ import uk.co.malbec.cascade.events.Handler
 import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.modules.Reporter
 import uk.co.malbec.cascade.modules.TestExecutor
+import uk.co.malbec.cascade.modules.TestReport
 
 import static org.mockito.Mockito.*
 
 public class StandardTestExecutorTest {
 
     Reporter reporterMock = mock(Reporter)
+    TestReport testReport = mock(TestReport)
 
     static Integer counter
     static Integer whenCalled
@@ -61,7 +63,7 @@ public class StandardTestExecutorTest {
 
         when(journey.getName()).thenReturn("description")
 
-        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, reporterMock, new HashMap<String, Scope>());
+        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, testReport, new HashMap<String, Scope>());
 
         assert preHandlerCtrlCalled == 0
         assert preHandlerCalled == 1

@@ -2,17 +2,16 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step({SelectPayment.HeavenlyHalfPennies.class, SelectPayment.Gold.class, SelectPayment.Nothing.class, SelectPayment.EarthlyFiat.class})
+@Narrative("Appeal question.")
 public interface AppealQuestion {
+    @Narrative("Enter yes to appeal and go to thrall page.")
     class YesToAppeal implements AppealQuestion {
         @Demands
         private WebDriver webDriver;
@@ -31,6 +30,7 @@ public interface AppealQuestion {
         }
     }
 
+    @Narrative("Enter no to appeal and go to thrall page.")
     class NoToAppeal implements AppealQuestion {
         @Demands
         private WebDriver webDriver;

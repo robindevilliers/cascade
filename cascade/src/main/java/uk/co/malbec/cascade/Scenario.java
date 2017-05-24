@@ -1,10 +1,12 @@
 package uk.co.malbec.cascade;
 
+import uk.co.malbec.cascade.annotations.Narrative;
 import uk.co.malbec.cascade.annotations.ReEntrantTerminator;
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.annotations.Terminator;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 public class Scenario {
 
@@ -46,6 +48,15 @@ public class Scenario {
 
     public String getName() {
         return cls.getName();
+    }
+
+    public String getSimpleName(){
+        String[] parts = cls.toString().split("[.]");
+       return parts[parts.length - 1];
+    }
+
+    public String getNarrative(){
+        return Optional.ofNullable(cls.getAnnotation(Narrative.class)).map(Narrative::value).orElse(getSimpleName());
     }
 
     public boolean isTerminator() {

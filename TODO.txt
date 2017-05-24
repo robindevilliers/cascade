@@ -1,22 +1,24 @@
 TODO
 4. if a general exception happens have cascade reports display as much.
+15. error handling.
 7. test names need some work in the reports test list.
 9. annotation for overriding step name.
-11. test parallel-lisation
 12. profiles
 14. all strategies should be override-able via annotations.
-15. error handling.
+
 17. transitionId and stateId should display in reports if used.
 20. previous and next buttons on scope display.
 21. scope page might be better as collapsible accordians.
-23. description annotation - added to scope pane.
+23. narrative annotation - added to scope pane.
 26. filtering should support first result, first 10 etc.
+29. print completeness level on summary page.
 
 DOCUMENTATION
 24. document static variables
 25. document beforeall afterall.
 8. document reports
 27. document parallize.
+28. rename description annotation to narrative.
 
 WONT FIX
 10. test generator that drives off story files.
@@ -33,6 +35,7 @@ DONE
 22. make screenshot zoom.
 13. step handlers should support injectable values
 6. Reflections utils doesn't like 1.8.  need to update to support lambdas
+11. test parallel-lisation
 
 
 Cookbook ideas:

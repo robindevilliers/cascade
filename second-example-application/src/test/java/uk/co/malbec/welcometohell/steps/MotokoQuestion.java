@@ -2,17 +2,16 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(CosPlayQuestion.YesToCosPlay.class)
+@Narrative("Motoko question.")
 public interface MotokoQuestion {
+    @Narrative("Enter yes to motoko and go to the star wars page.")
     class YesToMotoko implements MotokoQuestion {
         @Demands
         private WebDriver webDriver;
@@ -31,6 +30,7 @@ public interface MotokoQuestion {
         }
     }
 
+    @Narrative("Enter no to motoko and go to the star wars page.")
     class NoToMotoko implements MotokoQuestion {
         @Demands
         private WebDriver webDriver;

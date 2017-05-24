@@ -96,7 +96,7 @@ public class TestOneScenario {
     @Step
     public interface Do {
 
-        @Description("Do This")
+        @Narrative("Do This")
         class DoThis implements Do {
 
             @Given

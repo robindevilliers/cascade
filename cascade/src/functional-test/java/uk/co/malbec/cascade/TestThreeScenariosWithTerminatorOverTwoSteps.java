@@ -141,7 +141,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
     @Step
     public interface DoOne {
 
-        @uk.co.malbec.cascade.annotations.Description("Do This")
+        @Narrative("Do This")
         class DoThis implements DoOne {
 
             @Given
@@ -170,7 +170,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
             }
         }
 
-        @uk.co.malbec.cascade.annotations.Description("Do The Other")
+        @Narrative("Do The Other")
         @Terminator
         class DoTheOther implements DoOne {
 
@@ -204,7 +204,7 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
     public interface DoTwo {
 
 
-        @uk.co.malbec.cascade.annotations.Description("Do That")
+        @Narrative("Do That")
         class DoThat implements DoTwo {
 
             @Given

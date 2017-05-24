@@ -11,8 +11,9 @@ import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(Jurisdiction.Jedi.class)
+@Narrative("Cosplay question.")
 public interface CosPlayQuestion {
-
+    @Narrative("Enter yes to cosplay and go to the motoko page.")
     class YesToCosPlay implements CosPlayQuestion {
         @Demands
         private WebDriver webDriver;
@@ -34,6 +35,7 @@ public interface CosPlayQuestion {
         }
     }
 
+    @Narrative("Enter no to cosplay and go to the plea page.")
     class NoToCosPlay implements CosPlayQuestion {
         @Demands
         private WebDriver webDriver;

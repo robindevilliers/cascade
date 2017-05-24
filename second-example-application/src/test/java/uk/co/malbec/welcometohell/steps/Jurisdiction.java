@@ -2,18 +2,17 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(BalletQuestion.HatesBallet.class)
+@Narrative("Jurisdiction question.")
 public interface Jurisdiction {
 
+    @Narrative("Enter muslim for religion and go to the muslim conclusion page.")
     class Muslim implements Jurisdiction {
         @Demands
         private WebDriver webDriver;
@@ -32,6 +31,7 @@ public interface Jurisdiction {
         }
     }
 
+    @Narrative("Enter hindu for religion and go to the how is hell page.")
     class Hindu implements Jurisdiction {
         @Demands
         private WebDriver webDriver;
@@ -50,6 +50,7 @@ public interface Jurisdiction {
         }
     }
 
+    @Narrative("Enter buddhist for religion and go to the how is hell page.")
     class Buddhist implements Jurisdiction {
         @Demands
         private WebDriver webDriver;
@@ -68,6 +69,7 @@ public interface Jurisdiction {
         }
     }
 
+    @Narrative("Enter jewish for religion and go to the how is plea page.")
     class Jewish implements Jurisdiction {
         @Demands
         private WebDriver webDriver;
@@ -86,6 +88,7 @@ public interface Jurisdiction {
         }
     }
 
+    @Narrative("Enter pirate for religion and go to the how is plea page.")
     class Pirate implements Jurisdiction {
         @Demands
         private WebDriver webDriver;
@@ -104,6 +107,7 @@ public interface Jurisdiction {
         }
     }
 
+    @Narrative("Enter jedi for religion and go to the next page depending on gender.")
     class Jedi implements Jurisdiction {
         @Demands
         private WebDriver webDriver;
@@ -129,6 +133,7 @@ public interface Jurisdiction {
         }
     }
 
+    @Narrative("Enter christian for religion and go to the plea page.")
     class Christian implements Jurisdiction {
         @Demands
         private WebDriver webDriver;

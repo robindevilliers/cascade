@@ -3,6 +3,7 @@ package uk.co.malbec.cascade.modules.reporter;
 import junit.framework.AssertionFailedError;
 import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.Scope;
+import uk.co.malbec.cascade.annotations.Narrative;
 import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
@@ -124,6 +125,7 @@ public class HtmlReporter implements Reporter {
 
             JsonObjectBuilder scenarioJson = builderFactory.createObjectBuilder();
             scenarioJson.add("name", scenario.getName());
+            Optional.ofNullable(scenario.getCls().getAnnotation(Narrative.class)).ifPresent((n) -> scenarioJson.add("narrative", n.value()));
             scenarioJson.add("state", scenario.getStateCls().getName());
             scenarioJson.add("terminator", scenario.isTerminator());
             scenarioJson.add("reEntrantTerminator", scenario.isReEntrantTerminator());
@@ -137,14 +139,11 @@ public class HtmlReporter implements Reporter {
         for (Map.Entry<Class<?>, Class[]> entry : states.entrySet()) {
             JsonObjectBuilder stateJson = builderFactory.createObjectBuilder();
             stateJson.add("name", entry.getKey().getCanonicalName());
+            Optional.ofNullable(entry.getKey().getAnnotation(Narrative.class)).ifPresent((n) -> stateJson.add("narrative", n.value()));
 
             JsonArrayBuilder precedentsJson = builderFactory.createArrayBuilder();
             for (Class<?> cls : entry.getValue()) {
-                Class<?> c = findClassWithAnnotation(Step.class, cls);
-                if (c == null){
-                    System.out.println("test");
-                }
-                precedentsJson.add(c.getCanonicalName());
+                Optional.ofNullable(findClassWithAnnotation(Step.class, cls)).ifPresent((s) -> precedentsJson.add(s.getCanonicalName()));
             }
 
             stateJson.add("precedents", precedentsJson);
@@ -171,11 +170,6 @@ public class HtmlReporter implements Reporter {
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
     }
 
-
-
-
-
-
     private void copyFileFromTemplate(String fileName, File baseDirectory) {
         try {
             InputStream is = HtmlReporter.class.getResourceAsStream("/template/" + fileName);
@@ -184,7 +178,6 @@ public class HtmlReporter implements Reporter {
             throw new CascadeException("io error copying file " + fileName, e);
         }
     }
-
 
     private void writeVariableAsFile(File reportsDirectory, String variableName, String fileName, JsonStructure data) {
         try {
@@ -220,7 +213,7 @@ public class HtmlReporter implements Reporter {
     }
 
     private <T extends Annotation> Class<?> findClassWithAnnotation(Class<T> annotationClass, Class<?> subject) {
-        if (subject.equals(Step.Null.class)){
+        if (subject.equals(Step.Null.class)) {
             return subject;
         }
 
@@ -257,7 +250,7 @@ public class HtmlReporter implements Reporter {
         private HtmlReporter htmlReporter;
 
 
-        public HtmlTestReport(RenderingSystem renderingSystem, JsonBuilderFactory builderFactory, HtmlReporter htmlReporter){
+        public HtmlTestReport(RenderingSystem renderingSystem, JsonBuilderFactory builderFactory, HtmlReporter htmlReporter) {
             this.renderingSystem = renderingSystem;
             this.builderFactory = builderFactory;
             this.htmlReporter = htmlReporter;
@@ -271,12 +264,13 @@ public class HtmlReporter implements Reporter {
 
             directoryItemJson.add("journeyId", UUID.randomUUID().toString().replaceAll("-", ""));
             directoryItemJson.add("name", journey.getName());
-
+            directoryItemJson.add("id", journey.getId());
 
             this.steps = new ArrayList<>();
             for (Scenario scenario : journey.getSteps()) {
                 JsonObjectBuilder stepJson = builderFactory.createObjectBuilder();
                 stepJson.add("name", scenario.getName());
+                stepJson.add("narrative", scenario.getNarrative());
                 this.steps.add(stepJson);
             }
 
@@ -306,7 +300,6 @@ public class HtmlReporter implements Reporter {
 
         }
 
-
         @Override
         public void stepBegin(Object step) {
 
@@ -317,7 +310,7 @@ public class HtmlReporter implements Reporter {
             for (String key : this.scope.keySet()) {
                 Scope scope = this.scope.get(key);
 
-                if (scope.getTransitionRenderingStrategy() != null){
+                if (scope.getTransitionRenderingStrategy() != null) {
                     scope.setCopy(scope.getTransitionRenderingStrategy().copy(scope.getValue()));
                 } else {
                     scope.setCopy(renderingSystem.copy(scope.getValue()));
@@ -352,40 +345,40 @@ public class HtmlReporter implements Reporter {
             for (String key : sortedKeys) {
                 Scope scope = this.scope.get(key);
 
-                if (scope.isGlobal()){
+                if (scope.isGlobal()) {
                     continue;
                 }
 
                 JsonObjectBuilder memberJson = builderFactory.createObjectBuilder();
 
                 String transition = null;
-                if (scope.getValue() != null && !scope.getValue().equals(scope.getCopy())){
+                if (scope.getValue() != null && !scope.getValue().equals(scope.getCopy())) {
 
-                    if (scope.getTransitionRenderingStrategy() != null){
+                    if (scope.getTransitionRenderingStrategy() != null) {
                         transition = scope.getTransitionRenderingStrategy().render(scope.getValue(), scope.getCopy());
                     } else {
                         transition = renderingSystem.renderTransition(scope.getValue(), scope.getCopy());
                     }
 
-                    if (transition != null){
+                    if (transition != null) {
                         hasTransition = true;
                         memberJson.add("transition", transition);
                     }
                 }
 
                 String state;
-                if (scope.getStateRenderingStrategy() != null){
+                if (scope.getStateRenderingStrategy() != null) {
                     state = scope.getStateRenderingStrategy().render(scope.getValue());
                 } else {
                     state = renderingSystem.renderState(scope.getValue());
                 }
 
-                if (state != null){
+                if (state != null) {
                     hasState = true;
                     memberJson.add("state", state);
                 }
 
-                if (state != null || transition != null){
+                if (state != null || transition != null) {
                     scopeJson.add(key, memberJson);
                 }
             }
@@ -439,13 +432,13 @@ public class HtmlReporter implements Reporter {
 
         @Override
         public void finishTest(Journey journey) {
-            if (directoryItemJson == null){
+            if (directoryItemJson == null) {
                 return;
             }
 
-            if (steps != null){
+            if (steps != null) {
                 JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
-                if (steps != null){
+                if (steps != null) {
                     for (JsonObjectBuilder step : steps) {
                         scenariosJson.add(step);
                     }
@@ -472,7 +465,7 @@ public class HtmlReporter implements Reporter {
         private void handleException(Object step, Throwable e) {
             testResult = TestResult.ERROR;
 
-            String message = e.getMessage() != null ? e.getMessage().replaceAll("<","&lt;").replaceAll(">","&gt;") : "null";
+            String message = e.getMessage() != null ? e.getMessage().replaceAll("<", "&lt;").replaceAll(">", "&gt;") : "null";
             directoryItemJson.add("errorMessage", message);
             directoryItemJson.add("stackTrace", extractStackTrace(e));
             if (step != null) {
@@ -483,7 +476,7 @@ public class HtmlReporter implements Reporter {
         private String extractStackTrace(Throwable f) {
             StringWriter stackTrace = new StringWriter();
             f.printStackTrace(new PrintWriter(stackTrace));
-            return stackTrace.toString().replaceAll("\t", "&nbsp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\n", "<br>");
+            return stackTrace.toString().replaceAll("\t", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>");
         }
     }
 

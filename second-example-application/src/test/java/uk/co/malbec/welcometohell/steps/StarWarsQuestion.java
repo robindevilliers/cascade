@@ -11,8 +11,10 @@ import static uk.co.malbec.welcometohell.Utilities.enterText;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step({MotokoQuestion.class, Jurisdiction.Jedi.class})
+@Narrative("Star wars question.")
 public interface StarWarsQuestion {
 
+    @Narrative("Enter correct answers and go to the done time page.")
     class KnowsStarWars implements StarWarsQuestion {
         @Demands
         private WebDriver webDriver;
@@ -44,6 +46,7 @@ public interface StarWarsQuestion {
         }
     }
 
+    @Narrative("Enter wrong answers and go to the plea page.")
     class IgnorantStarWars implements StarWarsQuestion {
         @Demands
         private WebDriver webDriver;

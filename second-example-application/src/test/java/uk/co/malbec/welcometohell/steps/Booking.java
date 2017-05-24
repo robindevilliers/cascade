@@ -2,17 +2,16 @@ package uk.co.malbec.welcometohell.steps;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import uk.co.malbec.cascade.annotations.Demands;
-import uk.co.malbec.cascade.annotations.Step;
-import uk.co.malbec.cascade.annotations.Then;
-import uk.co.malbec.cascade.annotations.When;
+import uk.co.malbec.cascade.annotations.*;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step({ThrallResults.class, ThrallQuestion.NoToThrall.class})
+@Narrative("Mother in law question.")
 public interface Booking {
+    @Narrative("Enter yes to mother in law and go to the missed booking page.")
     class YesToMotherInLaw implements Booking {
 
         @Demands
@@ -31,7 +30,7 @@ public interface Booking {
             assertEquals("Welcome to Hell | Missed Booking", webDriver.getTitle());
         }
     }
-
+    @Narrative("Enter no to mother in law and go to the missed booking page.")
     class NoToMotherInLaw implements Booking {
 
         @Demands

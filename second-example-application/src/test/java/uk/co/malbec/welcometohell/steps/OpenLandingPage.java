@@ -9,6 +9,7 @@ import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @SuppressWarnings("all")
 @Step
+@Narrative("Open application.")
 public class OpenLandingPage {
     @Supplies
     private WebDriver webDriver;
