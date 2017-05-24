@@ -7,6 +7,7 @@ import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.Reporter;
+import uk.co.malbec.cascade.modules.TestReport;
 import uk.co.malbec.cascade.utils.Reference;
 
 import javax.json.*;
@@ -28,20 +29,13 @@ public class HtmlReporter implements Reporter {
     private JsonBuilderFactory builderFactory = Json.createBuilderFactory(emptyMap());
     private JsonWriterFactory writerFactory = Json.createWriterFactory(map(PRETTY_PRINTING, true));
 
-    private File reportsDirectory;
     private File dataDirectory;
 
-    private JsonObjectBuilder directoryItemJson;
     private JsonArrayBuilder directoryItemsJson;
-
-    private TestResult testResult;
 
     private long startTime;
     private JsonObjectBuilder directoryJson;
-    private Map<String, Scope> scope;
-    private List<JsonObjectBuilder> steps;
 
-    private int index;
     private RenderingSystem renderingSystem;
 
     public HtmlReporter(RenderingSystem renderingSystem) {
@@ -55,9 +49,8 @@ public class HtmlReporter implements Reporter {
 
         this.startTime = System.currentTimeMillis();
 
-        if (globalScope.get("REPORTS_BASE_DIRECTORY") == null){
-            globalScope.put("REPORTS_BASE_DIRECTORY", new Scope("./build/reports/tests/cascade"));
-        }
+        globalScope.computeIfAbsent("REPORTS_BASE_DIRECTORY", k -> new Scope("./build/reports/tests/cascade"));
+
         File reportsDirectory = createDestinationDirectories(globalScope.get("REPORTS_BASE_DIRECTORY").getValue().toString());
         globalScope.put("REPORTS_DIRECTORY", new Scope(reportsDirectory));
         copyTemplateFiles(reportsDirectory);
@@ -73,7 +66,7 @@ public class HtmlReporter implements Reporter {
             }
         }
 
-        reportsDirectory = new File(testDirectory, Long.toString(System.currentTimeMillis()));
+        File reportsDirectory = new File(testDirectory, Long.toString(System.currentTimeMillis()));
 
         if (!reportsDirectory.mkdir()) {
             throw new CascadeException("Unable to create cascade directory for cascade reports at location " + reportsDirectory);
@@ -167,193 +160,8 @@ public class HtmlReporter implements Reporter {
     }
 
     @Override
-    public void setupTest(Journey journey, Map<String, Scope> scope) {
-        this.index = 0;
-        this.scope = scope;
-        directoryItemJson = builderFactory.createObjectBuilder();
-
-        directoryItemJson.add("journeyId", UUID.randomUUID().toString().replaceAll("-", ""));
-        directoryItemJson.add("name", journey.getName());
-
-
-        this.steps = new ArrayList<>();
-        for (Scenario scenario : journey.getSteps()) {
-            JsonObjectBuilder stepJson = builderFactory.createObjectBuilder();
-            stepJson.add("name", scenario.getName());
-            this.steps.add(stepJson);
-        }
-
-        StringBuilder filter = new StringBuilder();
-        filter.append("@FilterTests<br>").append("Predicate filter = and(");
-
-        boolean comma = false;
-        int index = 0;
-        for (Scenario scenario : journey.getSteps()) {
-            if (comma) {
-                filter.append(",");
-            }
-            filter.append("<br>&nbsp;stepAt(");
-            filter.append(index++);
-            filter.append(",");
-            filter.append(scenario.getCls().getCanonicalName());
-            filter.append(".class)");
-            comma = true;
-        }
-
-        filter.append("<br>);");
-        directoryItemJson.add("filter", filter.toString());
-    }
-
-    @Override
-    public void startTest(Journey journey, Reference<Object> control, Reference<List<Object>> steps) {
-
-    }
-
-
-    @Override
-    public void stepBegin(Object step) {
-
-    }
-
-    @Override
-    public void stepWhenBegin(Object step, Method whenMethod) {
-        for (String key : this.scope.keySet()) {
-            Scope scope = this.scope.get(key);
-
-            if (scope.getTransitionRenderingStrategy() != null){
-                scope.setCopy(scope.getTransitionRenderingStrategy().copy(scope.getValue()));
-            } else {
-                scope.setCopy(renderingSystem.copy(scope.getValue()));
-            }
-        }
-    }
-
-    @Override
-    public void stepWhenInvocationException(Object step, Method whenMethod, InvocationTargetException e) {
-        handleInvocationException(step, e);
-    }
-
-    @Override
-    public void setWhenSuccess(Object step) {
-
-
-    }
-
-    @Override
-    public void stepWhenEnd(Object step, Method whenMethod) {
-
-    }
-
-    @Override
-    public void stepThenBegin(Object step, Method thenMethod) {
-        JsonObjectBuilder scopeJson = builderFactory.createObjectBuilder();
-        List<String> sortedKeys = new ArrayList<>(this.scope.keySet());
-        Collections.sort(sortedKeys);
-
-        boolean hasState = false;
-        boolean hasTransition = false;
-        for (String key : sortedKeys) {
-            Scope scope = this.scope.get(key);
-
-            if (scope.isGlobal()){
-                continue;
-            }
-
-            JsonObjectBuilder memberJson = builderFactory.createObjectBuilder();
-
-            String transition = null;
-            if (scope.getValue() != null && !scope.getValue().equals(scope.getCopy())){
-
-                if (scope.getTransitionRenderingStrategy() != null){
-                    transition = scope.getTransitionRenderingStrategy().render(scope.getValue(), scope.getCopy());
-                } else {
-                    transition = renderingSystem.renderTransition(scope.getValue(), scope.getCopy());
-                }
-
-                if (transition != null){
-                    hasTransition = true;
-                    memberJson.add("transition", transition);
-                }
-            }
-
-            String state;
-            if (scope.getStateRenderingStrategy() != null){
-                state = scope.getStateRenderingStrategy().render(scope.getValue());
-            } else {
-                state = renderingSystem.renderState(scope.getValue());
-            }
-
-            if (state != null){
-                hasState = true;
-                memberJson.add("state", state);
-            }
-
-            if (state != null || transition != null){
-                scopeJson.add(key, memberJson);
-            }
-        }
-
-        JsonObjectBuilder stepJson = this.steps.get(this.index);
-
-        stepJson.add("hasState", hasState);
-        stepJson.add("hasTransition", hasTransition);
-        stepJson.add("scope", scopeJson);
-    }
-
-    @Override
-    public void stepThenSuccess(Object step) {
-
-    }
-
-    @Override
-    public void stepThenInvocationException(Object step, Method thenMethod, InvocationTargetException e) {
-        handleInvocationException(step, e);
-    }
-
-    @Override
-    public void stepThenEnd(Object step, Method thenMethod) {
-
-    }
-
-    @Override
-    public void endStep(Object step) {
-        this.index++;
-    }
-
-    @Override
-    public void success(Journey journey) {
-        this.testResult = TestResult.SUCCESS;
-    }
-
-    @Override
-    public void tearDown(Reference<Object> control, Reference<List<Object>> steps) {
-
-    }
-
-    @Override
-    public void handleUnknownException(RuntimeException e, Journey journey) {
-        handleException(null, e);
-    }
-
-    @Override
-    public void finishTest(Journey journey) {
-        if (directoryItemJson == null){
-            return;
-        }
-
-        if (steps != null){
-            JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
-            if (steps != null){
-                for (JsonObjectBuilder step : steps) {
-                    scenariosJson.add(step);
-                }
-
-            }
-            directoryItemJson.add("scenarios", scenariosJson);
-        }
-
-        directoryItemJson.add("result", testResult.toString());
-        directoryItemsJson.add(directoryItemJson);
+    public TestReport createTestReport() {
+        return new HtmlTestReport(renderingSystem, builderFactory, this);
     }
 
     @Override
@@ -363,34 +171,9 @@ public class HtmlReporter implements Reporter {
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
     }
 
-    private void handleInvocationException(Object step, InvocationTargetException e) {
-        if (e.getTargetException() instanceof AssertionFailedError) {
-            AssertionFailedError assertionFailedError = (AssertionFailedError) e.getTargetException();
-            testResult = TestResult.FAILED;
-            directoryItemJson.add("assertionMessage", assertionFailedError.getMessage());
-            directoryItemJson.add("stackTrace", extractStackTrace(assertionFailedError));
-            directoryItemJson.add("failingStep", step.getClass().getName());
-        } else {
-            handleException(step, e.getCause());
-        }
-    }
 
-    private void handleException(Object step, Throwable e) {
-        testResult = TestResult.ERROR;
 
-        String message = e.getMessage() != null ? e.getMessage().replaceAll("<","&lt;").replaceAll(">","&gt;") : "null";
-        directoryItemJson.add("errorMessage", message);
-        directoryItemJson.add("stackTrace", extractStackTrace(e));
-        if (step != null) {
-            directoryItemJson.add("failingStep", step.getClass().getName());
-        }
-    }
 
-    private String extractStackTrace(Throwable f) {
-        StringWriter stackTrace = new StringWriter();
-        f.printStackTrace(new PrintWriter(stackTrace));
-        return stackTrace.toString().replaceAll("\t", "&nbsp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\n", "<br>");
-    }
 
 
     private void copyFileFromTemplate(String fileName, File baseDirectory) {
@@ -458,5 +241,253 @@ public class HtmlReporter implements Reporter {
             return findClassWithAnnotation(annotationClass, superClass);
         }
         return null;
+    }
+
+
+    public static class HtmlTestReport implements TestReport {
+        private Map<String, Scope> scope;
+        private List<JsonObjectBuilder> steps;
+
+        private JsonObjectBuilder directoryItemJson;
+        private int index;
+        private TestResult testResult;
+
+        private RenderingSystem renderingSystem;
+        private JsonBuilderFactory builderFactory;
+        private HtmlReporter htmlReporter;
+
+
+        public HtmlTestReport(RenderingSystem renderingSystem, JsonBuilderFactory builderFactory, HtmlReporter htmlReporter){
+            this.renderingSystem = renderingSystem;
+            this.builderFactory = builderFactory;
+            this.htmlReporter = htmlReporter;
+        }
+
+        @Override
+        public void setupTest(Journey journey, Map<String, Scope> scope) {
+            this.index = 0;
+            this.scope = scope;
+            directoryItemJson = builderFactory.createObjectBuilder();
+
+            directoryItemJson.add("journeyId", UUID.randomUUID().toString().replaceAll("-", ""));
+            directoryItemJson.add("name", journey.getName());
+
+
+            this.steps = new ArrayList<>();
+            for (Scenario scenario : journey.getSteps()) {
+                JsonObjectBuilder stepJson = builderFactory.createObjectBuilder();
+                stepJson.add("name", scenario.getName());
+                this.steps.add(stepJson);
+            }
+
+            StringBuilder filter = new StringBuilder();
+            filter.append("@FilterTests<br>").append("Predicate filter = and(");
+
+            boolean comma = false;
+            int index = 0;
+            for (Scenario scenario : journey.getSteps()) {
+                if (comma) {
+                    filter.append(",");
+                }
+                filter.append("<br>&nbsp;stepAt(");
+                filter.append(index++);
+                filter.append(",");
+                filter.append(scenario.getCls().getCanonicalName());
+                filter.append(".class)");
+                comma = true;
+            }
+
+            filter.append("<br>);");
+            directoryItemJson.add("filter", filter.toString());
+        }
+
+        @Override
+        public void startTest(Journey journey, Reference<Object> control, Reference<List<Object>> steps) {
+
+        }
+
+
+        @Override
+        public void stepBegin(Object step) {
+
+        }
+
+        @Override
+        public void stepWhenBegin(Object step, Method whenMethod) {
+            for (String key : this.scope.keySet()) {
+                Scope scope = this.scope.get(key);
+
+                if (scope.getTransitionRenderingStrategy() != null){
+                    scope.setCopy(scope.getTransitionRenderingStrategy().copy(scope.getValue()));
+                } else {
+                    scope.setCopy(renderingSystem.copy(scope.getValue()));
+                }
+            }
+        }
+
+        @Override
+        public void stepWhenInvocationException(Object step, Method whenMethod, InvocationTargetException e) {
+            handleInvocationException(step, e);
+        }
+
+        @Override
+        public void setWhenSuccess(Object step) {
+
+
+        }
+
+        @Override
+        public void stepWhenEnd(Object step, Method whenMethod) {
+
+        }
+
+        @Override
+        public void stepThenBegin(Object step, Method thenMethod) {
+            JsonObjectBuilder scopeJson = builderFactory.createObjectBuilder();
+            List<String> sortedKeys = new ArrayList<>(this.scope.keySet());
+            Collections.sort(sortedKeys);
+
+            boolean hasState = false;
+            boolean hasTransition = false;
+            for (String key : sortedKeys) {
+                Scope scope = this.scope.get(key);
+
+                if (scope.isGlobal()){
+                    continue;
+                }
+
+                JsonObjectBuilder memberJson = builderFactory.createObjectBuilder();
+
+                String transition = null;
+                if (scope.getValue() != null && !scope.getValue().equals(scope.getCopy())){
+
+                    if (scope.getTransitionRenderingStrategy() != null){
+                        transition = scope.getTransitionRenderingStrategy().render(scope.getValue(), scope.getCopy());
+                    } else {
+                        transition = renderingSystem.renderTransition(scope.getValue(), scope.getCopy());
+                    }
+
+                    if (transition != null){
+                        hasTransition = true;
+                        memberJson.add("transition", transition);
+                    }
+                }
+
+                String state;
+                if (scope.getStateRenderingStrategy() != null){
+                    state = scope.getStateRenderingStrategy().render(scope.getValue());
+                } else {
+                    state = renderingSystem.renderState(scope.getValue());
+                }
+
+                if (state != null){
+                    hasState = true;
+                    memberJson.add("state", state);
+                }
+
+                if (state != null || transition != null){
+                    scopeJson.add(key, memberJson);
+                }
+            }
+
+            JsonObjectBuilder stepJson = this.steps.get(this.index);
+
+            stepJson.add("hasState", hasState);
+            stepJson.add("hasTransition", hasTransition);
+            stepJson.add("scope", scopeJson);
+        }
+
+        @Override
+        public void stepThenSuccess(Object step) {
+
+        }
+
+        @Override
+        public void stepThenInvocationException(Object step, Method thenMethod, InvocationTargetException e) {
+            handleInvocationException(step, e);
+        }
+
+        @Override
+        public void stepThenEnd(Object step, Method thenMethod) {
+
+        }
+
+        @Override
+        public void endStep(Object step) {
+            this.index++;
+        }
+
+        @Override
+        public void success(Journey journey) {
+            this.testResult = TestResult.SUCCESS;
+        }
+
+        @Override
+        public void mergeTestReport() {
+            htmlReporter.merge(directoryItemJson);
+        }
+
+        @Override
+        public void tearDown(Reference<Object> control, Reference<List<Object>> steps) {
+
+        }
+
+        @Override
+        public void handleUnknownException(RuntimeException e, Journey journey) {
+            handleException(null, e);
+        }
+
+        @Override
+        public void finishTest(Journey journey) {
+            if (directoryItemJson == null){
+                return;
+            }
+
+            if (steps != null){
+                JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
+                if (steps != null){
+                    for (JsonObjectBuilder step : steps) {
+                        scenariosJson.add(step);
+                    }
+
+                }
+                directoryItemJson.add("scenarios", scenariosJson);
+            }
+
+            directoryItemJson.add("result", testResult.toString());
+        }
+
+        private void handleInvocationException(Object step, InvocationTargetException e) {
+            if (e.getTargetException() instanceof AssertionFailedError) {
+                AssertionFailedError assertionFailedError = (AssertionFailedError) e.getTargetException();
+                testResult = TestResult.FAILED;
+                directoryItemJson.add("assertionMessage", assertionFailedError.getMessage());
+                directoryItemJson.add("stackTrace", extractStackTrace(assertionFailedError));
+                directoryItemJson.add("failingStep", step.getClass().getName());
+            } else {
+                handleException(step, e.getCause());
+            }
+        }
+
+        private void handleException(Object step, Throwable e) {
+            testResult = TestResult.ERROR;
+
+            String message = e.getMessage() != null ? e.getMessage().replaceAll("<","&lt;").replaceAll(">","&gt;") : "null";
+            directoryItemJson.add("errorMessage", message);
+            directoryItemJson.add("stackTrace", extractStackTrace(e));
+            if (step != null) {
+                directoryItemJson.add("failingStep", step.getClass().getName());
+            }
+        }
+
+        private String extractStackTrace(Throwable f) {
+            StringWriter stackTrace = new StringWriter();
+            f.printStackTrace(new PrintWriter(stackTrace));
+            return stackTrace.toString().replaceAll("\t", "&nbsp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\n", "<br>");
+        }
+    }
+
+    private void merge(JsonObjectBuilder directoryItemJson) {
+        directoryItemsJson.add(directoryItemJson);
     }
 }

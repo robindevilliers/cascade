@@ -9,8 +9,8 @@ import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.events.Handler;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
-import uk.co.malbec.cascade.modules.Reporter;
 import uk.co.malbec.cascade.modules.TestExecutor;
+import uk.co.malbec.cascade.modules.TestReport;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -69,7 +69,7 @@ public class StandardTestExecutor implements TestExecutor {
     }
 
 
-    public void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey, Reporter reporter, Map<String, Scope> scope) {
+    public void executeTest(RunNotifier notifier, Description description, List<Object> steps, Journey journey, TestReport reporter, Map<String, Scope> scope) {
 
         notifier.fireTestStarted(description);
 

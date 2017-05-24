@@ -16,6 +16,7 @@ DOCUMENTATION
 24. document static variables
 25. document beforeall afterall.
 8. document reports
+27. document parallize.
 
 WONT FIX
 10. test generator that drives off story files.

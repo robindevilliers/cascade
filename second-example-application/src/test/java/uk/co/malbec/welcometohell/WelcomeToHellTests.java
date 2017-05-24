@@ -17,7 +17,8 @@ import java.util.List;
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.welcometohell.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
-//@StepHandler(TakeScreenshot.class)
+@StepHandler(TakeScreenshot.class)
+@Parallelize(3)
 public class WelcomeToHellTests {
 
     {
