@@ -1,9 +1,16 @@
+var params = queryParameters();
+
+var breadcrumb = new BreadCrumb('journey');
 
 var directory = new Directory(directoryData);
 
-var journey = findJourney();
+var journey = _.find(directoryData.items, function (journey) {
+        return journey.journeyId === params.journeyId;
+    });
+
 if (!journey){
-    window.location = "index.html"
+
+    window.href = "index.html"
 }
 $('#journey-id').html('- ' + journey.journeyId);
 
@@ -17,6 +24,9 @@ function togglePathEmphasis(el){
     }
 }
 
+function gotoState(el, index){
+    breadcrumb.gotoNewLink("state.html?journeyId=" + journey.journeyId + "&index=" + index);
+}
 
 function toggleImageSize(el){
     if (el.attr('data-zoomed') == "false"){
@@ -67,12 +77,6 @@ function toggleImageSize(el){
 
         }
 }
-
-
-
-
-
-
 
 renderTabs();
 renderSynopsisPanel();
@@ -130,19 +134,20 @@ function renderAnalysisPanel(journey) {
         dimensions: {
             width: coordinateSystem.getWidth(),
             height: coordinateSystem.getHeight()
-        }
+        },
+        journeyId: journey.journeyId
     };
     $("#analysis").find("#tab-body").append(journeyAnalysisTemplate(data));
 
-    _.each(journey.scenarios, function(scenario, idx){
-        var modalTemplate = _.template($("#journey-step-modal").text());
-        $("#analysis").find("#tab-body").append(modalTemplate({
-            index: idx,
-            name: scenario.name,
-            scope: scenario.scope,
-            hasState: scenario.hasState,
-            hasTransition: scenario.hasTransition
-        }));
-    })
+//    _.each(journey.scenarios, function(scenario, idx){
+//        var modalTemplate = _.template($("#journey-step-modal").text());
+//        $("#analysis").find("#tab-body").append(modalTemplate({
+//            index: idx,
+//            name: scenario.name,
+//            scope: scenario.scope,
+//            hasState: scenario.hasState,
+//            hasTransition: scenario.hasTransition
+//        }));
+//    })
 
 }

@@ -61,7 +61,7 @@ public class StandardTestExecutorTest {
 
         when(journey.getName()).thenReturn("description")
 
-        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, reporterMock, scope);
+        testExecutor.executeTest(runNotifier, description, [new BasicStep()], journey, reporterMock, new HashMap<String, Scope>());
 
         assert preHandlerCtrlCalled == 0
         assert preHandlerCalled == 1

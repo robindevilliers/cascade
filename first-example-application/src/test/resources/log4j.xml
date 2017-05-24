@@ -5,14 +5,14 @@
 
     <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{dd MMM yyyy HH:mm:ss} %5p %c{1} - %m%n"/>
+            <param name="ConversionPattern" literal="%d{dd MMM yyyy HH:mm:ss} %5p %c{1} - %m%n"/>
         </layout>
     </appender>
 
 
 
     <root>
-        <level value="INFO"/>
+        <level literal="INFO"/>
         <appender-ref ref="consoleAppender"/>
     </root>
 

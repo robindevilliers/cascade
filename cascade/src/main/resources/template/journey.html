@@ -63,7 +63,7 @@
 
 
 <script id="journey-analysis-template" type="text/html">
-    <% var gridWidth = dimensions.width * 20;%>
+    <% var gridWidth = Math.max(560, dimensions.width * 20);%>
     <% var gridHeight = dimensions.height * 20;%>
     <div class="svg-panel">
         <svg width="<%=gridWidth + 10%>" height="<%=gridHeight + 10%>">
@@ -172,10 +172,11 @@
 
             <%_.each(plot.indexes, function(index, i) {%>
             <% var offset = plot.indexes.length - i - 1%>
-            <rect style="cursor:pointer;" onclick="$('#scope_<%=index%>').modal('show');"
+
+            <rect style="cursor:pointer;" onclick="gotoState($(this), <%=index%>);"
                   x="<%=plot.gridX * 20 + 5 + 148 - (offset * 28)%>" y="<%=plot.gridY * 20 + 5 + 37%>" width="24"
                   height="20" rx="5" ry="5" stroke="black" fill="lightgray"/>
-            <text style="cursor:pointer;" onclick="$('#scope_<%=index%>').modal('show');"
+            <text style="cursor:pointer;" onclick="gotoState($(this), <%=index%>);"
                   x="<%=plot.gridX * 20 + 5 + 160 - (offset * 28)%>" y="<%=plot.gridY * 20 + 5 + 52%>"
                   text-anchor="middle" font-family="Verdana" font-size="12" font-weight="bold" fill="black"><%=index%>
             </text>
@@ -220,12 +221,12 @@
                         <caption>The table below lists all changes in state that occurred during the execution of the current step.</caption>
                         <tbody>
                         <%
-                        _.forEach(scope, function(value, key) {
-                            if (value.transition){
+                        _.forEach(scope, function(literal, key) {
+                            if (literal.transition){
                         %>
                         <tr>
                             <th ><%=key%></th>
-                            <td><%=value.transition%></td>
+                            <td><%=literal.transition%></td>
                         </tr>
                         <%
                             }
@@ -243,12 +244,12 @@
                         <caption>This table includes the values of the variables defined in the current journey immediately upon completion of the current step.</caption>
                         <tbody>
                         <%
-                        _.forEach(scope, function(value, key) {
-                            if (value.state) {
+                        _.forEach(scope, function(literal, key) {
+                            if (literal.state) {
                         %>
                         <tr>
                             <th ><%=key%></th>
-                            <td><%=value.state%></td>
+                            <td><%=literal.state%></td>
                         </tr>
                         <%
                             }
@@ -270,14 +271,20 @@
     </div>
 </script>
 
+<script id="breadcrumb-template" type="text/html">
+    <ol class="breadcrumb">
+        <% _.each(links, function(link, idx) { %>
+        <li class="breadcrumb-item"><a href="#" onclick="breadcrumb.goto(<%=idx%>)"><%=link.name%></a></li>
+        <%}); %>
+    </ol>
+</script>
 
 <div class="container">
 
     <h1>Cascade Reports
         <small id="journey-id"></small>
-
     </h1>
-    <p><a href="index.html" class="pull-right">Index</a></p>
+    <div id="breadcrumb"></div>
 
     <div id="tab-headers"></div>
     <div id="tab-panels"></div>
@@ -296,6 +303,8 @@
 <script src="lib/leg.js"></script>
 <script src="lib/coordinate.js"></script>
 <script src="lib/plot.js"></script>
+<script src="lib/utils.js"></script>
+<script src="lib/breadcrumb.js"></script>
 
 <script src="journey.js"></script>
 </body>

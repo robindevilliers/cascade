@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cascade Reports</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<script id="content-template" type="text/html">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title"> <h4><%=name%></h4> </div>
+        </div>
+
+        <div class="panel-body">
+            <p><b>Index: </b> <span><%=index%></span></p>
+
+            <h4>Transition</h4>
+            <% if (hasTransition) {%>
+            <table class="table table-striped">
+                <caption>The table below lists all changes in state that occurred during the execution of the current step.</caption>
+                <tbody>
+                <%
+                _.forEach(scope, function(literal, key) {
+                if (literal.transition){
+                %>
+                <tr>
+                    <th ><%=key%></th>
+                    <td><%=literal.transition%></td>
+                </tr>
+                <%
+                }
+                });
+                %>
+                </tbody>
+            </table>
+            <%} else {%>
+            This step doesn't alter state, so no transition data is available.
+            <%}%>
+
+            <h4>State</h4>
+            <% if (hasState) {%>
+            <table class="table table-striped">
+                <caption>This table includes the values of the variables defined in the current journey immediately upon completion of the current step.</caption>
+                <tbody>
+                <%
+                _.forEach(scope, function(literal, key) {
+                if (literal.state) {
+                %>
+                <tr>
+                    <th ><%=key%></th>
+                    <td><%=literal.state%></td>
+                </tr>
+                <%
+                }
+                });
+                %>
+                </tbody>
+            </table>
+            <%} else {%>
+            This step doesn't assert state, so no state data is available.
+            <%}%>
+        </div>
+    </div>
+</script>
+
+<script id="breadcrumb-template" type="text/html">
+    <ol class="breadcrumb">
+        <% _.each(links, function(link, idx) { %>
+        <li class="breadcrumb-item"><a href="#" onclick="breadcrumb.goto(<%=idx%>)"><%=link.name%></a></li>
+        <%}); %>
+    </ol>
+</script>
+
+
+<div class="container">
+
+    <h1>Cascade Reports
+        <small id="journey-id"></small>
+    </h1>
+    <div id="breadcrumb"></div>
+
+    <div id="content"></div>
+</div>
+
+
+<script src="jquery.min.js"></script>
+<script src="lodash.js"></script>
+<script src="bootstrap.min.js"></script>
+
+<script src="data/directoryData.js"></script>
+<script src="lib/directory.js"></script>
+<script src="lib/utils.js"></script>
+<script src="lib/breadcrumb.js"></script>
+
+<script src="state.js"></script>
+</body>
+</html>

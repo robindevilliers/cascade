@@ -69,7 +69,7 @@ test.doFirst {
     executorService = Executors.newSingleThreadExecutor()
     executorService.submit({
         tasks.findMainClass.execute()
-        pid = tasks.bootRun.execute()
+        tasks.bootRun.execute()
 
     } as Runnable)
 
@@ -84,25 +84,17 @@ test.doFirst {
 }
 
 test.doLast {
-    def sout = new StringBuilder()
-    def serr = new StringBuilder()
-    String[] cmd = [
-        "/bin/sh",
-        "-c",
-        "ps -ax | grep onlinebankingexample.Application | grep -v grep | cut -f 1 -d ' '"
-    ]
+    tasks.shutdown.execute()
+}
 
-    def process = Runtime.getRuntime().exec(cmd)
-    process.consumeProcessOutput(sout, serr)
-    process.waitFor()
-    if (process.exitValue() != 0 ){
-        throw new GradleScriptException("PID script failed to execute.  First example application might still be running on port 8080.", null);
-    }
 
-    def killProcess = Runtime.getRuntime().exec("kill -9 " + sout.toString().trim())
-    killProcess.waitFor()
-    if (killProcess.exitValue() != 0 ){
-        throw new GradleScriptException("Skill script failed to execute.  First example application might still be running on port 8080.", null);
+task shutdown {
+    doLast {
+        def connection = new URL("http://localhost:8080/shutdown").openConnection()
+        connection.setRequestMethod("POST")
+        connection.connect()
+        println 'Shutting down application...'
+        println connection.inputStream.text
     }
 }
 

@@ -1,0 +1,101 @@
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-velocity")
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.apache.velocity:velocity:1.7")
+    compile('joda-time:joda-time:2.5')
+
+
+    testCompile("org.hamcrest:hamcrest-all:1.3")
+    testCompile("junit:junit:4.11")
+    testCompile('org.jboss.resteasy:resteasy-client:3.0.9.Final')
+    testCompile('org.jboss.resteasy:resteasy-jackson-provider:3.0.9.Final')
+    testCompile project(":cascade")
+    testCompile "org.reflections:reflections:0.9.9-RC1"
+    testCompile('org.seleniumhq.selenium:selenium-chrome-driver:3.0.1')
+    testCompile('org.seleniumhq.selenium:selenium-support:3.0.1')
+}
+
+
+
+ExecutorService executorService
+String WEB_DRIVER_FILE = "$projectDir/selenium-drivers/chromedriver"
+
+test {
+    doFirst {
+        if (!new File(WEB_DRIVER_FILE).exists()){
+            println """|==============================================================================================
+                |ERROR ERROR ERROR
+                |The chomedriver is not available for use.
+                |The first-example-application expects a chromedriver binary to be available at:
+                |
+                | $WEB_DRIVER_FILE
+                |
+                |These drivers can be obtained from this url for your particular platform:
+                |
+                | https://sites.google.com/a/chromium.org/chromedriver/downloads
+                |
+                |Please make sure the driver that is intalled matches the version of Chrome you have installed.
+                |==============================================================================================""".stripMargin()
+            throw new GradleScriptException("Invalid configuration", null);
+        }
+    }
+    systemProperty "webdriver.chrome.driver", "$projectDir/selenium-drivers/chromedriver"
+}
+
+test.doFirst {
+    executorService = Executors.newSingleThreadExecutor()
+    executorService.submit({
+        tasks.findMainClass.execute()
+        pid = tasks.bootRun.execute()
+
+    } as Runnable)
+
+    while (true) {
+        try {
+            'http://localhost:8080'.toURL().text
+            break
+        } catch (Exception e) {
+            sleep 1000
+        }
+    }
+}
+
+test.doLast {
+    tasks.shutdown.execute()
+}
+
+task shutdown {
+    doLast {
+        def connection = new URL("http://localhost:8080/shutdown").openConnection()
+        connection.setRequestMethod("POST")
+        connection.connect()
+        println 'Shutting down application...'
+        println connection.inputStream.text
+    }
+}
+
+
+

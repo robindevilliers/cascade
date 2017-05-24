@@ -21,7 +21,7 @@ import static uk.co.malbec.cascade.conditions.Predicates.*;
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.welcometohell.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
-@StepHandler(TakeScreenshot.class)
+//@StepHandler(TakeScreenshot.class)
 public class WelcomeToHellTests {
 
     {

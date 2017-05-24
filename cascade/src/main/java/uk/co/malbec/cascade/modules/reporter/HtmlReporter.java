@@ -3,6 +3,7 @@ package uk.co.malbec.cascade.modules.reporter;
 import junit.framework.AssertionFailedError;
 import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.Scope;
+import uk.co.malbec.cascade.annotations.Step;
 import uk.co.malbec.cascade.exception.CascadeException;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.Reporter;
@@ -10,6 +11,7 @@ import uk.co.malbec.cascade.utils.Reference;
 
 import javax.json.*;
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
@@ -87,6 +89,7 @@ public class HtmlReporter implements Reporter {
     private void copyTemplateFiles(File reportsDirectory) {
         copyFileFromTemplate("index.html", reportsDirectory);
         copyFileFromTemplate("bootstrap.min.css", reportsDirectory);
+        copyFileFromTemplate("bootstrap.css.map", reportsDirectory);
         copyFileFromTemplate("jquery.min.js", reportsDirectory);
         copyFileFromTemplate("bootstrap.min.js", reportsDirectory);
         copyFileFromTemplate("lodash.js", reportsDirectory);
@@ -94,6 +97,8 @@ public class HtmlReporter implements Reporter {
         copyFileFromTemplate("journey.js", reportsDirectory);
         copyFileFromTemplate("journey.html", reportsDirectory);
         copyFileFromTemplate("style.css", reportsDirectory);
+        copyFileFromTemplate("state.html", reportsDirectory);
+        copyFileFromTemplate("state.js", reportsDirectory);
 
         new File(reportsDirectory, "fonts").mkdir();
 
@@ -112,6 +117,8 @@ public class HtmlReporter implements Reporter {
         copyFileFromTemplate("lib/path.js", reportsDirectory);
         copyFileFromTemplate("lib/plot.js", reportsDirectory);
         copyFileFromTemplate("lib/state.js", reportsDirectory);
+        copyFileFromTemplate("lib/utils.js", reportsDirectory);
+        copyFileFromTemplate("lib/breadcrumb.js", reportsDirectory);
 
     }
 
@@ -140,7 +147,11 @@ public class HtmlReporter implements Reporter {
 
             JsonArrayBuilder precedentsJson = builderFactory.createArrayBuilder();
             for (Class<?> cls : entry.getValue()) {
-                precedentsJson.add(cls.getCanonicalName());
+                Class<?> c = findClassWithAnnotation(Step.class, cls);
+                if (c == null){
+                    System.out.println("test");
+                }
+                precedentsJson.add(c.getCanonicalName());
             }
 
             stateJson.add("precedents", precedentsJson);
@@ -367,7 +378,7 @@ public class HtmlReporter implements Reporter {
     private void handleException(Object step, Throwable e) {
         testResult = TestResult.ERROR;
 
-        String message = e.getMessage() != null ? e.getMessage() : "null";
+        String message = e.getMessage() != null ? e.getMessage().replaceAll("<","&lt;").replaceAll(">","&gt;") : "null";
         directoryItemJson.add("errorMessage", message);
         directoryItemJson.add("stackTrace", extractStackTrace(e));
         if (step != null) {
@@ -378,7 +389,7 @@ public class HtmlReporter implements Reporter {
     private String extractStackTrace(Throwable f) {
         StringWriter stackTrace = new StringWriter();
         f.printStackTrace(new PrintWriter(stackTrace));
-        return stackTrace.toString().replaceAll("\n", "<br>").replaceAll("\t", "&nbsp;");
+        return stackTrace.toString().replaceAll("\t", "&nbsp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\n", "<br>");
     }
 
 
@@ -423,5 +434,29 @@ public class HtmlReporter implements Reporter {
 
     private enum TestResult {
         SUCCESS, FAILED, ERROR
+    }
+
+    private <T extends Annotation> Class<?> findClassWithAnnotation(Class<T> annotationClass, Class<?> subject) {
+        if (subject.equals(Step.Null.class)){
+            return subject;
+        }
+
+        T step = subject.getAnnotation(annotationClass);
+        if (step != null) {
+            return subject;
+        }
+
+        for (Class<?> i : subject.getInterfaces()) {
+            step = i.getAnnotation(annotationClass);
+            if (step != null) {
+                return i;
+            }
+        }
+
+        Class superClass = subject.getSuperclass();
+        if (superClass != null) {
+            return findClassWithAnnotation(annotationClass, superClass);
+        }
+        return null;
     }
 }

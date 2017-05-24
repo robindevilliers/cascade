@@ -3,6 +3,7 @@ package uk.co.malbec.onlinebankingexample;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -30,7 +31,12 @@ public class Utilities {
     }
 
     public static void select(WebDriver webDriver, String selector, String value) {
-        new Select(webDriver.findElement(By.cssSelector(selector))).selectByValue(value);
+        new Select(webDriver.findElement(By.cssSelector(selector)))
+                .getOptions()
+                .stream()
+                .filter(opt -> opt.getText().equals(value))
+                .findFirst()
+                .ifPresent(WebElement::click);
     }
 
     public static void click(WebDriver webDriver, String selector) {

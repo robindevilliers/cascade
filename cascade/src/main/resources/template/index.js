@@ -1,3 +1,5 @@
+var breadcrumb = new BreadCrumb('index');
+
 renderDashboard();
 renderTabPanels();
 renderJourneyLists();
@@ -10,7 +12,7 @@ $(".journey-list tr").hover(function() {
 });
 
 $(".journey-list tr").click(function() {
-    window.location = "journey.html?journeyId=" + $(this).attr("data-journey-id");
+    breadcrumb.gotoNewLink("journey.html?journeyId=" + $(this).attr("data-journey-id"));
 });
 
 function renderDashboard() {
@@ -24,7 +26,7 @@ function renderDashboard() {
         return journey.result === 'ERROR';
     }));
     var totalCount = _.size(directoryData.items);
-    var percentage = Math.round(successesCount / totalCount * 100);
+    var percentage = totalCount > 0 ? Math.round(successesCount / totalCount * 100) : 0;
 
     var totalSeconds = Math.floor(directoryData.duration / 1000);
     var minutes = Math.floor(totalSeconds / 60);

@@ -108,7 +108,6 @@ public class OnlineBankingTests {
 
     @Teardown
     public static void tearDown(Journey journey){
-        System.out.println("tearDown");
     }
 
     @AfterAll

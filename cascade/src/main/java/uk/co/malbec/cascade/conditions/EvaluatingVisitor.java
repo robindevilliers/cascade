@@ -3,6 +3,7 @@ package uk.co.malbec.cascade.conditions;
 import uk.co.malbec.cascade.Scenario;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EvaluatingVisitor implements Visitor {
@@ -41,8 +42,9 @@ public class EvaluatingVisitor implements Visitor {
 
     @Override
     public void visit(WithStepPredicate withStepPredicate) {
-        //TODO - add code so that I can define a step interface here as well as a concrete class.
-        result = scenarioClasses.contains(withStepPredicate.getStep());
+        result = scenarioClasses
+                .stream()
+                .anyMatch(c -> withStepPredicate.getStep().isAssignableFrom(c));
     }
 
     @Override
@@ -59,4 +61,8 @@ public class EvaluatingVisitor implements Visitor {
     public boolean getResult(){
         return result;
     }
+
+
+
+
 }

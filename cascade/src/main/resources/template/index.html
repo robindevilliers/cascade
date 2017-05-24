@@ -96,11 +96,20 @@
     </table>
 </script>
 
+<script id="breadcrumb-template" type="text/html">
+    <ol class="breadcrumb">
+        <% _.each(links, function(link, idx) { %>
+        <li class="breadcrumb-item"><a href="#" onclick="breadcrumb.goto(<%=idx%>)"><%=link.name%></a></li>
+        <%}); %>
+    </ol>
+</script>
+
 <div class="container">
 
     <h1>Cascade Reports
         <small> - <span id="index-percentage-label"></span>% Successful</small>
     </h1>
+    <div id="breadcrumb"></div>
 
     <h3>Test Summary</h3>
 
@@ -136,6 +145,9 @@
 <script src="bootstrap.min.js"></script>
 
 <script src="data/directoryData.js"></script>
+<script src="lib/utils.js"></script>
+<script src="lib/breadcrumb.js"></script>
+
 <script src="index.js"></script>
 </body>
 </html>
