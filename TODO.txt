@@ -1,41 +1,25 @@
-
-Why Cascade?
-
-Acceptance tests are slow and hard to maintain, because of their journey like nature.
-Cascade intelligently models the state machine of the application allowing the optimised
-generation of tests to cover the Complete set of functionality.  Fewer tests means less
-time to run.  Intelligent modeling guarantees better coverage of functionality.  Less
-code means less development effort.  Modeling the state machine allows cascade to generate
-powerful reports that track the data flows through each journey.  With modifications to
-the subject application, cascade can decompose journey testing into transition testing,
-resulting in testing times proportional to the number of transitions in the state machine.
-
-Alternatives:
-1. Define acceptance tests as something else.
-    1.1 Acceptance tests are user defined, necessitating journeys.   Calling other tests ATs, is just false.
-
-2. Have fewer acceptance tests.
-    2.1 Having fewer Journey tests because of time constraints, is admitting defeat.
-
-
+TODO
 4. if a general exception happens have cascade reports display as much.
-6. Reflections utils doesn't like 1.8.  need to update to support lambdas
 7. test names need some work in the reports test list.
-8. document reports
 9. annotation for overriding step name.
-10. test generator that drives off story files.
 11. test parallel-lisation
 12. profiles
 14. all strategies should be override-able via annotations.
 15. error handling.
-16. state persistence
 17. transitionId and stateId should display in reports if used.
 20. previous and next buttons on scope display.
 21. scope page might be better as collapsible accordians.
 23. description annotation - added to scope pane.
+26. filtering should support first result, first 10 etc.
+
+DOCUMENTATION
 24. document static variables
 25. document beforeall afterall.
-26. filtering should support first result, first 10 etc.
+8. document reports
+
+WONT FIX
+10. test generator that drives off story files.
+16. state persistence
 
 DONE
 1. change link on html reports page so that if you click on the cell, it goes to a test.
@@ -47,6 +31,7 @@ DONE
 19. Sort out responsive menu in first example application css - doesn't look nice in screenshots.
 22. make screenshot zoom.
 13. step handlers should support injectable values
+6. Reflections utils doesn't like 1.8.  need to update to support lambdas
 
 
 Cookbook ideas:
