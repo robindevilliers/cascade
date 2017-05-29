@@ -30,7 +30,6 @@ public class WizardBuilder extends DefaultHandler implements ApplicationContextA
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
         for (ElementParser elementParser : elementParsers) {
             if (elementParser.accepts(qName)) {
                 Object element = elementParser.parse(elements, attributes);
@@ -55,7 +54,6 @@ public class WizardBuilder extends DefaultHandler implements ApplicationContextA
 
     @Override
     public void characters(char ch[], int start, int length) throws SAXException {
-
         String value = new String(copyOfRange(ch, start, start + length));
 
         if (!StringUtils.isBlank(value)) {

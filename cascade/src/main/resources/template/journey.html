@@ -39,20 +39,57 @@
 
 <script id="journey-synopsis-panel-template" type="text/html">
     <h4>Name</h4>
-    <p><%=name%></p>
+    <p><%=journey.name%></p>
+    <h4>Narrative</h4>
+    <table class="table borderless table-condensed">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Class</th>
+                <th>Order</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                var failed = false;
+                _.each(journey.scenarios, function(scenario, i) {
+                    var atFailedStep = journey.failingStep === scenario.name;
+                    if (!failed && atFailedStep){
+                        failed = true;
+                    }
+                    var simpleName = _.last(scenario.name.split("."));
+                    var state = _.find(scenarios, function(s){ return s.name === scenario.name}).state;
+            %>
+                <tr>
+                    <th scope="row"><%=i%></th>
+                    <td class="<%if (atFailedStep) {%>font-weight-bold text-danger<%}%>"><%=scenario.narrative%></td>
+                    <td class="<%if (atFailedStep) {%>font-weight-bold text-danger<%}%>"><%=simpleName%></td>
+                    <td class="<%if (atFailedStep) {%>font-weight-bold text-danger<%}%>"><%=scenarioOrder[scenario.name]%>,<%=stateOrder[state]%></td>
+                    <td>
+                        <%if (!failed) {%>
+                        <span class="glyphicon glyphicon-list-alt" style="cursor:pointer;" onclick="gotoState($(this), <%=i%>);" aria-hidden="true"></span>
+                        <%}%>
+                    </td>
+                </tr>
+            <%});%>
+
+        </tbody>
+    </table>
     <h4>Result</h4>
-    <p><%=result%></p>
-    <% if(result === 'FAILED'){%>
+    <p><%=journey.result%></p>
+    <% if(journey.result === 'FAILED'){%>
     <h4>Assertion Failure</h4>
-    <p><%=assertionMessage%></p>
+    <p><%=journey.assertionMessage%></p>
     <h4>Stack Trace</h4>
-    <p><%=stackTrace%></p>
+    <p><%=journey.stackTrace%></p>
     <%}%>
-    <% if(result === 'ERROR'){%>
+    <% if(journey.result === 'ERROR'){%>
     <h4>Message</h4>
-    <p><%=errorMessage%></p>
+    <p><%=journey.errorMessage%></p>
     <h4>Stack Trace</h4>
-    <p><%=stackTrace%></p>
+    <p><%=journey.stackTrace%></p>
     <%}%>
 </script>
 
@@ -199,75 +236,6 @@
             <%}%>
             <%});%>
         </svg>
-    </div>
-</script>
-
-<script id="journey-step-modal" type="text/html">
-    <div id="scope_<%=index%>" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <div class="modal-title">
-                        <h4><%=name%></h4>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <p><b>Index: </b> <span><%=index%></span></p>
-
-                    <h4>Transition</h4>
-                    <% if (hasTransition) {%>
-                    <table class="table table-striped">
-                        <caption>The table below lists all changes in state that occurred during the execution of the current step.</caption>
-                        <tbody>
-                        <%
-                        _.forEach(scope, function(literal, key) {
-                            if (literal.transition){
-                        %>
-                        <tr>
-                            <th ><%=key%></th>
-                            <td><%=literal.transition%></td>
-                        </tr>
-                        <%
-                            }
-                        });
-                        %>
-                        </tbody>
-                    </table>
-                    <%} else {%>
-                    This step doesn't alter state, so no transition data is available.
-                    <%}%>
-
-                    <h4>State</h4>
-                    <% if (hasState) {%>
-                    <table class="table table-striped">
-                        <caption>This table includes the values of the variables defined in the current journey immediately upon completion of the current step.</caption>
-                        <tbody>
-                        <%
-                        _.forEach(scope, function(literal, key) {
-                            if (literal.state) {
-                        %>
-                        <tr>
-                            <th ><%=key%></th>
-                            <td><%=literal.state%></td>
-                        </tr>
-                        <%
-                            }
-                        });
-                        %>
-                        </tbody>
-                    </table>
-                    <%} else {%>
-                        This step doesn't assert state, so no state data is available.
-                    <%}%>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
     </div>
 </script>
 

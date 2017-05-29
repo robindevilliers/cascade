@@ -38,6 +38,26 @@
 </script>
 
 <script id="journeys-template" type="text/html">
+
+    <div class="col-md-4 col-sm-offset-8">
+        <div class="input-group pull-right">
+            <span class="input-group-addon">Simple&nbsp;
+                <%if (config.mode === "simple"){%>
+                <input type="radio" name="mode" value="simple" checked onchange="reRenderLists(event)">
+                <%} else {%>
+                <input type="radio" name="mode" value="simple" onchange="reRenderLists(event)">
+                <%}%>
+            </span>
+            <span class="input-group-addon">Descriptive &nbsp;
+                <%if (config.mode === 'descriptive'){%>
+                <input type="radio" name="mode" value="descriptive" checked onchange="reRenderLists(event)">
+                <%} else {%>
+                <input type="radio" name="mode" value="descriptive" onchange="reRenderLists(event)">
+                <%}%>
+            </span>
+            <input type="number" name="orderThreshold" class="form-control" style="width: 70px; " value="<%=config.orderThreshold%>" maxlength="1" min="1" max="9" onchange="reRenderLists(event)">
+        </div>
+    </div>
     <table class="table table-striped journey-list">
         <thead>
         <tr>
@@ -50,7 +70,35 @@
         <% _.each(journeys, function(journey) {%>
         <tr style="cursor: pointer;" data-journey-id="<%=journey.journeyId%>">
             <th><%=journey.journeyId%></th>
-            <td><%=journey.name%></td>
+            <td>
+                <% if (config.mode == 'descriptive') {%>
+                <span style="font-size: 19px;"><%=journey.id%></span>
+                <%
+                    var latch = false;
+                    _.each(journey.scenarios, function(scenario) {
+                        var order = scenarioOrder[scenario.name];
+
+                        if (order <= config.orderThreshold){
+                            latch = false;
+                %>
+                <span style="font-size: <%= Math.max(22 - (order*3), 10)%>px;">
+                <%=scenario.narrative%>
+                </span>
+                <%
+                        } else {
+                            if (!latch){
+                %>
+                <span style="font-size: 19px;">...</span>
+                <%
+                            }
+                            latch = true;
+                        }
+                    });
+                %>
+                <%} else {%>
+                <%=journey.name%>
+                <%}%>
+            </td>
             <td><%=journey.result%></td>
         </tr>
         <%});%>

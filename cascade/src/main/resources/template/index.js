@@ -1,19 +1,26 @@
 var breadcrumb = new BreadCrumb('index');
 
+var config = {
+    mode: 'descriptive',
+    orderThreshold: 3
+};
+
 renderDashboard();
 renderTabPanels();
 renderJourneyLists();
 renderCoverageReport();
 
-$(".journey-list tr").hover(function() {
-    $(this).addClass("text-primary");
-}, function(){
-    $(this).removeClass("text-primary");
-});
-
-$(".journey-list tr").click(function() {
-    breadcrumb.gotoNewLink("journey.html?journeyId=" + $(this).attr("data-journey-id"));
-});
+function reRenderLists(e){
+    if (e.target.name === 'orderThreshold' && e.target.value.length == 0){
+        config[e.target.name] = 3;
+    } else if (e.target.name === 'orderThreshold' && (parseInt(e.target.value) > 9 || parseInt(e.target.value) < 1) ){
+        config[e.target.name] = 3;
+    } else {
+        config[e.target.name] = e.target.value;
+    }
+    renderJourneyLists();
+    return true;
+}
 
 function renderDashboard() {
     var successesCount = _.size(_.filter(directoryData.items, function (journey) {
@@ -69,8 +76,19 @@ function renderJourneyLists() {
         return journey.result !== 'SUCCESS';
     });
 
-    $("#all-journeys #tab-body").html(journeysTemplate({journeys: directoryData.items}));
-    $("#failed-journeys #tab-body").html(journeysTemplate({journeys: badJourneys}));
+    $("#all-journeys #tab-body").html(journeysTemplate({journeys: directoryData.items, scenarioOrder: directoryData.scenarioOrder, config: config}));
+    $("#failed-journeys #tab-body").html(journeysTemplate({journeys: badJourneys, scenarioOrder: directoryData.scenarioOrder, config: config}));
+
+    $(".journey-list tr").hover(function() {
+        $(this).addClass("text-primary");
+    }, function(){
+        $(this).removeClass("text-primary");
+    });
+
+    $(".journey-list tr").click(function() {
+        breadcrumb.gotoNewLink("journey.html?journeyId=" + $(this).attr("data-journey-id"));
+    });
+
 }
 
 function renderCoverageReport() {

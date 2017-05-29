@@ -9,7 +9,7 @@ import uk.co.malbec.cascade.annotations.Then;
 
 import static org.junit.Assert.assertEquals;
 
-@Step({MentallyIll.class, YouCanGo.class, EnterHowIsHell.class, AlreadyDoneTime.class, DoneTime.class})
+@Step({MentallyIll.class, YouCanGo.class, EnterHowIsHell.class, DoneTime.class})
 @Narrative("Present escaped conclusion.")
 public class Escaped {
 

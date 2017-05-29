@@ -116,11 +116,11 @@
         <button-large flavour="PRIMARY">Proceed</button-large>
 
         <route-mappings>
-            <default view="like-marmite.page"/>
+            <default view="like-marmalade.page"/>
         </route-mappings>
     </view>
 
-    <view id="like-marmite.page" title="Like Marmite">
+    <view id="like-marmalade.page" title="Like Marmalade">
 
         <title-large>Let's commence!</title-large>
 
@@ -131,9 +131,9 @@
             about your placement.
         </paragraph>
 
-        <question>Do you like marmite?</question>
+        <question>Do you like marmalade?</question>
 
-        <options data="like-marmite" type="BOOLEAN">
+        <options data="like-marmalade" type="BOOLEAN">
             <paragraph>Please answer truthfully and honestly.</paragraph>
             <paragraph flavour="MUTED" em="0.8">
                 If you lie to us, we will punish you.  On the other hand, if you are honest, we will punish you anyway!  This is hell.
@@ -148,8 +148,8 @@
         <button-large flavour="PRIMARY">Proceed</button-large>
 
         <route-mappings>
-            <rule condition="like-marmite = true" view="crazy.page"/>
-            <rule condition="like-marmite = false" view="been-to-opera.page"/>
+            <rule condition="like-marmalade = true" view="crazy.page"/>
+            <rule condition="like-marmalade = false" view="been-to-opera.page"/>
         </route-mappings>
     </view>
 
@@ -281,7 +281,6 @@
             <option value="BUDDHIST" justifySelf="START">Buddhist</option>
             <option value="JEWISH" justifySelf="START">Jewish</option>
             <option value="PIRATE" justifySelf="START">Pirate</option>
-            <option value="JEDI" justifySelf="START">Jedi</option>
             <option value="CHRISTIAN" justifySelf="START">Christian</option>
             <option value="ATHEIST" justifySelf="START">Atheist</option>
         </options>
@@ -336,116 +335,6 @@
                     Ha ha ha ha!  Oh my side!  I've a pain in my side!  Let me catch my breath.
                 </variable>
             </rule>
-        </route-mappings>
-    </view>
-
-
-    <view id="girl-star-wars.page" title="Cosplay">
-        <title-large>But you're a girl!</title-large>
-        <paragraph>
-            What?  A girl Star Wars fan? Impossible!  Aren't you all interested in dollies and cupcakes!  You can't
-            be a Star Wars fan.  Um... that is unless you are into cosplay?  I guess you could be into cosplay.
-            That fits... I suppose.
-        </paragraph>
-
-        <question>Are you in to cosplay?</question>
-
-        <options data="cosplay" type="BOOLEAN">
-            <paragraph>Please answer truthfully and honestly.</paragraph>
-            <paragraph flavour="MUTED" em="0.8">
-                What is cosplay?  If you have to ask, then just say 'No' in the checkbox below.
-            </paragraph>
-            <div orientation="ROW">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-            </div>
-
-        </options>
-
-        <button-large flavour="PRIMARY">Proceed</button-large>
-
-        <route-mappings>
-            <rule condition="cosplay = true" view="motoko-kusanagi.page"/>
-            <rule condition="cosplay = false" view="profession-of-innocence-first.page">
-                <variable name="title">I knew it!</variable>
-                <variable name="narrative">
-                    You just said you were a 'Jedi' in an effort to be obstructionist.  Well we are not
-                    fooled.  No get-out-of-hell free card for you.  Moving onto the next section...  Here... Have a cupcake!
-                </variable>
-            </rule>
-        </route-mappings>
-
-    </view>
-
-    <view id="motoko-kusanagi.page" title="Motoko Kusanagi">
-        <title-large>Into cosplay?</title-large>
-
-        <paragraph>
-            Oh, so you are into cosplay?  That's cool... Just one more question.
-        </paragraph>
-
-        <question>Have you ever dressed up as Motoko Kusanagi?</question>
-
-        <options data="motoko" type="BOOLEAN">
-            <paragraph>Please answer truthfully and honestly.</paragraph>
-            <paragraph flavour="MUTED" em="0.8">
-                Please answer 'Yes', if you have ever dressed up as Motoko Kusanagi and exhibited yourself in front of
-                hundreds, nay, thousands of horny star wars fans at a comic convention.  Otherwise, answer 'No'.
-            </paragraph>
-            <div orientation="ROW">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-            </div>
-        </options>
-
-        <button-large flavour="PRIMARY">Proceed</button-large>
-
-        <route-mappings>
-            <default view="star-wars.page"/>
-        </route-mappings>
-
-    </view>
-
-    <view id="star-wars.page" title="Star Wars">
-        <title-large>These are not the droids you are looking for?</title-large>
-        <paragraph>
-            #if($gender == 'FEMALE')
-                Okay, I admit.  That question about Motoko Kusanagi isn't really relevant. But okay,
-                Okay, okay.  So you could possibly be a Star Wars fan.  Well lets see!
-            #else
-            If you are a true Star Wars fan you must have seen Episode 1.  In which case you have already been to
-            hell... But that's only if you are a true Star Wars fan.  If you can answer these questions you may just win
-            yourself a get-out-of-hell free card.
-            #end
-
-        </paragraph>
-
-        <question>What is the name of Boba Fett's ship?</question>
-
-        <input data="boba-fett-ship" type="STRING">
-            <paragraph>Please enter in the field below the name of Boba Fett's ship?</paragraph>
-        </input>
-
-        <question>What is the name of the first ship you see in Episode 4?</question>
-
-        <input data="first-ship" type="STRING">
-            <paragraph>Please enter in the field below the name of the ship?</paragraph>
-        </input>
-
-        <button-large flavour="PRIMARY">Proceed</button-large>
-
-        <route-mappings>
-            <rule condition="(boba-fett-ship ~ '[Ss][Ll][Aa][Vv][Ee] ([Oo][Nn][Ee]|I|1)') and (first-ship ~ '[Cc][Oo][Rr][Ee][Ll][Ll][Ii][Aa][Nn] [Cc][Oo][Rr][Vv][Ee][Tt][Tt][Ee]') " view="good-bye.page">
-                <variable name="title">Oh you've already done your time!</variable>
-                <variable name="narrative">I know!  Episode 1 was pretty rough.  Oh well, Rogue One was better.</variable>
-            </rule>
-            <default view="profession-of-innocence-first.page">
-                <variable name="title">You are not a Jedi!</variable>
-                <variable name="narrative">
-                    Oh can't answer those questions hey?  Fraud!  Imposter!  You just said you were a 'Jedi' in an effort
-                    to be obstructionist.  We know everything, and No!, you are not entitled to privacy!
-                </variable>
-            </default>
         </route-mappings>
     </view>
 

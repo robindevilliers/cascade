@@ -12,7 +12,7 @@ import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 @Narrative("Gender question.")
 public interface EnterGender {
 
-    @Narrative("Enter male gender and go to marmite page.")
+    @Narrative("Enter male gender and go to marmalade page.")
     class EnterMaleGender implements EnterGender {
         @Demands
         private WebDriver webDriver;
@@ -30,11 +30,11 @@ public interface EnterGender {
 
         @Then
         public void then() {
-            assertEquals("Welcome to Hell | Like Marmite", webDriver.getTitle());
+            assertEquals("Welcome to Hell | Like Marmalade", webDriver.getTitle());
         }
     }
 
-    @Narrative("Enter female gender and go to marmite page.")
+    @Narrative("Enter female gender and go to marmalade page.")
     class EnterFemaleGender implements EnterGender {
         @Demands
         private WebDriver webDriver;
@@ -52,7 +52,7 @@ public interface EnterGender {
 
         @Then
         public void then() {
-            assertEquals("Welcome to Hell | Like Marmite", webDriver.getTitle());
+            assertEquals("Welcome to Hell | Like Marmalade", webDriver.getTitle());
         }
     }
 }

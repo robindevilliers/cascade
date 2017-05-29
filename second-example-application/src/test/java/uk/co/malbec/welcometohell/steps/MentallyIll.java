@@ -7,7 +7,7 @@ import uk.co.malbec.cascade.annotations.*;
 import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
-@Step(MarmiteQuestion.LikesMarmite.class)
+@Step(MarmaladeQuestion.LikesMarmalade.class)
 @Narrative("Proceed and go to the escaped page.")
 public class MentallyIll {
 

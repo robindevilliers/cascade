@@ -39,6 +39,9 @@ public class HtmlReporter implements Reporter {
 
     private RenderingSystem renderingSystem;
 
+    private Map<Class<?>, Integer> stateHistogram = new HashMap<>();
+    private Map<Class<?>, Integer> scenarioHistogram = new HashMap<>();
+
     public HtmlReporter(RenderingSystem renderingSystem) {
         this.renderingSystem = renderingSystem;
     }
@@ -167,7 +170,45 @@ public class HtmlReporter implements Reporter {
     public void finish() {
         directoryJson.add("duration", System.currentTimeMillis() - startTime);
         directoryJson.add("items", directoryItemsJson.build());
+
+        Map<Integer, List<Class>> stateAccumulator = new TreeMap<>();
+        stateHistogram.forEach((key, value) -> stateAccumulator.computeIfAbsent(value, (k) -> new ArrayList<>()).add(key));
+
+        JsonObjectBuilder stateOrderJson = builderFactory.createObjectBuilder();
+        int stateIndex = 1;
+        for (Map.Entry<Integer, List<Class>> entry: stateAccumulator.entrySet()){
+            for (Class clz: entry.getValue()){
+                stateOrderJson.add(clz.getName(), stateIndex);
+            }
+            stateIndex++;
+        }
+        directoryJson.add("stateOrder", stateOrderJson);
+
+
+        Map<Integer, List<Class>> scenarioAccumulator = new TreeMap<>();
+        scenarioHistogram.forEach((key, value) -> scenarioAccumulator.computeIfAbsent(value, (k) -> new ArrayList<>()).add(key));
+
+        JsonObjectBuilder scenarioOrderJson = builderFactory.createObjectBuilder();
+        int scenarioIndex = 1;
+
+        for (Map.Entry<Integer, List<Class>> entry: scenarioAccumulator.entrySet()){
+            for (Class clz: entry.getValue()){
+                scenarioOrderJson.add(clz.getName(), scenarioIndex);
+            }
+            scenarioIndex++;
+        }
+        directoryJson.add("scenarioOrder", scenarioOrderJson);
+
         writeVariableAsFile(dataDirectory, "directoryData", directoryJson.build());
+    }
+
+    private void merge(Journey journey, JsonObjectBuilder directoryItemJson) {
+
+        for (Scenario scenario: journey.getSteps()){
+            stateHistogram.compute(scenario.getStateCls(), (clz, count) -> count == null ? 1 : count + 1);
+            scenarioHistogram.compute(scenario.getCls(), (clz, count) -> count == null ? 1 : count + 1);
+        }
+        directoryItemsJson.add(directoryItemJson);
     }
 
     private void copyFileFromTemplate(String fileName, File baseDirectory) {
@@ -194,18 +235,6 @@ public class HtmlReporter implements Reporter {
 
     private void writeVariableAsFile(File reportsDirectory, String variableName, JsonStructure data) {
         writeVariableAsFile(reportsDirectory, variableName, variableName, data);
-    }
-
-    private static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            for (String filename : dir.list()) {
-                boolean success = deleteDir(new File(dir, filename));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
     }
 
     private enum TestResult {
@@ -248,7 +277,7 @@ public class HtmlReporter implements Reporter {
         private RenderingSystem renderingSystem;
         private JsonBuilderFactory builderFactory;
         private HtmlReporter htmlReporter;
-
+        private Journey journey;
 
         public HtmlTestReport(RenderingSystem renderingSystem, JsonBuilderFactory builderFactory, HtmlReporter htmlReporter) {
             this.renderingSystem = renderingSystem;
@@ -258,6 +287,7 @@ public class HtmlReporter implements Reporter {
 
         @Override
         public void setupTest(Journey journey, Map<String, Scope> scope) {
+            this.journey = journey;
             this.index = 0;
             this.scope = scope;
             directoryItemJson = builderFactory.createObjectBuilder();
@@ -417,7 +447,7 @@ public class HtmlReporter implements Reporter {
 
         @Override
         public void mergeTestReport() {
-            htmlReporter.merge(directoryItemJson);
+            htmlReporter.merge(journey, directoryItemJson);
         }
 
         @Override
@@ -478,9 +508,5 @@ public class HtmlReporter implements Reporter {
             f.printStackTrace(new PrintWriter(stackTrace));
             return stackTrace.toString().replaceAll("\t", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>");
         }
-    }
-
-    private void merge(JsonObjectBuilder directoryItemJson) {
-        directoryItemsJson.add(directoryItemJson);
     }
 }

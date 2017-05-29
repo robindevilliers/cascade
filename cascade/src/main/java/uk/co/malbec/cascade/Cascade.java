@@ -107,10 +107,10 @@ public class Cascade {
         int threads = Optional.ofNullable(controlClass.getAnnotation(Parallelize.class)).map(Parallelize::value).orElse(1);
         CompletionService<TestReport> ecs = new ExecutorCompletionService<>(Executors.newFixedThreadPool(threads));
 
-        journeys.stream().map((journey -> {
+        journeys.forEach((journey -> {
             TestReport testReport = reporter.createTestReport();
 
-            return ecs.submit(() -> {
+            ecs.submit(() -> {
                 try {
                     Reference<Object> control = new Reference<Object>();
                     Reference<List<Object>> steps = new Reference<List<Object>>();
@@ -140,13 +140,14 @@ public class Cascade {
                 }
                 return testReport;
             });
-        })).collect(Collectors.toList());
+        }));
 
         try {
-            for (Journey journey: journeys){
+            for (Journey journey : journeys) {
                 try {
                     ecs.take().get().mergeTestReport();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
             }
         } catch (ExecutionException e) {
             //TODO - handle exception

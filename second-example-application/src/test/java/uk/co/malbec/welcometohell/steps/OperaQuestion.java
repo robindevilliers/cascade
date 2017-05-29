@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.selectOption;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
-@Step(MarmiteQuestion.HatesMarmite.class)
+@Step(MarmaladeQuestion.HatesMarmalade.class)
 @Narrative("Opera question.")
 public interface OperaQuestion {
 

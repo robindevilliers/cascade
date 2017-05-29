@@ -11,9 +11,7 @@ import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 @Step({
         Jurisdiction.Jewish.class,
         Jurisdiction.Christian.class,
-        Jurisdiction.Pirate.class,
-        CosPlayQuestion.NoToCosPlay.class,
-        StarWarsQuestion.IgnorantStarWars.class
+        Jurisdiction.Pirate.class
 })
 @Narrative("Plea question.")
 public interface EnterPlea {

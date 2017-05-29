@@ -105,7 +105,7 @@ public class WizardEngine {
         for (Rule rule : routeMappings.getRules()) {
 
             Expression expression = expressionParser.generate(rule.getCondition());
-            if (expression.matches(data)){
+            if (expression.matches(data)) {
                 Map<String, Object> dataOnView = wizardState.getDataOnView(pageId);
                 rule.getVariables().forEach(v -> {
                     StringWriter content = new StringWriter();
@@ -117,7 +117,7 @@ public class WizardEngine {
             }
         }
         if (nextView == null) {
-            if (routeMappings.getDefault() == null){
+            if (routeMappings.getDefault() == null) {
                 throw new RuntimeException("No routes matched and no default supplied");
             }
 
@@ -146,28 +146,27 @@ public class WizardEngine {
     }
 
     private Wizard getWizard(String name) {
+        synchronized (cache) {
+            if (cache.containsKey(name)) {
+                return cache.get(name);
+            }
 
-        if (cache.containsKey(name)) {
-            return cache.get(name);
-        }
+            try {
+                SAXParserFactory.newInstance().newSAXParser().parse(
+                        WizardEngine.class.getResourceAsStream("/" + name + ".xml"),
+                        wizardBuilder
+                );
 
-        try {
-            SAXParserFactory.newInstance().newSAXParser().parse(
-                    WizardEngine.class.getResourceAsStream("/" + name + ".xml"),
-                    wizardBuilder
-            );
+                cache.put(name, wizardBuilder.getWizard());
 
-            cache.put(name, wizardBuilder.getWizard());
-
-            return wizardBuilder.getWizard();
-        } catch (Exception e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            } else {
-                throw new RuntimeException(e);
+                return wizardBuilder.getWizard();
+            } catch (Exception e) {
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                } else {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
-
-
 }

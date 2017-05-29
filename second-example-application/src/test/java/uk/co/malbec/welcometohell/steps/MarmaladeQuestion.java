@@ -9,11 +9,11 @@ import static org.junit.Assert.assertEquals;
 import static uk.co.malbec.welcometohell.Utilities.waitForPage;
 
 @Step(EnterGender.class)
-@Narrative("Marmite question.")
-public interface MarmiteQuestion {
+@Narrative("Marmalade question.")
+public interface MarmaladeQuestion {
 
-    @Narrative("Enter likes marmite and go to mentally ill page.")
-    class LikesMarmite implements MarmiteQuestion {
+    @Narrative("Enter likes marmalade and go to mentally ill page.")
+    class LikesMarmalade implements MarmaladeQuestion {
         @Demands
         private WebDriver webDriver;
 
@@ -35,8 +35,8 @@ public interface MarmiteQuestion {
         }
     }
 
-    @Narrative("Enter hates marmite and go to opera page.")
-    class HatesMarmite implements MarmiteQuestion {
+    @Narrative("Enter hates marmalade and go to opera page.")
+    class HatesMarmalade implements MarmaladeQuestion {
         @Demands
         private WebDriver webDriver;
 

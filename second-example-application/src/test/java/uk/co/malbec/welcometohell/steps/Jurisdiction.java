@@ -107,32 +107,6 @@ public interface Jurisdiction {
         }
     }
 
-    @Narrative("Enter jedi for religion and go to the next page depending on gender.")
-    class Jedi implements Jurisdiction {
-        @Demands
-        private WebDriver webDriver;
-
-        @Demands
-        private String gender;
-
-        @When
-        public void when() {
-            selectOption(webDriver, "input", "JEDI");
-
-            webDriver.findElement(By.cssSelector("button[type=submit]")).click();
-            waitForPage(webDriver);
-        }
-
-        @Then
-        public void then() {
-            if (gender.equals("MALE")){
-                assertEquals("Welcome to Hell | Star Wars", webDriver.getTitle());
-            } else {
-                assertEquals("Welcome to Hell | Cosplay", webDriver.getTitle());
-            }
-        }
-    }
-
     @Narrative("Enter christian for religion and go to the plea page.")
     class Christian implements Jurisdiction {
         @Demands

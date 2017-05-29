@@ -19,6 +19,7 @@ var contentTemplate = _.template($("#content-template").text());
 $("#content").append(contentTemplate({
     index: params['index'],
     name: scenario.name,
+    narrative: scenario.narrative,
     scope: scenario.scope,
     hasState: scenario.hasState,
     hasTransition: scenario.hasTransition

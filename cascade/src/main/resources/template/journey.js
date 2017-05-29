@@ -107,7 +107,7 @@ function renderTabs() {
 
 function renderSynopsisPanel() {
     var journeySynopsisPanelTemplate = _.template($("#journey-synopsis-panel-template").text());
-    $("#synopsis").find("#tab-body").append(journeySynopsisPanelTemplate(journey));
+    $("#synopsis").find("#tab-body").append(journeySynopsisPanelTemplate({journey: journey, scenarios: directoryData.scenarios, stateOrder: directoryData.stateOrder, scenarioOrder: directoryData.scenarioOrder}));
 }
 
 function renderFilterPanel() {
@@ -138,16 +138,5 @@ function renderAnalysisPanel(journey) {
         journeyId: journey.journeyId
     };
     $("#analysis").find("#tab-body").append(journeyAnalysisTemplate(data));
-
-//    _.each(journey.scenarios, function(scenario, idx){
-//        var modalTemplate = _.template($("#journey-step-modal").text());
-//        $("#analysis").find("#tab-body").append(modalTemplate({
-//            index: idx,
-//            name: scenario.name,
-//            scope: scenario.scope,
-//            hasState: scenario.hasState,
-//            hasTransition: scenario.hasTransition
-//        }));
-//    })
 
 }
