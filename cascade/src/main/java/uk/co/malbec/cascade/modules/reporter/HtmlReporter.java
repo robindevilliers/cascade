@@ -1,6 +1,7 @@
 package uk.co.malbec.cascade.modules.reporter;
 
 import junit.framework.AssertionFailedError;
+import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.annotations.Narrative;
@@ -36,6 +37,7 @@ public class HtmlReporter implements Reporter {
 
     private long startTime;
     private JsonObjectBuilder directoryJson;
+    private Completeness completeness;
 
     private RenderingSystem renderingSystem;
 
@@ -47,7 +49,8 @@ public class HtmlReporter implements Reporter {
     }
 
     @Override
-    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope) {
+    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope, Completeness completeness) {
+        this.completeness = completeness;
         this.directoryJson = builderFactory.createObjectBuilder();
         this.directoryItemsJson = builderFactory.createArrayBuilder();
 
@@ -120,7 +123,6 @@ public class HtmlReporter implements Reporter {
     }
 
     private void writeStateMachineToJson(List<Scenario> scenarios) {
-        //TODO - you need to interrogate the When and Then annotations for replaced stateId and scenarioIds
         Map<Class<?>, Class[]> states = new HashMap<>();
         JsonArrayBuilder statesJson = builderFactory.createArrayBuilder();
         JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
@@ -153,12 +155,11 @@ public class HtmlReporter implements Reporter {
             statesJson.add(stateJson);
         }
         directoryJson.add("states", statesJson);
+        directoryJson.add("completeness", completeness.toString());
     }
-
 
     @Override
     public void start() {
-
     }
 
     @Override

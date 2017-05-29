@@ -40,6 +40,8 @@ function renderDashboard() {
     var remainingSeconds = totalSeconds - (minutes * 60);
 
     $('#index-percentage-label').html(percentage);
+    $('#completeness-label').html(directoryData.completeness);
+
     $('#index-success-label').html(successesCount);
     $('#index-failure-label').html(failureCount);
     $('#index-error-label').html(errorCount);

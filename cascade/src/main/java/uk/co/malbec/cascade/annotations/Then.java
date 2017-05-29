@@ -6,9 +6,6 @@ import java.lang.annotation.*;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Then {
-    String scenarioId() default Null;
-
-    String stateId() default Null;
 
     String Null = "";
 }

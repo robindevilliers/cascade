@@ -1,5 +1,6 @@
 package uk.co.malbec.cascade.modules.reporter;
 
+import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.Scenario;
 import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.model.Journey;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class DisableReporter implements Reporter {
     @Override
-    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope) {
+    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope, Completeness completenessLevel) {
 
     }
 

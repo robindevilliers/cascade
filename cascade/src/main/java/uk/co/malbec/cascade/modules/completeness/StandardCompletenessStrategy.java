@@ -40,7 +40,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
                     if (then == null) {
                         return null;
                     }
-                    return then.scenarioId() == null || then.scenarioId().equals(Then.Null) ? scenario.getCls().getCanonicalName() : then.scenarioId();
+                    return scenario.getCls().getCanonicalName();
                 }
             }.calculate(journeys);
         }
@@ -53,7 +53,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
                     if (when == null) {
                         return null;
                     }
-                    return when.transitionId() == null || when.transitionId().equals(When.Null) ? scenario.getCls().getCanonicalName() : when.transitionId();
+                    return scenario.getCls().getCanonicalName();
                 }
             }.calculate(journeys);
         }
@@ -66,7 +66,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
                     if (then == null) {
                         return null;
                     }
-                    return then.stateId() == null || then.stateId().equals(When.Null) ? scenario.getStateCls().getCanonicalName() : then.stateId();
+                    return scenario.getStateCls().getCanonicalName();
                 }
             }.calculate(journeys);
 
@@ -74,6 +74,11 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
 
 
         throw new UnsupportedOperationException("Unknown completeness level supplied.");
+    }
+
+    @Override
+    public Completeness getCompletenessLevel() {
+        return this.completeness;
     }
 
 

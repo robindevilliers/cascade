@@ -4,10 +4,8 @@ TODO
 12. profiles
 14. all strategies should be override-able via annotations.
 
-17. transitionId and stateId should display in reports if used.
 20. previous and next buttons on scope display.
 26. filtering should support first result, first 10 etc.
-29. print completeness level on summary page.
 30. add tabs to breadcrumbs.
 31. coverage page is broken.
 
@@ -15,13 +13,15 @@ DOCUMENTATION
 24. document static variables
 25. document beforeall afterall.
 8. document reports
-27. document parallize.
+27. document parallel-lise.
 28. rename description annotation to narrative.
+31. remove stateId, transitionId and scenarioId from When, Then documentation.
 
 WONT FIX
 10. test generator that drives off story files.
 16. state persistence
 21. scope page might be better as collapsible accordians.
+17. transitionId and stateId should display in reports if used.
 
 DONE
 1. change link on html reports page so that if you click on the cell, it goes to a test.
@@ -38,6 +38,7 @@ DONE
 23. narrative annotation - added to scope pane.
 9. annotation for overriding step name.
 7. test names need some work in the reports test list.
+29. print completeness level on summary page.
 
 Cookbook ideas:
 1. OnlyRunWith greater explanation.

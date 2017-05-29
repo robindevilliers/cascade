@@ -1,5 +1,6 @@
 package uk.co.malbec.cascade.modules;
 
+import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.Scope;
 import uk.co.malbec.cascade.model.Journey;
 
@@ -10,4 +11,6 @@ public interface CompletenessStrategy {
     void init(Class<?> controlClass, Map<String, Scope> globalScope);
 
     List<Journey> filter(List<Journey> journeys);
+
+    Completeness getCompletenessLevel();
 }

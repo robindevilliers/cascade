@@ -75,7 +75,7 @@ public class Cascade {
         completenessStrategy.init(controlClass, globalScope);
         renderingSystem.init(controlClass, globalScope);
 
-        reporter.init(controlClass, scenarios, globalScope);
+        reporter.init(controlClass, scenarios, globalScope, completenessStrategy.getCompletenessLevel());
         List<Journey> journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy, globalScope);
 
         this.journeys = completenessStrategy.filter(journeys);
