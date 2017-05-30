@@ -1,7 +1,6 @@
 TODO
 4. if a general exception happens have cascade reports display as much.
 15. error handling.
-31. coverage page is broken.
 
 DOCUMENTATION
 24. document static variables
@@ -41,7 +40,9 @@ DONE
 30. add tabs to breadcrumbs.
 12. profiles
 26. filtering should support first result, first 10 etc.
-
+31. coverage page is broken.
+35. include order on state machine page.
+36. include coverage summary.
 
 Cookbook ideas:
 1. OnlyRunWith greater explanation.

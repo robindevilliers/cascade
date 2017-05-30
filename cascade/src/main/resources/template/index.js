@@ -67,7 +67,7 @@ function renderTabPanels() {
         active = false;
     }
     tabs.push({active: activeTab === 'all' || active, id: "all", title: "All"});
-    tabs.push({active: activeTab === 'coverage', id: "coverage", title: "Coverage"});
+    tabs.push({active: activeTab === 'machine', id: "machine", title: "State Machine"});
 
     var tabHeadersTemplate = _.template($("#tab-headers-template").text());
     $("#tab-headers").append(tabHeadersTemplate({tabs: tabs}));
@@ -102,50 +102,94 @@ function renderJourneyLists() {
     $(".journey-list tr").click(function() {
         breadcrumb.gotoNewLink("journey.html?journeyId=" + $(this).attr("data-journey-id"));
     });
-
 }
 
 function renderCoverageReport() {
-    var coverageTemplate = _.template($("#coverage-template").text());
+    var machineTemplate = _.template($("#machine-template").text());
+
+    var stateCount = 0;
+    var completeStateCount = 0;
+
+    var scenarioCount = 0;
+    var completeScenarioCount = 0;
 
 
-    _.each(directoryData.items, function (journey) {
-        journey.states = _.uniq(_.flatMap(journey.scenarios, function (journeyScenario) {
-            return _.map(_.filter(directoryData.scenarios, function (scenario) {
-                return scenario.name === journeyScenario;
-            }), function (scenario) {
-                return scenario.state;
-            });
-        }));
-    });
+    var stateMachine = _.chain(directoryData.states)
+        .cloneDeep()
+        .map(function(state){
+            var atLeastOneRun = false;
+            var atLeastOneMiss = false;
 
+            var scenarios = _.chain(directoryData.scenarios)
+            .filter(function(scenario) {
+                return scenario.state === state.name;
+            })
+            .cloneDeep()
+            .map(function(scenario){
+                var count = _.chain(directoryData.items)
+                .flatMap(function(journey) { return journey.scenarios;})
+                .map(function(s){ return s.name})
+                .uniq()
+                .reduce(function(count, name){
+                    return scenario.name === name ? count + 1 : count;
+                }, 0)
+                .value();
 
-    var stateHistogram = {};
-    _.each(directoryData.states, function (state) {
-        var count = 0;
-        _.each(directoryData.items, function (journey) {
-            if (_.some(journey.states, function (s) {
-                    return s === state.name;
-                })) {
-                count++;
+                if (count > 0){
+                    scenario.coverage ='COVERED';
+                    scenario.bg = 'success';
+                    atLeastOneRun = true;
+                } else {
+                    scenario.coverage ='MISSED';
+                    scenario.bg = 'danger';
+                    atLeastOneMiss = true;
+                }
+
+                return scenario;
+            })
+            .each(function(scenario) {
+                scenarioCount++;
+                if (scenario.coverage === 'COVERED'){
+                    completeScenarioCount++;
+                }
+                return true;
+            })
+            .value();
+
+            state.scenarios = scenarios;
+
+            if (atLeastOneRun){
+                if (atLeastOneMiss){
+                    state.bg = 'warning';
+                    state.coverage = 'PARTIAL';
+                } else {
+                    state.bg = 'success';
+                    state.coverage = 'COMPLETE';
+                }
+            } else {
+                state.bg = 'danger';
+                state.coverage = 'MISSED';
             }
-        });
-        stateHistogram[state.name] = count;
-    });
 
-
-    var scenarioHistogram = {};
-    _.each(directoryData.scenarios, function (scenario) {
-        var count = 0;
-        _.each(directoryData.items, function (journey) {
-            if (_.some(journey.directoryData, function (s) {
-                    return s === scenario.name;
-                })) {
-                count++;
+            return state;
+        })
+        .each(function(state){
+            stateCount++;
+            if (state.coverage === 'COMPLETE'){
+                completeStateCount++;
             }
-        });
-        scenarioHistogram[scenario.name] = count;
-    });
+            return true;
+        })
+        .value();
 
-    $("#coverage #tab-body").html(coverageTemplate({"stateData": stateHistogram, "scenarioData": scenarioHistogram}));
+    var statePercentage = stateCount > 0 ? Math.round(completeStateCount / stateCount * 100) : 0;
+    $('.state-coverage-pane').addClass(statePercentage < 100 ? statePercentage < 70 ? 'bg-danger' : 'bg-warning' : 'bg-success');
+    $('#index-state-coverage-label').html(statePercentage);
+
+    var scenarioPercentage = scenarioCount > 0 ? Math.round(completeScenarioCount / scenarioCount * 100) : 0;
+    $('.scenario-coverage-pane').addClass(scenarioPercentage < 100 ? scenarioPercentage < 70 ? 'bg-danger' : 'bg-warning' : 'bg-success');
+    $('#index-scenario-coverage-label').html(scenarioPercentage);
+
+
+    $("#machine #tab-body").html(machineTemplate({stateMachine: stateMachine, stateOrder: directoryData.stateOrder, scenarioOrder: directoryData.scenarioOrder}));
 }

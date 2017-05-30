@@ -26,7 +26,8 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
     @Before
     def void "initialisation"() {
-        backwardsFromTerminatorsJourneyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic())
+        backwardsFromTerminatorsJourneyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator()
+        backwardsFromTerminatorsJourneyGenerator.init(new ConditionalLogic())
     }
 
     @Test

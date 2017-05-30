@@ -20,3 +20,23 @@
     font-weight: bold;
 }
 
+li p {
+    margin-bottom: 0px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.scenario-heading {
+    padding: 5px;
+}
+
+.state-heading {
+    padding: 10px;
+}
+
+.no-break {
+    word-break: keep-all;
+    white-space: nowrap;
+}

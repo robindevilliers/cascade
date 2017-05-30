@@ -120,7 +120,7 @@ public class HtmlReporter implements Reporter {
     }
 
     private void writeStateMachineToJson(List<Scenario> scenarios) {
-        Map<Class<?>, Class[]> states = new HashMap<>();
+        Map<Class<?>, TreeSet<Class>> states = new HashMap<>();
         JsonArrayBuilder statesJson = builderFactory.createArrayBuilder();
         JsonArrayBuilder scenariosJson = builderFactory.createArrayBuilder();
         for (Scenario scenario : scenarios) {
@@ -132,20 +132,19 @@ public class HtmlReporter implements Reporter {
             scenarioJson.add("terminator", scenario.isTerminator());
             scenarioJson.add("reEntrantTerminator", scenario.isReEntrantTerminator());
             scenariosJson.add(scenarioJson);
-            if (!states.containsKey(scenario.getStateCls())) {
-                states.put(scenario.getStateCls(), scenario.getSteps());
-            }
+
+            states.computeIfAbsent(scenario.getStateCls(), (c) -> new TreeSet<>(Comparator.comparing(Class::getCanonicalName))).addAll(Arrays.asList(scenario.getSteps()));
         }
         directoryJson.add("scenarios", scenariosJson);
 
-        for (Map.Entry<Class<?>, Class[]> entry : states.entrySet()) {
+        for (Map.Entry<Class<?>, TreeSet<Class>> entry : states.entrySet()) {
             JsonObjectBuilder stateJson = builderFactory.createObjectBuilder();
             stateJson.add("name", entry.getKey().getCanonicalName());
             Optional.ofNullable(entry.getKey().getAnnotation(Narrative.class)).ifPresent((n) -> stateJson.add("narrative", n.value()));
 
             JsonArrayBuilder precedentsJson = builderFactory.createArrayBuilder();
             for (Class<?> cls : entry.getValue()) {
-                Optional.ofNullable(findClassWithAnnotation(Step.class, cls)).ifPresent((s) -> precedentsJson.add(s.getCanonicalName()));
+                precedentsJson.add(cls.getName());
             }
 
             stateJson.add("precedents", precedentsJson);
@@ -174,8 +173,8 @@ public class HtmlReporter implements Reporter {
 
         JsonObjectBuilder stateOrderJson = builderFactory.createObjectBuilder();
         int stateIndex = 1;
-        for (Map.Entry<Integer, List<Class>> entry: stateAccumulator.entrySet()){
-            for (Class clz: entry.getValue()){
+        for (Map.Entry<Integer, List<Class>> entry : stateAccumulator.entrySet()) {
+            for (Class clz : entry.getValue()) {
                 stateOrderJson.add(clz.getName(), stateIndex);
             }
             stateIndex++;
@@ -189,8 +188,8 @@ public class HtmlReporter implements Reporter {
         JsonObjectBuilder scenarioOrderJson = builderFactory.createObjectBuilder();
         int scenarioIndex = 1;
 
-        for (Map.Entry<Integer, List<Class>> entry: scenarioAccumulator.entrySet()){
-            for (Class clz: entry.getValue()){
+        for (Map.Entry<Integer, List<Class>> entry : scenarioAccumulator.entrySet()) {
+            for (Class clz : entry.getValue()) {
                 scenarioOrderJson.add(clz.getName(), scenarioIndex);
             }
             scenarioIndex++;
@@ -202,7 +201,7 @@ public class HtmlReporter implements Reporter {
 
     private void merge(Journey journey, JsonObjectBuilder directoryItemJson) {
 
-        for (Scenario scenario: journey.getSteps()){
+        for (Scenario scenario : journey.getSteps()) {
             stateHistogram.compute(scenario.getStateCls(), (clz, count) -> count == null ? 1 : count + 1);
             scenarioHistogram.compute(scenario.getCls(), (clz, count) -> count == null ? 1 : count + 1);
         }
@@ -277,7 +276,7 @@ public class HtmlReporter implements Reporter {
         private HtmlReporter htmlReporter;
         private Journey journey;
 
-        public HtmlTestReport(RenderingSystem renderingSystem, JsonBuilderFactory builderFactory, HtmlReporter htmlReporter) {
+        HtmlTestReport(RenderingSystem renderingSystem, JsonBuilderFactory builderFactory, HtmlReporter htmlReporter) {
             this.renderingSystem = renderingSystem;
             this.builderFactory = builderFactory;
             this.htmlReporter = htmlReporter;

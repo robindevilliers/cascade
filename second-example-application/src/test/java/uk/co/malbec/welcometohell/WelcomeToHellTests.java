@@ -14,15 +14,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@Factory(DisableReporter.class)
-@Limit(2)
-//@Profile("standard")
 @SuppressWarnings("all")
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.welcometohell.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
 //@StepHandler(TakeScreenshot.class)
-//@Parallelize(3)
+@Parallelize(3)
+//@Factory(DisableReporter.class)
+//@Limit(2)
+//@Profile("standard")
 public class WelcomeToHellTests {
 
     {

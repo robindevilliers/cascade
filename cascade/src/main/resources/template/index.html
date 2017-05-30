@@ -107,41 +107,39 @@
 
 </script>
 
-<script id="coverage-template" type="text/html">
+<script id="machine-template" type="text/html">
     <h3>States</h3>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Count</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% _.forOwn(stateData, function(count, name) {%>
-        <tr>
-            <td><%=name%></td>
-            <td><%=count%></td>
-        </tr>
+
+    <% _.each(stateMachine, function(state) {%>
+    <h4 class="state-heading bg-<%=state.bg%>"><%=state.name%>
+        <span class="badge "><%=stateOrder[state.name]%></span>
+        <span class="pull-right"><%=state.coverage%></span>
+    </h4>
+
+    <h5>Precedents</h5>
+    <ul>
+        <% _.each(state.precedents, function(precedent) {%>
+        <li><%=precedent%></li>
         <%});%>
-        </tbody>
-    </table>
-    <h3>Scenarios</h3>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Count</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% _.forOwn(scenarioData, function(count, name) {%>
-        <tr>
-            <td><%=name%></td>
-            <td><%=count%></td>
-        </tr>
-        <%});%>
-        </tbody>
-    </table>
+    </ul>
+    <h5>Scenarios</h5>
+    <ul>
+    <% _.each(state.scenarios, function(scenario) {%>
+        <li>
+            <p class="scenario-heading bg-<%=scenario.bg%>"><%=scenario.name%>
+                <% if (scenario.terminator) {%><span class="badge">Terminator</span><%}%>
+                <% if (scenario.reEntrantTerminator) {%><span class="badge">ReEntrantTerminator</span><%}%>
+                <span class="badge "><%=scenarioOrder[scenario.name]%></span>
+                <span class="pull-right"><%=scenario.coverage%></span></p>
+
+
+        </li>
+
+    <%});%>
+    </ul>
+
+    <%});%>
+
 </script>
 
 <script id="breadcrumb-template" type="text/html">
@@ -159,26 +157,50 @@
     </h1>
     <div id="breadcrumb"></div>
 
-    <h3>Test Summary</h3>
-
-    <div class="row well">
-        <div class="col-md-3 bg-success">
-            <div class="row text-center"><span id="index-success-label"></span></div>
-            <div class="row text-center"> Successes</div>
-        </div>
-        <div class="col-md-3 bg-danger">
-            <div class="row text-center"><span id="index-failure-label"></span></div>
-            <div class="row text-center"> Failures</div>
-        </div>
-        <div class="col-md-3 bg-warning">
-            <div class="row text-center"><span id="index-error-label"></span></div>
-            <div class="row text-center"> Errors</div>
-        </div>
-        <div class="col-md-3 bg-info">
-            <div class="row text-center"><span id="index-minutes-label"></span> min <span
-                    id="index-seconds-label"></span>s
+    <div class="well">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row ">
+                    <h4 class="text-center">Test Summary</h4>
+                </div>
+                <div class="row ">
+                    <div class="col-sm-3 col-sm-offset-1 bg-success">
+                        <div class="row text-center"><span id="index-success-label"></span></div>
+                        <div class="row text-center"> Successes</div>
+                    </div>
+                    <div class="col-sm-3 bg-danger">
+                        <div class="row text-center"><span id="index-failure-label"></span></div>
+                        <div class="row text-center"> Failures</div>
+                    </div>
+                    <div class="col-sm-3 bg-warning">
+                        <div class="row text-center"><span id="index-error-label"></span></div>
+                        <div class="row text-center"> Errors</div>
+                    </div>
+                </div>
             </div>
-            <div class="row text-center"> Duration</div>
+            <div class="col-sm-6">
+                <div class="row ">
+                    <h4 class="text-center">Test Coverage</h4>
+                </div>
+                <div class="row ">
+                    <div class="col-sm-3 col-sm-offset-2 state-coverage-pane">
+                        <div class="row text-center no-break"><span id="index-state-coverage-label"></span>%</div>
+                        <div class="row text-center no-break">States</div>
+                    </div>
+
+                    <div class="col-sm-3 scenario-coverage-pane">
+                        <div class="row text-center no-break"><span id="index-scenario-coverage-label"></span>%</div>
+                        <div class="row text-center no-break"> Scenarios</div>
+                    </div>
+
+                    <div class="col-sm-3 bg-info">
+                        <div class="row text-center no-break"><span id="index-minutes-label"></span> min <span
+                                id="index-seconds-label"></span>s
+                        </div>
+                        <div class="row text-center"> Duration</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

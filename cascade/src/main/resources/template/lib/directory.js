@@ -4,7 +4,7 @@ function Directory(directory) {
         return _.chain(directory.states)
             .filter(function (state) {
                 return _.some(state.precedents, function (p) {
-                    return p === "uk.co.malbec.cascade.annotations.Step.Null"
+                    return p === "uk.co.malbec.cascade.annotations.Step$Null"
                 });
             })
             .map(function (state) {
@@ -18,11 +18,12 @@ function Directory(directory) {
             .filter(function (state) {
                 return _.some(state.precedents, function (p) {
                     return p === name;
+                }) || _.some(state.precedents, function (p) {
+                    var scenario = _.find(directory.scenarios, function(s) { return s.name === p; });
+                    return scenario && scenario.state === name;
                 });
             })
-            .map(function (state) {
-                return state.name;
-            })
+            .map(function (state) {return state.name;})
             .value();
     };
 
@@ -40,7 +41,7 @@ function Directory(directory) {
         });
 
         return _.some(directoryState.precedents, function(precedent){
-            return precedent === "uk.co.malbec.cascade.annotations.Step.Null";
+            return precedent === "uk.co.malbec.cascade.annotations.Step$Null";
         });
     }
 
