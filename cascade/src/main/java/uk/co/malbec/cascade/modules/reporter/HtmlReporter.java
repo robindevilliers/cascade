@@ -44,13 +44,10 @@ public class HtmlReporter implements Reporter {
     private Map<Class<?>, Integer> stateHistogram = new HashMap<>();
     private Map<Class<?>, Integer> scenarioHistogram = new HashMap<>();
 
-    public HtmlReporter(RenderingSystem renderingSystem) {
-        this.renderingSystem = renderingSystem;
-    }
-
     @Override
-    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope, Completeness completeness) {
+    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope, Completeness completeness, RenderingSystem renderingSystem) {
         this.completeness = completeness;
+        this.renderingSystem = renderingSystem;
         this.directoryJson = builderFactory.createObjectBuilder();
         this.directoryItemsJson = builderFactory.createArrayBuilder();
 

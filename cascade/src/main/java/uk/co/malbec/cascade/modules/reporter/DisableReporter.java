@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class DisableReporter implements Reporter {
+
     @Override
-    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope, Completeness completenessLevel) {
+    public void init(Class<?> controlClass, List<Scenario> scenarios, Map<String, Scope> globalScope, Completeness completenessLevel, RenderingSystem renderingSystem) {
 
     }
 

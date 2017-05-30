@@ -8,17 +8,21 @@ import uk.co.malbec.cascade.CascadeRunner;
 import uk.co.malbec.cascade.Completeness;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.model.Journey;
+import uk.co.malbec.cascade.modules.reporter.DisableReporter;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Factory(DisableReporter.class)
+@Limit(2)
+//@Profile("standard")
 @SuppressWarnings("all")
 @RunWith(CascadeRunner.class)
 @Scan("uk.co.malbec.welcometohell.steps")
 @CompletenessLevel(Completeness.SCENARIO_COMPLETE)
 //@StepHandler(TakeScreenshot.class)
-@Parallelize(3)
+//@Parallelize(3)
 public class WelcomeToHellTests {
 
     {

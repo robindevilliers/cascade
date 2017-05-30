@@ -1,12 +1,6 @@
 TODO
 4. if a general exception happens have cascade reports display as much.
 15. error handling.
-12. profiles
-14. all strategies should be override-able via annotations.
-
-20. previous and next buttons on scope display.
-26. filtering should support first result, first 10 etc.
-30. add tabs to breadcrumbs.
 31. coverage page is broken.
 
 DOCUMENTATION
@@ -16,12 +10,17 @@ DOCUMENTATION
 27. document parallel-lise.
 28. rename description annotation to narrative.
 31. remove stateId, transitionId and scenarioId from When, Then documentation.
+32. document profiles.
+33. document limit.
+34. document factory.
 
 WONT FIX
 10. test generator that drives off story files.
 16. state persistence
 21. scope page might be better as collapsible accordians.
 17. transitionId and stateId should display in reports if used.
+20. previous and next buttons on scope display. - later
+14. all strategies should be override-able via annotations.
 
 DONE
 1. change link on html reports page so that if you click on the cell, it goes to a test.
@@ -39,6 +38,10 @@ DONE
 9. annotation for overriding step name.
 7. test names need some work in the reports test list.
 29. print completeness level on summary page.
+30. add tabs to breadcrumbs.
+12. profiles
+26. filtering should support first result, first 10 etc.
+
 
 Cookbook ideas:
 1. OnlyRunWith greater explanation.

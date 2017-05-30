@@ -10,11 +10,11 @@
 
 
 <script id="tab-headers-template" type="text/html">
-    <ul class="nav nav-pills" role="tablist">
-        <% _.each(tabs, function(tab) {%>
-        <li role="presentation" class="<%if (tab.active){%>active<%}%>">
-            <a href="#<%=tab.id%>" aria-controls="home" role="tab" data-toggle="tab"><%=tab.title%></a>
-        </li>
+    <ul class="nav nav-pills">
+        <% _.each(tabs, function(tab) {  %>
+        <li class="<%if (tab.active){%>active<%}%>">
+            <a href="#" data-tab-id="<%=tab.id%>"><%=tab.title%></a>
+        </li>&nbsp;
         <%});%>
     </ul>
 </script>
@@ -22,7 +22,7 @@
 <script id="tab-panels-template" type="text/html">
     <div class="tab-content">
         <% _.each(tabs, function(tab) {%>
-        <div role="tabpanel" class="tab-pane <%if (tab.active){%>active<%}%>" id="<%=tab.id%>">
+        <div class="tab-pane <%if (tab.active){%>active<%}%>" id="<%=tab.id%>">
             <div class="panel panel-<%=tab.panel%>">
                 <div class="panel-heading">
                     <h4 class="panel-title"><%=tab.title%></h4>

@@ -23,7 +23,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
     private ConditionalLogic conditionalLogic;
 
-    public StepBackwardsFromTerminatorsJourneyGenerator(ConditionalLogic conditionalLogic) {
+    @Override
+    public void init(ConditionalLogic conditionalLogic) {
         this.conditionalLogic = conditionalLogic;
     }
 

@@ -10,7 +10,6 @@ import uk.co.malbec.cascade.utils.Reference;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import static uk.co.malbec.cascade.utils.ReflectionUtils.*;
 
@@ -75,8 +74,13 @@ public class Cascade {
         completenessStrategy.init(controlClass, globalScope);
         renderingSystem.init(controlClass, globalScope);
 
-        reporter.init(controlClass, scenarios, globalScope, completenessStrategy.getCompletenessLevel());
+        reporter.init(controlClass, scenarios, globalScope, completenessStrategy.getCompletenessLevel(), renderingSystem);
         List<Journey> journeys = journeyGenerator.generateJourneys(scenarios, controlClass, filterStrategy, globalScope);
+
+        Limit limit = controlClass.getAnnotation(Limit.class);
+        if (limit != null){
+            journeys = journeys.subList(0, limit.value());
+        }
 
         this.journeys = completenessStrategy.filter(journeys);
 

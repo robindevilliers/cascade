@@ -5,15 +5,12 @@ function BreadCrumb(pageName) {
 
     var links = params.bc ? JSON.parse(atob(params.bc)) : [];
 
-    links.push({name: pageName, url: buildCurrentLink()});
-
-    console.log(links);
+    links.push({name: params.tab || pageName, url: buildCurrentLink()});
 
     var breadcrumbTemplate = _.template($("#breadcrumb-template").text());
     $("#breadcrumb").append(breadcrumbTemplate({
         links: links
     }));
-
 
     this.gotoNewLink = function(url){
         window.location = url + '&bc=' + btoa(JSON.stringify(links));
@@ -29,6 +26,10 @@ function BreadCrumb(pageName) {
         }
         window.location.href = url;
     };
+
+    this.lastName = function(){
+        return _.last(links).name;
+    }
 
 
     function buildCurrentLink(){

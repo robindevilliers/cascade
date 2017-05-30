@@ -1,6 +1,6 @@
 var params = queryParameters();
 
-var breadcrumb = new BreadCrumb('journey');
+var breadcrumb = new BreadCrumb('synopsis');
 
 var directory = new Directory(directoryData);
 
@@ -93,16 +93,24 @@ function findJourney() {
 }
 
 function renderTabs() {
+    var activeTab = params.tab;
     var tabs = [];
-    tabs.push({active: true, id: "synopsis", title: "Synopsis", panel: "default"});
-    tabs.push({active: false, id: "filter", title: "Filter", panel: "default"});
-    tabs.push({active: false, id: "analysis", title: "Analysis", panel: "default"});
+    tabs.push({active: activeTab === 'synopsis' || activeTab === undefined, id: "synopsis", title: "Synopsis", panel: "default"});
+    tabs.push({active: activeTab === 'filter', id: "filter", title: "Filter", panel: "default"});
+    tabs.push({active:  activeTab === 'analysis', id: "analysis", title: "Analysis", panel: "default"});
 
     var tabHeadersTemplate = _.template($("#tab-headers-template").text());
     $("#tab-headers").append(tabHeadersTemplate({tabs: tabs}));
 
     var tabPanelsTemplate = _.template($("#tab-panels-template").text());
     $("#tab-panels").append(tabPanelsTemplate({tabs: tabs}));
+
+    $("#tab-headers li a").click(function() {
+        if (breadcrumb.lastName() == $(this).attr("data-tab-id")){
+            return false;
+        }
+        breadcrumb.gotoNewLink("journey.html?tab=" + $(this).attr("data-tab-id") + "&journeyId=" + journey.journeyId);
+    });
 }
 
 function renderSynopsisPanel() {

@@ -8,6 +8,7 @@ out
 .idea
 .idea/**
 .DS_Store
+cascade/src/main/resources/template/data/
 first-example-application/selenium-drivers/*
 second-example-application/selenium-drivers/*
 

@@ -1,3 +1,5 @@
+var params = queryParameters();
+
 var breadcrumb = new BreadCrumb('index');
 
 var config = {
@@ -16,10 +18,13 @@ function reRenderLists(e){
     } else if (e.target.name === 'orderThreshold' && (parseInt(e.target.value) > 9 || parseInt(e.target.value) < 1) ){
         config[e.target.name] = 3;
     } else {
-        config[e.target.name] = e.target.value;
+        if (e.target.name.startsWith('mode')){
+            config['mode'] = e.target.value;
+        }
+
     }
     renderJourneyLists();
-    return true;
+
 }
 
 function renderDashboard() {
@@ -54,21 +59,28 @@ function renderTabPanels() {
         return journey.result !== 'SUCCESS';
     }));
 
+    var activeTab = params.tab;
     var tabs = [];
-    var active = true;
+    var active = activeTab === undefined;
     if (errorCount > 0) {
-        tabs.push({active: true, id: "failed-journeys", title: "Failures"});
+        tabs.push({active: activeTab === 'failures' || active, id: "failures", title: "Failures"});
         active = false;
     }
-    tabs.push({active: active, id: "all-journeys", title: "All"});
-    tabs.push({active: false, id: "coverage", title: "Coverage"});
-
+    tabs.push({active: activeTab === 'all' || active, id: "all", title: "All"});
+    tabs.push({active: activeTab === 'coverage', id: "coverage", title: "Coverage"});
 
     var tabHeadersTemplate = _.template($("#tab-headers-template").text());
     $("#tab-headers").append(tabHeadersTemplate({tabs: tabs}));
 
     var tabPanelsTemplate = _.template($("#tab-panels-template").text());
     $("#tab-panels").append(tabPanelsTemplate({tabs: tabs}));
+
+    $("#tab-headers li a").click(function() {
+        if (breadcrumb.lastName() == $(this).attr("data-tab-id")){
+            return false;
+        }
+        breadcrumb.gotoNewLink("index.html?tab=" + $(this).attr("data-tab-id"));
+    });
 }
 
 function renderJourneyLists() {
@@ -78,8 +90,8 @@ function renderJourneyLists() {
         return journey.result !== 'SUCCESS';
     });
 
-    $("#all-journeys #tab-body").html(journeysTemplate({journeys: directoryData.items, scenarioOrder: directoryData.scenarioOrder, config: config}));
-    $("#failed-journeys #tab-body").html(journeysTemplate({journeys: badJourneys, scenarioOrder: directoryData.scenarioOrder, config: config}));
+    $("#all #tab-body").html(journeysTemplate({id: 1, journeys: directoryData.items, scenarioOrder: directoryData.scenarioOrder, config: config}));
+    $("#failures #tab-body").html(journeysTemplate({id: 2, journeys: badJourneys, scenarioOrder: directoryData.scenarioOrder, config: config}));
 
     $(".journey-list tr").hover(function() {
         $(this).addClass("text-primary");
