@@ -51,7 +51,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //we should have the simplest most happy journey for mortgages
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
                     steps.remove(0) == new Scenario(DisplayAccountsList.MortgageAccount.class, DisplayAccountsList.MortgageAccount) &&
@@ -62,7 +62,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //we should have the simplest most happy journey for saver accounts
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
                     steps.remove(0) == new Scenario(DisplayAccountsList.SaverAccount.class, DisplayAccountsList.SaverAccount) &&
@@ -74,7 +74,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //we should have the journey that includes an optional informational message that does not terminate
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
                     steps.remove(0) == new Scenario(PostLoginAlert.InformationAlert.class, PostLoginAlert.InformationAlert) &&
@@ -86,7 +86,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         // we should have the journey that has the account locked alert which is a terminating journey
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
                     steps.remove(0) == new Scenario(PostLoginAlert.UserAccountLockedAlert.class, PostLoginAlert.UserAccountLockedAlert) &&
@@ -98,7 +98,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
         //we should have all the above tests preceded by an incorrect password entry
         //simplest journey first
         journey = journeys.find { it ->
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
@@ -111,7 +111,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //informational message with bad password
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
@@ -124,7 +124,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //informational message with bad password
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
@@ -138,7 +138,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //user account locked with bad password
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.remove(0) == new Scenario(OpenLoginPage.class, OpenLoginPage) &&
                     steps.remove(0) == new Scenario(BadPassword.class, BadPassword) &&
                     steps.remove(0) == new Scenario(Successful.class, Successful) &&
@@ -210,7 +210,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
 
         //journey with the OpenDetailsPage repeated twice.
         journey = journeys.find {
-            List<Class> steps = new ArrayList(it.steps)
+            List<Scenario> steps = new ArrayList(it.steps)
             return steps.size() == 5 &&
                     steps.remove(0) == new Scenario(OpenLandingPage.class, OpenLandingPage) &&
                     steps.remove(0) == new Scenario(OpenHomePage.class, OpenHomePage) &&

@@ -29,7 +29,7 @@ public class ScenarioFinder {
 
         if (Arrays.stream(stateClazz.getAnnotations())
                 .noneMatch(a -> a.annotationType().equals(Step.class))){
-            return; //Reflections library will return classes that implement interfaces that have annotations.  We dont' want this yet.
+            return; //Reflections library will return classes that implement interfaces that have annotations.  We don't want this yet.
         }
 
         if (clazz.isInterface()) {

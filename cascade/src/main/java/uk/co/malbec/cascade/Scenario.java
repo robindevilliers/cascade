@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public class Scenario {
 
-    private Class<?> cls;
+    private Class<?> clazz;
 
-    private Class<?> stateCls;
+    private Class<?> stateClazz;
 
     private boolean isTerminator;
 
@@ -22,13 +22,13 @@ public class Scenario {
 
     private Class[] steps;
 
-    public Scenario(Class<?> cls, Class<?> stateCls) {
-        this.cls = cls;
-        this.stateCls = stateCls;
-        steps = findAnnotation(Step.class, cls).value();
-        isTerminator = findAnnotation(Terminator.class, cls) != null;
+    public Scenario(Class<?> clazz, Class<?> stateClazz) {
+        this.clazz = clazz;
+        this.stateClazz = stateClazz;
+        steps = findAnnotation(Step.class, clazz).value();
+        isTerminator = findAnnotation(Terminator.class, clazz) != null;
 
-        ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, cls);
+        ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, clazz);
         if (reEntrantTerminator != null) {
             isReEntrantTerminator = true;
             reEntrantCount = reEntrantTerminator.value();
@@ -38,25 +38,25 @@ public class Scenario {
 
     }
 
-    public Class<?> getCls() {
-        return cls;
+    public Class<?> getClazz() {
+        return clazz;
     }
 
-    public Class<?> getStateCls() {
-        return stateCls;
+    public Class<?> getStateClazz() {
+        return stateClazz;
     }
 
     public String getName() {
-        return cls.getName();
+        return clazz.getName();
     }
 
     public String getSimpleName(){
-        String[] parts = cls.toString().split("[.]");
+        String[] parts = clazz.toString().split("[.]");
        return parts[parts.length - 1];
     }
 
     public String getNarrative(){
-        return Optional.ofNullable(cls.getAnnotation(Narrative.class)).map(Narrative::value).orElse(getSimpleName());
+        return Optional.ofNullable(clazz.getAnnotation(Narrative.class)).map(Narrative::value).orElse(getSimpleName());
     }
 
     public boolean isTerminator() {
@@ -82,14 +82,12 @@ public class Scenario {
 
         Scenario scenario = (Scenario) o;
 
-        if (cls != null ? !cls.equals(scenario.cls) : scenario.cls != null) return false;
-
-        return true;
+        return clazz != null ? clazz.equals(scenario.clazz) : scenario.clazz == null;
     }
 
     @Override
     public int hashCode() {
-        return cls != null ? cls.hashCode() : 0;
+        return clazz != null ? clazz.hashCode() : 0;
     }
 
     private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Class<?> subject) {
@@ -107,7 +105,7 @@ public class Scenario {
 
         Class superClass = subject.getSuperclass();
         if (superClass != null) {
-            return (T) findAnnotation(annotationClass, superClass);
+            return findAnnotation(annotationClass, superClass);
         }
         return null;
     }

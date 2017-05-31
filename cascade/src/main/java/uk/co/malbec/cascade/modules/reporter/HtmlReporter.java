@@ -127,13 +127,13 @@ public class HtmlReporter implements Reporter {
 
             JsonObjectBuilder scenarioJson = builderFactory.createObjectBuilder();
             scenarioJson.add("name", scenario.getName());
-            Optional.ofNullable(scenario.getCls().getAnnotation(Narrative.class)).ifPresent((n) -> scenarioJson.add("narrative", n.value()));
-            scenarioJson.add("state", scenario.getStateCls().getName());
+            Optional.ofNullable(scenario.getClazz().getAnnotation(Narrative.class)).ifPresent((n) -> scenarioJson.add("narrative", n.value()));
+            scenarioJson.add("state", scenario.getStateClazz().getName());
             scenarioJson.add("terminator", scenario.isTerminator());
             scenarioJson.add("reEntrantTerminator", scenario.isReEntrantTerminator());
             scenariosJson.add(scenarioJson);
 
-            states.computeIfAbsent(scenario.getStateCls(), (c) -> new TreeSet<>(Comparator.comparing(Class::getCanonicalName))).addAll(Arrays.asList(scenario.getSteps()));
+            states.computeIfAbsent(scenario.getStateClazz(), (c) -> new TreeSet<>(Comparator.comparing(Class::getCanonicalName))).addAll(Arrays.asList(scenario.getSteps()));
         }
         directoryJson.add("scenarios", scenariosJson);
 
@@ -202,8 +202,8 @@ public class HtmlReporter implements Reporter {
     private void merge(Journey journey, JsonObjectBuilder directoryItemJson) {
 
         for (Scenario scenario : journey.getSteps()) {
-            stateHistogram.compute(scenario.getStateCls(), (clz, count) -> count == null ? 1 : count + 1);
-            scenarioHistogram.compute(scenario.getCls(), (clz, count) -> count == null ? 1 : count + 1);
+            stateHistogram.compute(scenario.getStateClazz(), (clz, count) -> count == null ? 1 : count + 1);
+            scenarioHistogram.compute(scenario.getClazz(), (clz, count) -> count == null ? 1 : count + 1);
         }
         directoryItemsJson.add(directoryItemJson);
     }
@@ -313,7 +313,7 @@ public class HtmlReporter implements Reporter {
                 filter.append("<br>&nbsp;stepAt(");
                 filter.append(index++);
                 filter.append(",");
-                filter.append(scenario.getCls().getCanonicalName());
+                filter.append(scenario.getClazz().getCanonicalName());
                 filter.append(".class)");
                 comma = true;
             }

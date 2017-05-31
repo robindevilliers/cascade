@@ -36,11 +36,11 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             return new ScenarioDispersalSelectionAlgorithm() {
                 @Override
                 public String supplyGroupingId(Scenario scenario) {
-                    Then then = findMethodAnnotation(Then.class, scenario.getCls());
+                    Then then = findMethodAnnotation(Then.class, scenario.getClazz());
                     if (then == null) {
                         return null;
                     }
-                    return scenario.getCls().getCanonicalName();
+                    return scenario.getClazz().getCanonicalName();
                 }
             }.calculate(journeys);
         }
@@ -49,11 +49,11 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             return new ScenarioDispersalSelectionAlgorithm() {
                 @Override
                 public String supplyGroupingId(Scenario scenario) {
-                    When when = findMethodAnnotation(When.class, scenario.getCls());
+                    When when = findMethodAnnotation(When.class, scenario.getClazz());
                     if (when == null) {
                         return null;
                     }
-                    return scenario.getCls().getCanonicalName();
+                    return scenario.getClazz().getCanonicalName();
                 }
             }.calculate(journeys);
         }
@@ -62,16 +62,15 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             return new ScenarioDispersalSelectionAlgorithm() {
                 @Override
                 public String supplyGroupingId(Scenario scenario) {
-                    Then then = findMethodAnnotation(Then.class, scenario.getCls());
+                    Then then = findMethodAnnotation(Then.class, scenario.getClazz());
                     if (then == null) {
                         return null;
                     }
-                    return scenario.getStateCls().getCanonicalName();
+                    return scenario.getStateClazz().getCanonicalName();
                 }
             }.calculate(journeys);
 
         }
-
 
         throw new UnsupportedOperationException("Unknown completeness level supplied.");
     }
@@ -86,7 +85,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
 
         public abstract String supplyGroupingId(Scenario scenario);
 
-        public List<Journey> calculate(List<Journey> journeys) {
+        List<Journey> calculate(List<Journey> journeys) {
             //build up a histogram of scenarios
             Map<String, ScenarioWrapper> histogram = new HashMap<>();
 
@@ -94,11 +93,8 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             for (Journey journey : journeys) {
                 for (Scenario scenario : journey.getSteps()) {
                     String groupingId = supplyGroupingId(scenario);
-                    ScenarioWrapper scenarioWrapper = histogram.get(groupingId);
-                    if (scenarioWrapper == null) {
-                        scenarioWrapper = new ScenarioWrapper(scenario);
-                        histogram.put(groupingId, scenarioWrapper);
-                    }
+                    ScenarioWrapper scenarioWrapper = histogram
+                            .computeIfAbsent(groupingId, k -> new ScenarioWrapper(scenario));
                     scenarioWrapper.add(journey);
                 }
             }
@@ -158,7 +154,6 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
 
     }
 
-
     private static class ScenarioWrapper {
 
         private Scenario scenario;
@@ -167,7 +162,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
 
         private int order;
 
-        public ScenarioWrapper(Scenario scenario) {
+        ScenarioWrapper(Scenario scenario) {
             this.scenario = scenario;
         }
 
@@ -175,7 +170,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             this.journeys.add(journey);
         }
 
-        public int getNumberOfJourneys() {
+        int getNumberOfJourneys() {
             return journeys.size();
         }
 
@@ -183,7 +178,7 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             this.order = order;
         }
 
-        public boolean containsJourney(Journey journey) {
+        boolean containsJourney(Journey journey) {
             return journeys.contains(journey);
         }
 

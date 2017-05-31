@@ -10,4 +10,12 @@ public class Utils {
         map.put(name, o);
         return map;
     }
+
+    public static void sleep(long millis){
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            //ignore
+        }
+    }
 }

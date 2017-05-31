@@ -8,12 +8,12 @@ import java.util.List;
 public class EvaluatingVisitor implements Visitor {
 
     private boolean result;
-    private List<Class> scenarioClasses;
+    private List<Class<?>> scenarioClasses;
 
     public EvaluatingVisitor(List<Scenario> scenarios){
-        scenarioClasses = new ArrayList<Class>();
+        scenarioClasses = new ArrayList<>();
         for (Scenario scenario : scenarios){
-            scenarioClasses.add(scenario.getCls());
+            scenarioClasses.add(scenario.getClazz());
         }
     }
 
@@ -60,8 +60,4 @@ public class EvaluatingVisitor implements Visitor {
     public boolean getResult(){
         return result;
     }
-
-
-
-
 }

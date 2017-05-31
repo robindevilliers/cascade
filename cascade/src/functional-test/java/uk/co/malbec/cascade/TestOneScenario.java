@@ -6,6 +6,7 @@ import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
 import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.modules.ClasspathScanner;
+import uk.co.malbec.cascade.modules.JourneyGenerator;
 import uk.co.malbec.cascade.modules.completeness.StandardCompletenessStrategy;
 import uk.co.malbec.cascade.modules.construction.StandardConstructionStrategy;
 import uk.co.malbec.cascade.modules.executor.StandardTestExecutor;
@@ -55,10 +56,12 @@ public class TestOneScenario {
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
+        JourneyGenerator journeyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator();
+        journeyGenerator.init(new ConditionalLogic());
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()),

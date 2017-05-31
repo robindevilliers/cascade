@@ -25,7 +25,6 @@ public class CascadeRunner extends Runner {
 
         Profile profile = testClass.getAnnotation(Profile.class);
         if (profile != null){
-
             String profileToRun = System.getProperty(profile.name());
             if (profileToRun == null){
                 profileToRun = System.getenv(profile.name());
@@ -88,8 +87,6 @@ public class CascadeRunner extends Runner {
 
             }
         }
-
-        journeyGenerator.init(new ConditionalLogic());
 
         cascade = new Cascade(classpathScanner,
                 new ScenarioFinder(),

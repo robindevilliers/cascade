@@ -26,9 +26,7 @@ public class StandardConstructionStrategy implements ConstructionStrategy {
         steps.set(new ArrayList<>());
         Map<Scenario, Object> singletons = new HashMap<Scenario, Object>();
         for (Scenario scenario : journey.getSteps()) {
-            if (singletons.get(scenario) == null) {
-                singletons.put(scenario, newInstance(scenario.getCls(), "step"));
-            }
+            singletons.computeIfAbsent(scenario, k -> newInstance(scenario.getClazz(), "step"));
             steps.get().add(singletons.get(scenario));
         }
 

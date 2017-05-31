@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface JourneyGenerator {
+
     void init(ConditionalLogic conditionalLogic);
+
     List<Journey> generateJourneys(List<Scenario> scenarios, Class<?> controlClass, Filter filter, Map<String, Scope> globalScope);
 }

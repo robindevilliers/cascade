@@ -7,6 +7,7 @@ import org.junit.runner.Description
 import org.junit.runner.notification.RunNotifier
 import uk.co.malbec.cascade.annotations.Scan
 import uk.co.malbec.cascade.annotations.Step
+import uk.co.malbec.cascade.conditions.ConditionalLogic
 import uk.co.malbec.cascade.model.Journey
 import uk.co.malbec.cascade.modules.*
 import uk.co.malbec.cascade.modules.reporter.RenderingSystem
@@ -67,6 +68,7 @@ class CascadeTest {
         cascade.init(TestClass);
 
         //then
+        verify(journeyGeneratorMock).init(any(ConditionalLogic.class))
         verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
         verify(filterStrategyMock).init(TestClass, [:]);
         verify(testExecutorMock).init(TestClass, [:]);

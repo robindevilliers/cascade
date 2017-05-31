@@ -24,7 +24,7 @@ class StandardFilterStrategyTest {
     @Test
     def void "given instantiation, the filter strategy should extract filter classes from control class"(){
         standardFilterStrategy.init(TestClass, [:])
-        assert standardFilterStrategy.predicates == [new WithStepPredicate(BadPassword.class)] as Predicate[]
+        assert standardFilterStrategy.predicates[0] == new WithStepPredicate(BadPassword.class)
     }
 
     @Test

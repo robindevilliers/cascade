@@ -21,8 +21,8 @@ public class Scope {
         this.value = value;
     }
 
-    public Scope setGlobal(boolean global){
-        this.global = global;
+    public Scope setGlobal(){
+        this.global = true;
         return this;
     }
 

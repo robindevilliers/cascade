@@ -18,6 +18,16 @@ class ConditionalLogicTest {
     }
 
     @Test
+    def void "the stepAt predicate should return true"() {
+        assert new ConditionalLogic().matches(stepAt(1, Successful), steps)
+    }
+
+    @Test
+    def void "the stepAt predicate should return false"() {
+        assert !new ConditionalLogic().matches(stepAt(0, Successful), steps)
+    }
+
+    @Test
     def void "the not predicate enclosing the withStep predicate should return false"() {
         assert !new ConditionalLogic().matches(not(withStep(Successful)), steps)
     }

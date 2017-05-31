@@ -9,7 +9,7 @@ public class WithStepPredicate implements Predicate {
         this.step = step;
     }
 
-    public Class getStep() {
+    public Class<?> getStep() {
         return step;
     }
 
@@ -25,9 +25,7 @@ public class WithStepPredicate implements Predicate {
 
         WithStepPredicate that = (WithStepPredicate) o;
 
-        if (!step.equals(that.step)) return false;
-
-        return true;
+        return step.equals(that.step);
     }
 
     @Override

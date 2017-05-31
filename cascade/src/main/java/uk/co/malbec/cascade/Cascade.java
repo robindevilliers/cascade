@@ -3,6 +3,7 @@ package uk.co.malbec.cascade;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import uk.co.malbec.cascade.annotations.*;
+import uk.co.malbec.cascade.conditions.ConditionalLogic;
 import uk.co.malbec.cascade.model.Journey;
 import uk.co.malbec.cascade.modules.*;
 import uk.co.malbec.cascade.modules.reporter.RenderingSystem;
@@ -35,7 +36,7 @@ public class Cascade {
 
     private Class<?> controlClass;
 
-    private List<Journey> journeys = new ArrayList<Journey>();
+    private List<Journey> journeys = new ArrayList<>();
 
     private Map<String, Scope> globalScope = new HashMap<>();
 
@@ -62,11 +63,13 @@ public class Cascade {
     public void init(Class<?> controlClass) {
         this.controlClass = controlClass;
 
+        journeyGenerator.init(new ConditionalLogic());
+
         List<Scenario> scenarios = scenarioFinder.findScenarios(controlClass.getAnnotation(Scan.class).value(), classpathScanner);
 
         collectStaticSuppliedFields(controlClass, globalScope);
         for (Scenario scenario : scenarios) {
-            collectStaticSuppliedFields(scenario.getCls(), globalScope);
+            collectStaticSuppliedFields(scenario.getClazz(), globalScope);
         }
 
         filterStrategy.init(controlClass, globalScope);
@@ -85,12 +88,12 @@ public class Cascade {
         this.journeys = completenessStrategy.filter(journeys);
 
         for (Scenario scenario : scenarios) {
-            injectStaticDemandedFields(scenario.getCls(), globalScope);
+            injectStaticDemandedFields(scenario.getClazz(), globalScope);
         }
         injectStaticDemandedFields(controlClass, globalScope);
 
         for (Scope scope : globalScope.values()) {
-            scope.setGlobal(true);
+            scope.setGlobal();
         }
     }
 
@@ -116,8 +119,8 @@ public class Cascade {
 
             ecs.submit(() -> {
                 try {
-                    Reference<Object> control = new Reference<Object>();
-                    Reference<List<Object>> steps = new Reference<List<Object>>();
+                    Reference<Object> control = new Reference<>();
+                    Reference<List<Object>> steps = new Reference<>();
 
                     Map<String, Scope> scope = constructionStrategy.setup(controlClass, journey, control, steps, globalScope);
 
@@ -163,7 +166,6 @@ public class Cascade {
                 f.printStackTrace();
             }
         }
-
         invokeStaticAnnotatedMethod(AfterAll.class, controlClass, new Class[]{List.class}, new Object[]{journeys});
     }
 }
