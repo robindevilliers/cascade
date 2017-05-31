@@ -58,12 +58,12 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
         if (!unusedScenariosFilter.getScenarios().isEmpty()) {
-            throw new CascadeException(format("Invalid configuration: Scenario %s not found in any journey: " +
-                    "This journey generator calculates journeys by finding terminators " +
-                    "and walking backwards to the steps that start journeys. " +
-                    "If a step is not found in journeys, it is either dependent on " +
-                    "steps that don't lead to a journey start, or there are no terminators " +
-                    "downstream of this step.", unusedScenariosFilter.getScenarios().get(0).getClazz().toString()));
+            throw new CascadeException(format("Invalid configuration - Orphaned Scenario: Scenario %s not found in any journey: \n" +
+                    "\tThis journey generator calculates journeys by finding terminators \n" +
+                    "\tand walking backwards to the steps that start journeys. \n" +
+                    "\tIf a step is not found in journeys, it is either dependent on \n" +
+                    "\tsteps that don't lead to a journey start, or there are no terminators \n" +
+                    "\tdownstream of this step.", unusedScenariosFilter.getScenarios().get(0).getClazz().toString()));
         }
 
         //go through journeys and remove any that are redundant

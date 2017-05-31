@@ -1,5 +1,7 @@
 package uk.co.malbec.cascade.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,35 @@ public class Utils {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             //ignore
+        }
+    }
+
+    public static void printException(String message, Throwable f){
+        StringWriter stringWriter = new StringWriter();
+        stringWriter.append("------------ CASCADE ERROR -----------------\n");
+        stringWriter.append("\n");
+        stringWriter.append(message).append("\n");
+        stringWriter.append("\n");
+        f.printStackTrace(new PrintWriter(stringWriter));
+        stringWriter.append("--------------------------------------------");
+
+        System.err.println(stringWriter.toString());
+    }
+
+    @FunctionalInterface
+    public interface ExceptionalRunnable<T> {
+        void doIt() throws Exception;
+    }
+
+    public static void wrapChecked(ExceptionalRunnable runnable){
+        try {
+            runnable.doIt();
+        } catch (Exception e){
+            if (e instanceof RuntimeException){
+                throw (RuntimeException) e;
+            } else {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

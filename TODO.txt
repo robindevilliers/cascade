@@ -1,6 +1,3 @@
-TODO
-4. if a general exception happens have cascade reports display as much.
-15. error handling.
 
 DOCUMENTATION
 24. document static variables
@@ -46,6 +43,7 @@ DONE
 35. include order on state machine page.
 36. include coverage summary.
 14. all strategies should be override-able via annotations.
+15. error handling.
 
 Cookbook ideas:
 1. OnlyRunWith greater explanation.

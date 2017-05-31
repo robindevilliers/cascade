@@ -276,7 +276,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {
             //then
-            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
+            assert e.message.contains('Invalid configuration')
         }
     }
 
@@ -296,7 +296,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
             assert false: "An infinite loop exists, so an exception is expected"
         } catch (CascadeException e) {
             //then
-            assert e.message == 'Invalid configuration: Scenario class uk.co.malbec.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGeneratorTest$A not found in any journey: This journey generator calculates journeys by finding terminators and walking backwards to the steps that start journeys. If a step is not found in journeys, it is either dependent on steps that don\'t lead to a journey start, or there are no terminators downstream of this step.'
+            assert e.message.contains('Invalid configuration')
         }
     }
 

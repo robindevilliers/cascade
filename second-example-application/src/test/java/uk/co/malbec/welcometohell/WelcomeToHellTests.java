@@ -37,11 +37,7 @@ public class WelcomeToHellTests {
     static File REPORTS_DIRECTORY;
 
     @AfterAll
-    public static void after(List<Journey> journeys){
-        try {
-            new ProcessBuilder("open", REPORTS_DIRECTORY.getAbsolutePath() + "/index.html").start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void after(List<Journey> journeys) throws Exception{
+        new ProcessBuilder("open", REPORTS_DIRECTORY.getAbsolutePath() + "/index.html").start();
     }
 }
