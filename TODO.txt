@@ -13,13 +13,15 @@ DOCUMENTATION
 33. document limit.
 34. document factory.
 
+FIX LATER
+16. state persistence
+20. previous and next buttons on scope display. - later
+37. the scenario placement algorithm needs some work.
+
 WONT FIX
 10. test generator that drives off story files.
-16. state persistence
 21. scope page might be better as collapsible accordians.
 17. transitionId and stateId should display in reports if used.
-20. previous and next buttons on scope display. - later
-14. all strategies should be override-able via annotations.
 
 DONE
 1. change link on html reports page so that if you click on the cell, it goes to a test.
@@ -43,6 +45,7 @@ DONE
 31. coverage page is broken.
 35. include order on state machine page.
 36. include coverage summary.
+14. all strategies should be override-able via annotations.
 
 Cookbook ideas:
 1. OnlyRunWith greater explanation.
