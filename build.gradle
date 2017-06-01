@@ -2,7 +2,7 @@
 
 allprojects {
     apply plugin: 'idea'
-    group = 'uk.co.malbec.cascade'
+    group = 'com.github.robindevilliers'
     version = '1.0'
 }
 
