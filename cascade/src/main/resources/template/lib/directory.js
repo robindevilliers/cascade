@@ -4,7 +4,7 @@ function Directory(directory) {
         return _.chain(directory.states)
             .filter(function (state) {
                 return _.some(state.precedents, function (p) {
-                    return p === "uk.co.malbec.cascade.annotations.Step$Null"
+                    return p === "com.github.robindevilliers.cascade.annotations.Step$Null"
                 });
             })
             .map(function (state) {
@@ -41,7 +41,7 @@ function Directory(directory) {
         });
 
         return _.some(directoryState.precedents, function(precedent){
-            return precedent === "uk.co.malbec.cascade.annotations.Step$Null";
+            return precedent === "com.github.robindevilliers.cascade.annotations.Step$Null";
         });
     }
 
