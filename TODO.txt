@@ -1,14 +1,5 @@
 
-DOCUMENTATION
-24. document static variables
-25. document beforeall afterall.
-8. document reports
-27. document parallel-lise.
-28. rename description annotation to narrative.
-31. remove stateId, transitionId and scenarioId from When, Then documentation.
-32. document profiles.
-33. document limit.
-34. document factory.
+
 
 FIX LATER
 16. state persistence

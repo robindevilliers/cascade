@@ -1,7 +1,7 @@
 package com.github.robindevilliers.cascade;
 
 
-import com.github.robindevilliers.cascade.modules.ClasspathScanner;
+import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.annotations.Step;
 
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.Set;
 
 public class ScenarioFinder {
     
-    List<Scenario> findScenarios(String[] paths, ClasspathScanner classpathScanner){
-        List<Scenario> scenarios = new ArrayList<Scenario>();
+    List<Scenario> findScenarios(String[] paths, Scanner classpathScanner){
+        List<Scenario> scenarios = new ArrayList<>();
 
         for (String path : paths) {
             classpathScanner.initialise(path);
@@ -25,7 +25,7 @@ public class ScenarioFinder {
         return scenarios;
     }
 
-    private void findScenarios(List<Scenario> scenarios, Class<?> clazz, ClasspathScanner classpathScanner, Class<?> stateClazz) {
+    private void findScenarios(List<Scenario> scenarios, Class<?> clazz, Scanner classpathScanner, Class<?> stateClazz) {
 
         if (Arrays.stream(stateClazz.getAnnotations())
                 .noneMatch(a -> a.annotationType().equals(Step.class))){

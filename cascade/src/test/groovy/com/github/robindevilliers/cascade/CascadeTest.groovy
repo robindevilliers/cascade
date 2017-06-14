@@ -1,6 +1,6 @@
 package com.github.robindevilliers.cascade
 
-import com.github.robindevilliers.cascade.modules.ClasspathScanner
+import com.github.robindevilliers.cascade.modules.Scanner
 import com.github.robindevilliers.cascade.modules.CompletenessStrategy
 import com.github.robindevilliers.cascade.modules.ConstructionStrategy
 import com.github.robindevilliers.cascade.modules.FilterStrategy
@@ -28,7 +28,7 @@ class CascadeTest {
 
     Cascade cascade;
 
-    ClasspathScanner classpathScannerMock = mock(ClasspathScanner)
+    Scanner classpathScannerMock = mock(Scanner)
 
     ScenarioFinder scenarioFinderMock = mock(ScenarioFinder)
 
@@ -65,7 +65,7 @@ class CascadeTest {
     public void "given start of test, the cascade class should find scenarios and delegate to journey generator to generate journeys"() {
         //given
         List<Scenario> scenarios = []
-        when(scenarioFinderMock.findScenarios(any(String[]), any(ClasspathScanner))).thenReturn(scenarios)
+        when(scenarioFinderMock.findScenarios(any(String[]), any(Scanner))).thenReturn(scenarios)
 
         List<Journey> journeysMock = mock(List)
         when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock), eq([:]))).thenReturn(journeysMock)

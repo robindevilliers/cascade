@@ -2,11 +2,12 @@ package com.github.robindevilliers.onlinebankingexample.steps;
 
 
 import com.github.robindevilliers.cascade.annotations.*;
-import com.github.robindevilliers.onlinebankingexample.Utilities;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.robindevilliers.onlinebankingexample.Utilities.*;
 
 @SuppressWarnings("all")
 @Step(Challenge.class)
@@ -27,11 +28,11 @@ public interface Notice {
 
         @Then
         public void then() {
-            Utilities.assertTextEquals(webDriver, "[test-text-notice]", notices.get(0));
+            assertTextEquals(webDriver, "[test-text-notice]", notices.get(0));
 
-            Utilities.click(webDriver, "[test-cta-continue]");
-            Utilities.waitForPage(webDriver);
-            Utilities.assertElementDisplayed(webDriver, "[test-page-portfolio]");
+            click(webDriver, "[test-cta-continue]");
+            waitForPage(webDriver);
+            assertElementDisplayed(webDriver, "[test-page-portfolio]");
         }
     }
 
@@ -51,15 +52,15 @@ public interface Notice {
 
         @Then
         public void then() {
-            Utilities.assertTextEquals(webDriver, "[test-text-notice]", notices.get(0));
-            Utilities.click(webDriver, "[test-cta-continue]");
-            Utilities.waitForPage(webDriver);
+            assertTextEquals(webDriver, "[test-text-notice]", notices.get(0));
+            click(webDriver, "[test-cta-continue]");
+            waitForPage(webDriver);
 
-            Utilities.assertTextEquals(webDriver, "[test-text-notice]", notices.get(1));
-            Utilities.click(webDriver, "[test-cta-continue]");
-            Utilities.waitForPage(webDriver);
+            assertTextEquals(webDriver, "[test-text-notice]", notices.get(1));
+            click(webDriver, "[test-cta-continue]");
+            waitForPage(webDriver);
 
-            Utilities.assertElementDisplayed(webDriver, "[test-page-portfolio]");
+            assertElementDisplayed(webDriver, "[test-page-portfolio]");
         }
     }
 }

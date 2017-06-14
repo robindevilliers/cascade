@@ -4,7 +4,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import com.github.robindevilliers.cascade.annotations.Step
-import com.github.robindevilliers.cascade.modules.ClasspathScanner
+import com.github.robindevilliers.cascade.modules.Scanner
 
 import static org.mockito.Mockito.*
 
@@ -12,7 +12,7 @@ class ScenarioFinderTest {
 
     ScenarioFinder scenarioFinder
 
-    ClasspathScanner classpathScannerMock = mock(ClasspathScanner);
+    Scanner classpathScannerMock = mock(Scanner);
 
     @Before
     public void "initialisation"() {

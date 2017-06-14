@@ -2,6 +2,7 @@ package com.github.robindevilliers.cascade;
 
 import com.github.robindevilliers.cascade.annotations.*;
 import com.github.robindevilliers.cascade.modules.*;
+import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.utils.Reference;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
@@ -20,7 +21,7 @@ import static com.github.robindevilliers.cascade.utils.Utils.printException;
 
 public class Cascade {
 
-    private ClasspathScanner classpathScanner;
+    private Scanner classpathScanner;
 
     private ScenarioFinder scenarioFinder;
 
@@ -44,7 +45,7 @@ public class Cascade {
 
     private Map<String, Scope> globalScope = new HashMap<>();
 
-    public Cascade(ClasspathScanner classpathScanner,
+    public Cascade(Scanner classpathScanner,
                    ScenarioFinder scenarioFinder,
                    JourneyGenerator journeyGenerator,
                    ConstructionStrategy constructionStrategy,

@@ -2,7 +2,7 @@ package com.github.robindevilliers.cascade;
 
 import com.github.robindevilliers.cascade.annotations.*;
 import com.github.robindevilliers.cascade.conditions.ConditionalLogic;
-import com.github.robindevilliers.cascade.modules.ClasspathScanner;
+import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class TestOneScenario {
     public void givenOneStep_CascadeShouldGenerateOneDescriptionAndExecuteOneTest() {
 
         //given
-        ClasspathScanner classpathScannerMock = mock(ClasspathScanner.class);
+        Scanner classpathScannerMock = mock(Scanner.class);
         when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>() {{
             add(Do.class);
         }});

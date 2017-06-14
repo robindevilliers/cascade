@@ -31,10 +31,6 @@ public interface Challenge {
 
             waitForPage(webDriver);
         }
-
-        @Then
-        public void then() {
-        }
     }
 
     @Terminator

@@ -38,7 +38,7 @@ public class CascadeRunner extends Runner {
             renderingSystem.add(new ListStateRendering());
             renderingSystem.add(new FileStateRendering());
 
-            ClasspathScanner classpathScanner = new ReflectionsClasspathScanner();
+            Scanner classpathScanner = new ReflectionsClasspathScanner();
             JourneyGenerator journeyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator();
             ConstructionStrategy constructionStrategy = new StandardConstructionStrategy();
             TestExecutor testExecutor = new StandardTestExecutor();
@@ -50,8 +50,8 @@ public class CascadeRunner extends Runner {
             if (factory != null) {
                 for (Class<?> clz : factory.value()) {
 
-                    if (ClasspathScanner.class.isAssignableFrom(clz)) {
-                        classpathScanner = (ClasspathScanner) ReflectionUtils.newInstance(clz, "classpath scanner");
+                    if (Scanner.class.isAssignableFrom(clz)) {
+                        classpathScanner = (Scanner) ReflectionUtils.newInstance(clz, "classpath scanner");
                         continue;
                     }
 

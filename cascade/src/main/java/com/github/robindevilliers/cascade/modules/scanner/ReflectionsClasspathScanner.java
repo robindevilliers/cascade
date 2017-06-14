@@ -1,13 +1,13 @@
 package com.github.robindevilliers.cascade.modules.scanner;
 
 
-import com.github.robindevilliers.cascade.modules.ClasspathScanner;
+import com.github.robindevilliers.cascade.modules.Scanner;
 import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
-public class ReflectionsClasspathScanner implements ClasspathScanner {
+public class ReflectionsClasspathScanner implements Scanner {
 
     private Reflections reflections;
 
