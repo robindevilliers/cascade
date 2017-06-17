@@ -1,24 +1,17 @@
 package com.github.robindevilliers.cascade
 
-import com.github.robindevilliers.cascade.modules.Scanner
-import com.github.robindevilliers.cascade.modules.CompletenessStrategy
-import com.github.robindevilliers.cascade.modules.ConstructionStrategy
-import com.github.robindevilliers.cascade.modules.FilterStrategy
-import com.github.robindevilliers.cascade.modules.JourneyGenerator
-import com.github.robindevilliers.cascade.modules.Reporter
-import com.github.robindevilliers.cascade.modules.TestExecutor
-import com.github.robindevilliers.cascade.modules.TestReport
+import com.github.robindevilliers.cascade.annotations.Scan
+import com.github.robindevilliers.cascade.annotations.Step
+import com.github.robindevilliers.cascade.conditions.ConditionalLogic
+import com.github.robindevilliers.cascade.model.Journey
+import com.github.robindevilliers.cascade.modules.*
+import com.github.robindevilliers.cascade.modules.reporter.RenderingSystem
+import com.github.robindevilliers.cascade.utils.Reference
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.Description
 import org.junit.runner.notification.RunNotifier
-import com.github.robindevilliers.cascade.annotations.Scan
-import com.github.robindevilliers.cascade.annotations.Step
-import com.github.robindevilliers.cascade.conditions.ConditionalLogic
-import com.github.robindevilliers.cascade.model.Journey
-import com.github.robindevilliers.cascade.modules.reporter.RenderingSystem
-import com.github.robindevilliers.cascade.utils.Reference
 
 import static org.mockito.Matchers.any
 import static org.mockito.Matchers.eq
@@ -29,8 +22,6 @@ class CascadeTest {
     Cascade cascade;
 
     Scanner classpathScannerMock = mock(Scanner)
-
-    ScenarioFinder scenarioFinderMock = mock(ScenarioFinder)
 
     JourneyGenerator journeyGeneratorMock = mock(JourneyGenerator)
 
@@ -53,19 +44,19 @@ class CascadeTest {
     @Before
     public void "initialisation"() {
         when(reporterMock.createTestReport()).thenReturn(testReport)
-        cascade = new Cascade(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock, completenessStrategy, reporterMock, renderingSystemMock);
+        cascade = new Cascade(classpathScannerMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock, completenessStrategy, reporterMock, renderingSystemMock);
     }
 
     @After
     public void "cleanup"(){
-        verifyNoMoreInteractions(classpathScannerMock, scenarioFinderMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock)
+        verifyNoMoreInteractions(classpathScannerMock, journeyGeneratorMock, constructionStrategyMock, testExecutorMock, filterStrategyMock)
     }
 
     @Test
     public void "given start of test, the cascade class should find scenarios and delegate to journey generator to generate journeys"() {
         //given
         List<Scenario> scenarios = []
-        when(scenarioFinderMock.findScenarios(any(String[]), any(Scanner))).thenReturn(scenarios)
+        when(classpathScannerMock.findScenarios(any(String[]))).thenReturn(scenarios)
 
         List<Journey> journeysMock = mock(List)
         when(journeyGeneratorMock.generateJourneys(any(List), any(Class), eq(filterStrategyMock), eq([:]))).thenReturn(journeysMock)
@@ -76,7 +67,7 @@ class CascadeTest {
 
         //then
         verify(journeyGeneratorMock).init(any(ConditionalLogic.class))
-        verify(scenarioFinderMock).findScenarios(["uk.co.this", "uk.co.that"] as String[], classpathScannerMock)
+        verify(classpathScannerMock).findScenarios(["uk.co.this", "uk.co.that"] as String[])
         verify(filterStrategyMock).init(TestClass, [:]);
         verify(testExecutorMock).init(TestClass, [:]);
         verify(journeyGeneratorMock).generateJourneys(scenarios, TestClass, filterStrategyMock, [:])

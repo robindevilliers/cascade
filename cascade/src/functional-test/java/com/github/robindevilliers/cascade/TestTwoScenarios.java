@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -59,14 +60,11 @@ public class TestTwoScenarios {
 
         //given
         Scanner classpathScannerMock = mock(Scanner.class);
-        when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>() {{
-            add(Do.class);
-        }});
-
-        when(classpathScannerMock.getSubTypesOf(Do.class)).thenReturn(new HashSet<Class>() {{
-            add(Do.DoThis.class);
-            add(Do.DoThat.class);
-        }});
+        when(classpathScannerMock.findScenarios(any()))
+                .thenReturn(asList(
+                        new Scenario(Do.DoThis.class, Do.class),
+                        new Scenario(Do.DoThat.class, Do.class)
+                        ));
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
@@ -76,7 +74,6 @@ public class TestTwoScenarios {
 
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
-                new ScenarioFinder(),
                 journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
@@ -102,9 +99,6 @@ public class TestTwoScenarios {
         cascade.run(runNotifierMock);
 
         //then
-        verify(classpathScannerMock).initialise("uk.co.mytest.steps");
-        verify(classpathScannerMock).getTypesAnnotatedWith(Step.class);
-        verify(classpathScannerMock).getSubTypesOf(Do.class);
 
         verify(runNotifierMock).fireTestStarted(child0);
         verify(runNotifierMock).fireTestFinished(child0);

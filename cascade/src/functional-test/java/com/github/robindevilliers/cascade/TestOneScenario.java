@@ -4,6 +4,7 @@ import com.github.robindevilliers.cascade.annotations.*;
 import com.github.robindevilliers.cascade.conditions.ConditionalLogic;
 import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
+import javassist.compiler.ast.ASTList;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,9 +19,12 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -49,13 +53,7 @@ public class TestOneScenario {
 
         //given
         Scanner classpathScannerMock = mock(Scanner.class);
-        when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>() {{
-            add(Do.class);
-        }});
-
-        when(classpathScannerMock.getSubTypesOf(Do.class)).thenReturn(new HashSet<Class>() {{
-            add(Do.DoThis.class);
-        }});
+        when(classpathScannerMock.findScenarios(any())).thenReturn(singletonList(new Scenario(Do.DoThis.class, Do.class)));
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
@@ -63,7 +61,6 @@ public class TestOneScenario {
         journeyGenerator.init(new ConditionalLogic());
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
-                new ScenarioFinder(),
                 journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
@@ -86,10 +83,6 @@ public class TestOneScenario {
         cascade.run(runNotifierMock);
 
         //then
-        verify(classpathScannerMock).initialise("uk.co.mytest.steps");
-        verify(classpathScannerMock).getTypesAnnotatedWith(Step.class);
-        verify(classpathScannerMock).getSubTypesOf(Do.class);
-
         verify(runNotifierMock).fireTestStarted(child);
         verify(runNotifierMock).fireTestFinished(child);
 

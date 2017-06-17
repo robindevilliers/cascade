@@ -23,8 +23,6 @@ public class Cascade {
 
     private Scanner classpathScanner;
 
-    private ScenarioFinder scenarioFinder;
-
     private JourneyGenerator journeyGenerator;
 
     private ConstructionStrategy constructionStrategy;
@@ -46,7 +44,6 @@ public class Cascade {
     private Map<String, Scope> globalScope = new HashMap<>();
 
     public Cascade(Scanner classpathScanner,
-                   ScenarioFinder scenarioFinder,
                    JourneyGenerator journeyGenerator,
                    ConstructionStrategy constructionStrategy,
                    TestExecutor testExecutor,
@@ -55,7 +52,6 @@ public class Cascade {
                    Reporter reporter,
                    RenderingSystem renderingSystem) {
         this.classpathScanner = classpathScanner;
-        this.scenarioFinder = scenarioFinder;
         this.journeyGenerator = journeyGenerator;
         this.constructionStrategy = constructionStrategy;
         this.testExecutor = testExecutor;
@@ -70,7 +66,7 @@ public class Cascade {
 
         journeyGenerator.init(new ConditionalLogic());
 
-        List<Scenario> scenarios = scenarioFinder.findScenarios(controlClass.getAnnotation(Scan.class).value(), classpathScanner);
+        List<Scenario> scenarios = classpathScanner.findScenarios(controlClass.getAnnotation(Scan.class).value());
 
         collectStaticSuppliedFields(controlClass, globalScope);
         for (Scenario scenario : scenarios) {

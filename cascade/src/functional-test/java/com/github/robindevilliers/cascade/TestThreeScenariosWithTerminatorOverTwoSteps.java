@@ -2,26 +2,26 @@ package com.github.robindevilliers.cascade;
 
 
 import com.github.robindevilliers.cascade.annotations.*;
-import com.github.robindevilliers.cascade.modules.JourneyGenerator;
-import com.github.robindevilliers.cascade.modules.Scanner;
-import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.Description;
-import org.junit.runner.notification.RunNotifier;
 import com.github.robindevilliers.cascade.annotations.Terminator;
 import com.github.robindevilliers.cascade.conditions.ConditionalLogic;
+import com.github.robindevilliers.cascade.modules.JourneyGenerator;
+import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.modules.completeness.StandardCompletenessStrategy;
 import com.github.robindevilliers.cascade.modules.construction.StandardConstructionStrategy;
+import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
 import com.github.robindevilliers.cascade.modules.filtering.StandardFilterStrategy;
 import com.github.robindevilliers.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator;
 import com.github.robindevilliers.cascade.modules.reporter.DisableReporter;
 import com.github.robindevilliers.cascade.modules.reporter.RenderingSystem;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.Description;
+import org.junit.runner.notification.RunNotifier;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -70,19 +70,13 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
 
         //given
         Scanner classpathScannerMock = mock(Scanner.class);
-        when(classpathScannerMock.getTypesAnnotatedWith(Step.class)).thenReturn(new HashSet<Class<?>>() {{
-            add(DoOne.class);
-            add(DoTwo.class);
-        }});
 
-        when(classpathScannerMock.getSubTypesOf(DoOne.class)).thenReturn(new HashSet<Class>() {{
-            add(DoOne.DoThis.class);
-            add(DoOne.DoTheOther.class);
-        }});
-
-        when(classpathScannerMock.getSubTypesOf(DoTwo.class)).thenReturn(new HashSet<Class>() {{
-            add(DoTwo.DoThat.class);
-        }});
+        when(classpathScannerMock.findScenarios(any()))
+                .thenReturn(asList(
+                        new Scenario(DoOne.DoThis.class, DoOne.class),
+                        new Scenario(DoOne.DoTheOther.class, DoOne.class),
+                        new Scenario(DoTwo.DoThat.class, DoTwo.class)
+                ));
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
@@ -92,7 +86,6 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
 
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
-                new ScenarioFinder(),
                 journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
@@ -118,10 +111,6 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
         cascade.run(runNotifierMock);
 
         //then
-        verify(classpathScannerMock).initialise("uk.co.mytest.steps");
-        verify(classpathScannerMock).getTypesAnnotatedWith(Step.class);
-        verify(classpathScannerMock).getSubTypesOf(DoOne.class);
-        verify(classpathScannerMock).getSubTypesOf(DoTwo.class);
 
         verify(runNotifierMock).fireTestStarted(child0);
         verify(runNotifierMock).fireTestFinished(child0);

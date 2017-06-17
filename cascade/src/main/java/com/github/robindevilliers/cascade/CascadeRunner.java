@@ -89,7 +89,6 @@ public class CascadeRunner extends Runner {
             }
 
             cascade = new Cascade(classpathScanner,
-                    new ScenarioFinder(),
                     journeyGenerator,
                     constructionStrategy,
                     testExecutor,
