@@ -6,7 +6,7 @@ import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.notification.RunNotifier;
+
 import com.github.robindevilliers.cascade.modules.JourneyGenerator;
 import com.github.robindevilliers.cascade.modules.completeness.StandardCompletenessStrategy;
 import com.github.robindevilliers.cascade.modules.construction.StandardConstructionStrategy;
@@ -14,12 +14,15 @@ import com.github.robindevilliers.cascade.modules.filtering.StandardFilterStrate
 import com.github.robindevilliers.cascade.modules.generator.StepBackwardsFromTerminatorsJourneyGenerator;
 import com.github.robindevilliers.cascade.modules.reporter.DisableReporter;
 import com.github.robindevilliers.cascade.modules.reporter.RenderingSystem;
+import org.junit.runner.Description;
+import org.junit.runner.notification.RunNotifier;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 
@@ -71,14 +74,14 @@ public class TestOneScenario {
 
         cascade.init(TestBasicMain.class);
 
-        org.junit.runner.Description description = cascade.getDescription();
+        Description description = cascade.getDescription();
         assertEquals("Cascade Tests", description.getDisplayName());
 
-        List<org.junit.runner.Description> children = description.getChildren();
+        List<Description> children = description.getChildren();
         assertEquals(1, children.size());
 
-        org.junit.runner.Description child = children.get(0);
-        assertEquals("Test[1] Do This(uk.co.malbec.cascade.TestOneScenario$TestBasicMain)", child.getDisplayName());
+        Description child = children.get(0);
+        assertTrue(child.getDisplayName().matches("Test\\[1\\].*DoThis.*"));
 
         cascade.run(runNotifierMock);
 

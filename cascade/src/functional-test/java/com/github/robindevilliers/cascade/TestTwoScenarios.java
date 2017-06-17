@@ -2,8 +2,10 @@ package com.github.robindevilliers.cascade;
 
 
 import com.github.robindevilliers.cascade.annotations.*;
+import com.github.robindevilliers.cascade.modules.JourneyGenerator;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import com.github.robindevilliers.cascade.conditions.ConditionalLogic;
 import com.github.robindevilliers.cascade.modules.Scanner;
@@ -20,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class TestTwoScenarios {
@@ -35,7 +38,6 @@ public class TestTwoScenarios {
     static List<Integer> doThatExecuteCalled = new ArrayList<>();
     static List<Integer> doThatCheckCalled = new ArrayList<>();
     static List<Integer> doThatClearCalled = new ArrayList<>();
-
 
     @Before
     public void setup() {
@@ -68,10 +70,14 @@ public class TestTwoScenarios {
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
+        JourneyGenerator journeyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator();
+
+        journeyGenerator.init(new ConditionalLogic());
+
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()),
@@ -81,17 +87,17 @@ public class TestTwoScenarios {
 
         cascade.init(TestBasicMain.class);
 
-        org.junit.runner.Description description = cascade.getDescription();
+        Description description = cascade.getDescription();
         assertEquals("Cascade Tests", description.getDisplayName());
 
-        List<org.junit.runner.Description> children = description.getChildren();
+        List<Description> children = description.getChildren();
         assertEquals(2, children.size());
 
-        org.junit.runner.Description child0 = children.get(0);
-        assertEquals("Test[1] Do That(uk.co.malbec.cascade.TestTwoScenarios$TestBasicMain)", child0.getDisplayName());
+        Description child0 = children.get(0);
+        assertTrue(child0.getDisplayName().matches("Test\\[1\\].*DoThat.*"));
 
-        org.junit.runner.Description child1 = children.get(1);
-        assertEquals("Test[2] Do This(uk.co.malbec.cascade.TestTwoScenarios$TestBasicMain)", child1.getDisplayName());
+        Description child1 = children.get(1);
+        assertTrue(child1.getDisplayName().matches("Test\\[2\\].*DoThis.*"));
 
         cascade.run(runNotifierMock);
 

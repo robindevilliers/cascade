@@ -2,6 +2,7 @@ package com.github.robindevilliers.cascade;
 
 
 import com.github.robindevilliers.cascade.annotations.*;
+import com.github.robindevilliers.cascade.modules.JourneyGenerator;
 import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
 import org.junit.Before;
@@ -85,10 +86,14 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
+        JourneyGenerator journeyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator();
+
+        journeyGenerator.init(new ConditionalLogic());
+
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()),
@@ -105,10 +110,10 @@ public class TestThreeScenariosWithTerminatorOverTwoSteps {
         assertEquals(2, children.size());
 
         org.junit.runner.Description child0 = children.get(0);
-        assertTrue(child0.getDisplayName().startsWith("Test[1] Do The Other"));
+        assertTrue(child0.getDisplayName().matches("Test\\[1\\].*DoTheOther.*"));
 
         org.junit.runner.Description child1 = children.get(1);
-        assertTrue(child1.getDisplayName().startsWith("Test[2] Do ThisDo That"));
+        assertTrue(child1.getDisplayName().matches("Test\\[2\\].*DoThis.*DoThat.*"));
 
         cascade.run(runNotifierMock);
 

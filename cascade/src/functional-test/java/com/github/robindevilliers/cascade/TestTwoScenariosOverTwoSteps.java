@@ -3,6 +3,7 @@ package com.github.robindevilliers.cascade;
 
 import com.github.robindevilliers.cascade.annotations.*;
 import com.github.robindevilliers.cascade.conditions.ConditionalLogic;
+import com.github.robindevilliers.cascade.modules.JourneyGenerator;
 import com.github.robindevilliers.cascade.modules.Scanner;
 import com.github.robindevilliers.cascade.modules.executor.StandardTestExecutor;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class TestTwoScenariosOverTwoSteps {
@@ -73,10 +75,14 @@ public class TestTwoScenariosOverTwoSteps {
 
         RunNotifier runNotifierMock = mock(RunNotifier.class);
 
+        JourneyGenerator journeyGenerator = new StepBackwardsFromTerminatorsJourneyGenerator();
+
+        journeyGenerator.init(new ConditionalLogic());
+
         //when
         Cascade cascade = new Cascade(classpathScannerMock,
                 new ScenarioFinder(),
-                new StepBackwardsFromTerminatorsJourneyGenerator(new ConditionalLogic()),
+                journeyGenerator,
                 new StandardConstructionStrategy(),
                 new StandardTestExecutor(),
                 new StandardFilterStrategy(new ConditionalLogic()),
@@ -86,14 +92,14 @@ public class TestTwoScenariosOverTwoSteps {
 
         cascade.init(TestBasicMain.class);
 
-        org.junit.runner.Description description = cascade.getDescription();
+        Description description = cascade.getDescription();
         assertEquals("Cascade Tests", description.getDisplayName());
 
         List<Description> children = description.getChildren();
         assertEquals(1, children.size());
 
-        org.junit.runner.Description child0 = children.get(0);
-        assertEquals("Test[1] Do ThisDo That(uk.co.malbec.cascade.TestTwoScenariosOverTwoSteps$TestBasicMain)", child0.getDisplayName());
+        Description child0 = children.get(0);
+        assertTrue(child0.getDisplayName().matches("Test\\[1\\].*DoThis.*DoThat.*"));
 
         cascade.run(runNotifierMock);
 
