@@ -175,7 +175,7 @@ function renderCoverageReport() {
         })
         .each(function(state){
             stateCount++;
-            if (state.coverage === 'COMPLETE'){
+            if (state.coverage === 'COMPLETE' || state.coverage === 'PARTIAL'){
                 completeStateCount++;
             }
             return true;
