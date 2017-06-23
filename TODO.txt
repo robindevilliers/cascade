@@ -1,13 +1,4 @@
 
-
-
-1. video
-2. seo
-3. package in fluidity group
-4. dockerise
-
-
-
 FIX LATER
 1. state persistence
 2. previous and next buttons on scope display.
