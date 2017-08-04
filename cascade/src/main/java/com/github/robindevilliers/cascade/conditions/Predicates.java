@@ -6,6 +6,10 @@ public class Predicates {
         return new WithStepPredicate(step);
     }
 
+    public static Predicate stepIsCoupledWith(Class step, Class followingStep) {
+        return new StepIsCoupledWithPredicate(step, followingStep);
+    }
+
     public static Predicate stepAt(int i, Class step) {
         return new StepAtPredicate(i, step);
     }

@@ -4,7 +4,6 @@ import com.github.robindevilliers.cascade.Completeness;
 import com.github.robindevilliers.cascade.Scenario;
 import com.github.robindevilliers.cascade.Scope;
 import com.github.robindevilliers.cascade.annotations.CompletenessLevel;
-import com.github.robindevilliers.cascade.annotations.Then;
 import com.github.robindevilliers.cascade.annotations.When;
 import com.github.robindevilliers.cascade.model.Journey;
 import com.github.robindevilliers.cascade.modules.CompletenessStrategy;
@@ -35,10 +34,6 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             return new ScenarioDispersalSelectionAlgorithm() {
                 @Override
                 public String supplyGroupingId(Scenario scenario) {
-                    Then then = ReflectionUtils.findMethodAnnotation(Then.class, scenario.getClazz());
-                    if (then == null) {
-                        return null;
-                    }
                     return scenario.getClazz().getCanonicalName();
                 }
             }.calculate(journeys);
@@ -61,10 +56,6 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             return new ScenarioDispersalSelectionAlgorithm() {
                 @Override
                 public String supplyGroupingId(Scenario scenario) {
-                    Then then = ReflectionUtils.findMethodAnnotation(Then.class, scenario.getClazz());
-                    if (then == null) {
-                        return null;
-                    }
                     return scenario.getStateClazz().getCanonicalName();
                 }
             }.calculate(journeys);
@@ -92,9 +83,11 @@ public class StandardCompletenessStrategy implements CompletenessStrategy {
             for (Journey journey : journeys) {
                 for (Scenario scenario : journey.getSteps()) {
                     String groupingId = supplyGroupingId(scenario);
-                    ScenarioWrapper scenarioWrapper = histogram
-                            .computeIfAbsent(groupingId, k -> new ScenarioWrapper(scenario));
-                    scenarioWrapper.add(journey);
+                    if (groupingId != null){
+                        ScenarioWrapper scenarioWrapper = histogram
+                                .computeIfAbsent(groupingId, k -> new ScenarioWrapper(scenario));
+                        scenarioWrapper.add(journey);
+                    }
                 }
             }
 

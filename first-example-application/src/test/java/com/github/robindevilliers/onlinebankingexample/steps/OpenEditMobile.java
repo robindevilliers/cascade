@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import com.github.robindevilliers.onlinebankingexample.domain.PersonalDetails;
 
 @Step(OpenPersonalPage.class)
-@ReEntrantTerminator(1)
 public class OpenEditMobile {
 
     @Demands

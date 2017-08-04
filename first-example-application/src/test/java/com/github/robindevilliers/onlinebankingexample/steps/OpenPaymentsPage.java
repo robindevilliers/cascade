@@ -18,6 +18,7 @@ import static com.github.robindevilliers.cascade.conditions.Predicates.or;
 import static com.github.robindevilliers.cascade.conditions.Predicates.withStep;
 
 @SuppressWarnings("all")
+@SoftTerminator
 @Step({Portfolio.class, CancelStandingOrder.class})
 public class OpenPaymentsPage {
 

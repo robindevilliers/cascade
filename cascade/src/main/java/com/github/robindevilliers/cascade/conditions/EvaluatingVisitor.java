@@ -57,6 +57,29 @@ public class EvaluatingVisitor implements Visitor {
         result = !result;
     }
 
+    @Override
+    public void visit(StepIsCoupledWithPredicate stepFollowedByPredicate) {
+
+        result = false;
+        boolean latch = false;
+        for (Class<?> cls: scenarioClasses){
+
+            if (!latch && stepFollowedByPredicate.getFollowedBy().isAssignableFrom(cls)){
+                result = false;
+                break;
+            }
+
+            if (latch && stepFollowedByPredicate.getFollowedBy().isAssignableFrom(cls)) {
+                result = true;
+                latch = false;
+            }
+
+            if (!latch && stepFollowedByPredicate.getStep().isAssignableFrom(cls)){
+                latch = true;
+            }
+        }
+    }
+
     public boolean getResult(){
         return result;
     }

@@ -18,7 +18,6 @@ import static com.github.robindevilliers.cascade.conditions.Predicates.withStep;
 
 @SuppressWarnings("all")
 @Step(Portfolio.class)
-@ReEntrantTerminator(1)
 public interface OpenAccountPage {
 
     public class OpenCurrentAccount implements OpenAccountPage {

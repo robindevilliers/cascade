@@ -3,7 +3,7 @@
 allprojects {
     apply plugin: 'idea'
     group = 'solutions.fluidity'
-    version = '1.0'
+    version = '1.1'
 }
 
 subprojects {

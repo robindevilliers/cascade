@@ -7,7 +7,6 @@ import com.github.robindevilliers.onlinebankingexample.domain.PersonalDetails;
 import static com.github.robindevilliers.onlinebankingexample.Utilities.*;
 
 @Step(OpenEditEmail.class)
-@ReEntrantTerminator(1)
 public class EditEmail {
 
     @Demands

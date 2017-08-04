@@ -13,6 +13,7 @@ import static com.github.robindevilliers.onlinebankingexample.Utilities.assertEl
 import static com.github.robindevilliers.onlinebankingexample.Utilities.assertTextEquals;
 
 @SuppressWarnings("all")
+@SoftTerminator
 @Step({Challenge.class, Notice.class, BackToPorfolio.class})
 public interface Portfolio {
 

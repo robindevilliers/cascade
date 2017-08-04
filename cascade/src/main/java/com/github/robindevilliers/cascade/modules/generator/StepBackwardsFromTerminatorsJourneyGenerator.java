@@ -156,8 +156,8 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                 for (Scenario scenario : allScenarios) {
 
                     //if this scenario doesn't preceed the current step, we don't use it.
-                    boolean scenarioIsNotAPreceedingStep = !precedingStep.isAssignableFrom(scenario.getClazz());
-                    if (scenarioIsNotAPreceedingStep) {
+                    boolean scenarioIsNotAPrecedingStep = !precedingStep.isAssignableFrom(scenario.getClazz());
+                    if (scenarioIsNotAPrecedingStep) {
                         continue;
                     }
 
@@ -179,10 +179,14 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
                         }
                     }
 
-                    //if the journey already has a scenario for this scenario's step, and it is different from this scenario, we don't use it.
                     for (Scenario s : trail) {
-
+                        //if the journey already has a scenario for this scenario's step, and it is different from this scenario, we don't use it.
                         if (precedingStep.isAssignableFrom(s.getClazz()) && s != scenario) {
+                            continue Scenario;
+                        }
+
+                        //if the journey already contains this scenario and its not a 'repeatable' scenario, we don't use it.
+                        if (s == scenario && !scenario.isRepeatable()){
                             continue Scenario;
                         }
                     }

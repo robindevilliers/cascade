@@ -1,9 +1,6 @@
 package com.github.robindevilliers.cascade;
 
-import com.github.robindevilliers.cascade.annotations.Narrative;
-import com.github.robindevilliers.cascade.annotations.ReEntrantTerminator;
-import com.github.robindevilliers.cascade.annotations.Step;
-import com.github.robindevilliers.cascade.annotations.Terminator;
+import com.github.robindevilliers.cascade.annotations.*;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
@@ -18,6 +15,8 @@ public class Scenario {
 
     private boolean isReEntrantTerminator;
 
+    private boolean isRepeatable;
+
     private int reEntrantCount = 0;
 
     private Class[] steps;
@@ -28,14 +27,26 @@ public class Scenario {
         steps = findAnnotation(Step.class, clazz).value();
         isTerminator = findAnnotation(Terminator.class, clazz) != null;
 
+        isReEntrantTerminator = false;
+
         ReEntrantTerminator reEntrantTerminator = findAnnotation(ReEntrantTerminator.class, clazz);
         if (reEntrantTerminator != null) {
             isReEntrantTerminator = true;
             reEntrantCount = reEntrantTerminator.value();
-        } else {
-            isReEntrantTerminator = false;
+            isRepeatable = true;
         }
 
+        SoftTerminator softTerminator = findAnnotation(SoftTerminator.class, clazz);
+        if (softTerminator != null) {
+            isReEntrantTerminator = true;
+            reEntrantCount = 100;
+            isRepeatable = true;
+        }
+
+        Repeatable repeatable = findAnnotation(Repeatable.class, clazz);
+        if (repeatable != null) {
+            isRepeatable = true;
+        }
     }
 
     public Class<?> getClazz() {
@@ -65,6 +76,10 @@ public class Scenario {
 
     public boolean isReEntrantTerminator() {
         return isReEntrantTerminator;
+    }
+
+    public boolean isRepeatable(){
+        return isRepeatable;
     }
 
     public long getReEntrantCount(){

@@ -1,5 +1,6 @@
 package com.github.robindevilliers.cascade.modules.generator
 
+import com.github.robindevilliers.cascade.annotations.Repeatable
 import org.junit.Before
 import org.junit.Test
 import com.github.robindevilliers.cascade.Scenario
@@ -248,6 +249,7 @@ class StepBackwardsFromTerminatorsJourneyGeneratorTest {
     static class OpenLandingPage {
     }
 
+    @Repeatable
     @Step([OpenLandingPage, OpenDetailsPage, OpenDetailsPageThatDoesntTerminate])
     static class OpenHomePage {
     }

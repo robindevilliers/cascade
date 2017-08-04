@@ -7,4 +7,5 @@ public interface Visitor {
     void visit(WithStepPredicate withStepPredicate);
     void visit(StepAtPredicate stepAtPredicate);
     void visit(NotPredicate notPredicate);
+    void visit(StepIsCoupledWithPredicate stepFollowedByPredicate);
 }

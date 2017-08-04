@@ -12,7 +12,6 @@ import static com.github.robindevilliers.onlinebankingexample.Utilities.*;
 
 @SuppressWarnings("all")
 @Step(OpenPaymentsPage.class)
-@ReEntrantTerminator(1)
 public interface SetupStandingOrder {
 
     public class SetupStandingOrderForNow implements SetupStandingOrder {
