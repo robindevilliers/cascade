@@ -1,7 +1,5 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
-apply plugin: 'signing'
-
 
 dependencies {
     compile "junit:junit:4.10"
@@ -43,57 +41,12 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-signing {
-    sign configurations.archives
-}
-
-
 idea {
     module {
         testSourceDirs += file('src/functional-test/java')
     }
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment {
-                MavenDeployment deployment -> signing.signPom(deployment)
-            }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            pom.project {
-                name = 'Cascade'
-                packaging = 'jar'
-                description = 'Cascade is a blackbox testing framework'
-                url 'http://www.cascadetesting.tech/'
-
-                scm {
-                    url 'https://github.com/robindevilliers/cascade'
-                }
-
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'robindevilliers'
-                        name = 'Robin de Villiers'
-                        email 'robindevilliers@me.com'
-                    }
-                }
-            }
-        }
-    }
+if (project.hasProperty("cascade.signing.include")) {
+    apply from: project.property("cascade.signing.include")
 }

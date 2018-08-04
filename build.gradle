@@ -4,6 +4,7 @@ allprojects {
     apply plugin: 'idea'
     group = 'solutions.fluidity'
     version = '1.1'
+    ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 }
 
 subprojects {
