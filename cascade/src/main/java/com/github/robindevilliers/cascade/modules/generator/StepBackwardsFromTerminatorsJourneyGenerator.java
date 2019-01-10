@@ -20,10 +20,12 @@ import static java.util.Collections.synchronizedList;
 public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGenerator {
 
     private ConditionalLogic conditionalLogic;
+    private MultiplePreStepsGenerator multiplePreStepsGenerator;
 
     @Override
     public void init(ConditionalLogic conditionalLogic) {
         this.conditionalLogic = conditionalLogic;
+        this.multiplePreStepsGenerator = new MultiplePreStepsGenerator();
     }
 
     public List<Journey> generateJourneys(final List<Scenario> allScenarios, final Class<?> controlClass, Filter filter, Map<String, Scope> globalScope) {
@@ -50,10 +52,14 @@ public class StepBackwardsFromTerminatorsJourneyGenerator implements JourneyGene
         //sort terminators so that we always generate the same journeys.  This guarantees that we always have the same number of tests in the first pass.
         terminators.sort(Comparator.comparing(Scenario::getName));
 
-        final List<Journey> journeys = new ArrayList<>();
+        final List<Journey> withOutCombinePreStepJourneys = new ArrayList<>();
         for (final Scenario terminator : terminators) {
-            generatingTrail(terminator, new ArrayList<>(), allScenarios, journeys, controlClass, compositeFilter);
+            generatingTrail(terminator, new ArrayList<>(), allScenarios,
+                withOutCombinePreStepJourneys, controlClass,
+                compositeFilter);
         }
+
+        final List<Journey> journeys = multiplePreStepsGenerator.insertPreStepsToTheJourneys(withOutCombinePreStepJourneys);
 
         //go through all scenarios and find scenarios that are not in any journeys and generate an exception if any are found.
         if (!unusedScenariosFilter.getScenarios().isEmpty()) {
